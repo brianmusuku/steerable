@@ -6,8 +6,8 @@ main = ".svelte-kit/cloudflare/_worker.js"
 
 # 👇 Add this
 routes = [
-  { pattern = "steerable.xyz/*", zone_id = "" },
-  { pattern = "www.steerable.xyz/*", zone_id = "" }
+  { pattern = "steerable.dev/*", zone_id = "156468bb89523475952384be89b36a2f" },
+  { pattern = "www.steerable.dev/*", zone_id = "156468bb89523475952384be89b36a2f" }
 ]
 
 # Enable Node.js compatibility if you’re using Node built-ins
