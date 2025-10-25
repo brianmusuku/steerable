@@ -49,9 +49,9 @@
 						<IconAlignCenter class="size-5 stroke-1" />
 						<IconAlignRight class="size-5 stroke-1" />
 						<div class="h-6 border border-l"></div>
-						<IconLink class="size-4 stroke-1" />
-						<IconH1 class="size-4 stroke-1" />
-						<IconItalic class="size-4 stroke-1" />
+						<IconLink class="size-5 stroke-1" />
+						<IconH1 class="size-5 stroke-1" />
+						<IconItalic class="size-5 stroke-1" />
 					</div>
 					<!-- <Editor /> -->
 				</div>
