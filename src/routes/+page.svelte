@@ -38,7 +38,7 @@
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
 		<Resizable.Pane defaultSize={25}>
-			<div class="m-4 ml-2 flex h-full flex-col rounded-lg border bg-white">
+			<div class="m-4 ml-2 flex h-[60%] flex-col rounded-lg border bg-white">
 				<div class="flex w-full items-center justify-center gap-2 border-b py-2">
 					<IconArrowBackUp class="size-5 stroke-1" />
 					<IconArrowForwardUp class="size-5 stroke-1" />
