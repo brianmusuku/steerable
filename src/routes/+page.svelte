@@ -61,7 +61,7 @@
 							<Empty.Media variant="icon">
 								<IconAlertTriangle />
 							</Empty.Media>
-							<Empty.Title>No Components</Empty.Title>
+							<Empty.Title>No Sections</Empty.Title>
 							<Empty.Description>Write your website copy on the editor above.</Empty.Description>
 						</Empty.Header>
 						<Empty.Content></Empty.Content>
