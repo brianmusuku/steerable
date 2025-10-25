@@ -1,0 +1,37 @@
+name = "steerable"
+compatibility_date = "2025-01-01"
+
+# This is where SvelteKit’s Cloudflare adapter outputs
+main = ".svelte-kit/cloudflare/_worker.js"
+
+# 👇 Add this
+routes = [
+  { pattern = "steerable.xyz/*", zone_id = "" },
+  { pattern = "www.steerable.xyz/*", zone_id = "" }
+]
+
+# Enable Node.js compatibility if you’re using Node built-ins
+compatibility_flags = [ "nodejs_compat" ]
+
+[assets]
+# This is where SvelteKit outputs static assets (CSS, JS, images, etc.)
+directory = ".svelte-kit/cloudflare/assets"
+# Binding name that the worker uses to reference assets
+binding = "ASSETS"
+
+
+
+# (Optional) Bindings: add these if you use KV, D1, R2, Durable Objects, etc.
+# [[kv_namespaces]]
+# binding = "MY_KV"
+# id = "xxxxxxxxxxxxxxxxxxxxxx"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-d1-db"
+# database_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
