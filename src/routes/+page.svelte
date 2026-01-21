@@ -10,7 +10,7 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				prompt: 'hello'
+				prompt: 'Welcome to my website'
 			})
 		});
 
@@ -18,5 +18,9 @@
 		html = data.html;
 	});
 </script>
+
+<svelte:head>
+	<script src="https://cdn.tailwindcss.com"></script>
+</svelte:head>
 
 {@html html}

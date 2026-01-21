@@ -22,8 +22,8 @@ export async function generateHtmlSection(prompt: string) {
 	const fullPrompt = `
     Generate an arbitrary HTML section based on a random description.
     IMPORTANT RULES:
-    - Output ONLY the HTML code. Do NOT include any explanations, markdown, or additional text.
-    - Use ONLY standard HTML tags and attributes. Only black and white colors.
+    - Output ONLY the HTML+tailwind code. Do NOT include any explanations, markdown, or additional text.
+    - Use ONLY standard HTML tags and attributes.
     - Style the HTML exclusively using Tailwind CSS classes (assume Tailwind is included in the project).
     - Do NOT use inline styles, <style> tags, or any external CSS.
     - The output must be a valid, self-contained HTML section (e.g., <div>, <section>, etc.).
@@ -31,7 +31,7 @@ export async function generateHtmlSection(prompt: string) {
   `;
 
 	const response = await ai.models.generateContent({
-		model: 'gemini-2.5-flash',
+		model: 'gemini-3-flash-preview',
 		contents: fullPrompt
 	});
 
