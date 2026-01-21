@@ -6,6 +6,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/';
 
 	import { onMount } from 'svelte';
+	import { genState } from '$lib/genState.svelte';
 
 	let html = $state('');
 
@@ -22,6 +23,7 @@
 
 		const data = await resp.json();
 		html = data.html;
+		genState.currentHtml = data.html;
 	});
 </script>
 
