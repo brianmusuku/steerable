@@ -8,7 +8,7 @@
 		<Calendar
 			readonly
 			type="single"
-			class="select-none [&_[data-bits-calendar-head-cell]]:w-[33px] [&_[role=gridcell]]:w-[33px] [&_[role=gridcell]_[role=button][data-today]]:bg-sidebar-primary [&_[role=gridcell]_[role=button][data-today]]:text-sidebar-primary-foreground"
+			class="select-none **:data-bits-calendar-head-cell:w-[33px] [&_[role=gridcell]]:w-[33px] [&_[role=gridcell]_[role=button][data-today]]:bg-sidebar-primary [&_[role=gridcell]_[role=button][data-today]]:text-sidebar-primary-foreground"
 		/>
 	</Sidebar.GroupContent>
 </Sidebar.Group>
