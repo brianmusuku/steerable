@@ -24,14 +24,14 @@
 			})
 		});
 
-		const { themes } = await resp.json();
-		console.log(themes);
-		if (!themes) {
+		const data = await resp.json();
+		console.log(data);
+		if (!data.themes) {
 			isLoading = false;
 			toast.error('API Limit reached! Failed to get themes!');
 			return;
 		}
-		choices = [...themes, ...choices];
+		choices = [...data.themes, ...choices];
 		isLoading = false;
 		//choices.sort((a, b) => a.length - b.length);
 	};
