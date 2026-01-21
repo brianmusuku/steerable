@@ -3,7 +3,7 @@
 
 	import * as InputGroup from '$lib/components/ui/input-group/';
 
-	let numResults = $state(0);
+	let numResults = $state('58 Available');
 </script>
 
 <div class="grid w-full p-4">
@@ -12,6 +12,6 @@
 		<InputGroup.Addon>
 			<Search />
 		</InputGroup.Addon>
-		<InputGroup.Addon align="inline-end">{numResults} results</InputGroup.Addon>
+		<InputGroup.Addon align="inline-end">{numResults}</InputGroup.Addon>
 	</InputGroup.Root>
 </div>
