@@ -4,6 +4,7 @@
 	import * as Sidebar from '$lib/components/ui/sidebar/';
 	import { Plus as PlusIcon } from '@lucide/svelte';
 	import type { ComponentProps } from 'svelte';
+	import Choices from '$lib/components/choices.svelte';
 
 	// This is sample data.
 	const data = {
@@ -42,6 +43,7 @@
 		<NavUser user={data.user} />
 	</Sidebar.Header>
 	<Sidebar.Content>
+		<Choices />
 		<Sidebar.Separator class="mx-0" />
 		<Calendars calendars={data.calendars} />
 	</Sidebar.Content>
