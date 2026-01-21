@@ -10,15 +10,15 @@
 		Trash2 as Trash2Icon
 	} from '@lucide/svelte';
 
-	let { favorites }: { favorites: { name: string; url: string }[] } = $props();
+	let { history }: { history: { name: string; url: string }[] } = $props();
 
 	const sidebar = useSidebar();
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
-	<Sidebar.GroupLabel>Prompt History</Sidebar.GroupLabel>
+	<Sidebar.GroupLabel>Edit History</Sidebar.GroupLabel>
 	<Sidebar.Menu>
-		{#each favorites as item (item.name)}
+		{#each history as item (item.name)}
 			<Sidebar.MenuItem>
 				<Sidebar.MenuButton>
 					{#snippet child({ props })}
@@ -43,7 +43,7 @@
 					>
 						<DropdownMenu.Item>
 							<StarOffIcon class="text-muted-foreground" />
-							<span>Remove from Favorites</span>
+							<span>Remove from History</span>
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>

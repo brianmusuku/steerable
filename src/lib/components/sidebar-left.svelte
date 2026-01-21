@@ -13,7 +13,7 @@
 		Trash2 as Trash2Icon
 	} from '@lucide/svelte';
 
-	import NavFavorites from './nav-favorites.svelte';
+	import NavPromptHistory from './nav-prompt-history.svelte';
 	import NavMain from './nav-main.svelte';
 	import NavSecondary from './nav-secondary.svelte';
 	import TeamSwitcher from './team-switcher.svelte';
@@ -78,7 +78,7 @@
 				icon: MessageCircleQuestionIcon
 			}
 		],
-		favorites: [
+		history: [
 			{
 				name: 'Project Management & Task Tracking',
 				url: '#'
@@ -131,7 +131,7 @@
 		<NavMain items={data.navMain} />
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavFavorites favorites={data.favorites} />
+		<NavPromptHistory history={data.history} />
 		<NavSecondary items={data.navSecondary} class="mt-auto" />
 	</Sidebar.Content>
 	<Sidebar.Rail />
