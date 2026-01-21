@@ -5,8 +5,8 @@
 		Plus as PlusIcon
 	} from '@lucide/svelte';
 
-	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import * as Collapsible from '$lib/components/ui/collapsible/';
+	import * as Sidebar from '$lib/components/ui/sidebar/';
 
 	let {
 		workspaces
@@ -30,7 +30,7 @@
 							{/snippet}
 						</Sidebar.MenuButton>
 						<Collapsible.Trigger>
-							{#snippet child({ props })}
+							{#snippet child({ props }: any)}
 								<Sidebar.MenuAction
 									{...props}
 									class="start-2 bg-sidebar-accent text-sidebar-accent-foreground data-[state=open]:rotate-90"

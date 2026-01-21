@@ -2,7 +2,7 @@
 	import Calendars from './calendars.svelte';
 	import DatePicker from './date-picker.svelte';
 	import NavUser from './nav-user.svelte';
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import * as Sidebar from '$lib/components/ui/sidebar/';
 	import { Plus as PlusIcon } from '@lucide/svelte';
 	import type { ComponentProps } from 'svelte';
 
