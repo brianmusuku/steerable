@@ -13,8 +13,11 @@
 	});
 </script>
 
-<div class="flex flex-wrap items-start gap-3 p-4">
-	{#each choices as choice}
-		<Button class="cursor-pointer" variant="outline" size="sm">{choice}</Button>
-	{/each}
+<div class="flex flex-col gap-2 p-4">
+	<span class="text-xs font-semibold">Themes</span>
+	<div class="flex flex-wrap items-start gap-3">
+		{#each choices as choice}
+			<Button class="cursor-pointer" variant="outline" size="sm">{choice}</Button>
+		{/each}
+	</div>
 </div>
