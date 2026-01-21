@@ -25,10 +25,6 @@
 	});
 </script>
 
-<svelte:head>
-	<script src="https://cdn.tailwindcss.com"></script>
-</svelte:head>
-
 <Sidebar.Provider>
 	<SidebarLeft />
 	<Sidebar.Inset>
