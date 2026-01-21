@@ -18,7 +18,7 @@
 	)}
 >
 	<CalendarPrimitive.YearSelect bind:ref class="absolute inset-0 opacity-0" {...restProps}>
-		{#snippet child({ props, yearItems, selectedYearItem })}
+		{#snippet child({ props, yearItems, selectedYearItem }: any)}
 			<select {...props} {value}>
 				{#each yearItems as yearItem (yearItem.value)}
 					<option

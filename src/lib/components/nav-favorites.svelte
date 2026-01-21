@@ -30,7 +30,7 @@
 				</Sidebar.MenuButton>
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
+						{#snippet child({ props }: any)}
 							<Sidebar.MenuAction showOnHover {...props}>
 								<EllipsisIcon />
 								<span class="sr-only">More</span>

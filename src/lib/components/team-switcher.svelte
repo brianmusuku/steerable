@@ -1,6 +1,6 @@
 <script lang="ts">
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import * as Sidebar from '$lib/components/ui/sidebar/index.js';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/';
+	import * as Sidebar from '$lib/components/ui/sidebar/';
 	import { ChevronDown as ChevronDownIcon, Plus as PlusIcon } from '@lucide/svelte';
 	import type { Component } from 'svelte';
 
@@ -21,7 +21,7 @@
 	<Sidebar.MenuItem>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
-				{#snippet child({ props })}
+				{#snippet child({ props }: any)}
 					<Sidebar.MenuButton {...props} class="w-fit px-1.5">
 						<div
 							class="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
