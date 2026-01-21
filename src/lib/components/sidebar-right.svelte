@@ -6,6 +6,7 @@
 	import type { ComponentProps } from 'svelte';
 	import Choices from '$lib/components/controls/choices.svelte';
 	import Searchbar from '$lib/components/controls/searchbar.svelte';
+	import GeneralAgent from '$lib/components/controls/GeneralAgent.svelte';
 
 	// This is sample data.
 	const data = {
@@ -37,7 +38,7 @@
 	bind:ref
 	collapsible="none"
 	class="sticky top-0 hidden h-svh border-s lg:flex"
-	style="--sidebar-width: 18rem;"
+	style="--sidebar-width: 20rem;"
 	{...restProps}
 >
 	<Sidebar.Header class="h-16 border-b border-sidebar-border">
@@ -46,6 +47,7 @@
 	<Sidebar.Content>
 		<Searchbar />
 		<Choices />
+		<GeneralAgent />
 		<Sidebar.Separator class="mx-0" />
 		<Calendars calendars={data.calendars} />
 	</Sidebar.Content>
