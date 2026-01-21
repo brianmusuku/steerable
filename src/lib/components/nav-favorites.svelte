@@ -10,20 +10,19 @@
 		Trash2 as Trash2Icon
 	} from '@lucide/svelte';
 
-	let { favorites }: { favorites: { name: string; url: string; emoji: string }[] } = $props();
+	let { favorites }: { favorites: { name: string; url: string }[] } = $props();
 
 	const sidebar = useSidebar();
 </script>
 
 <Sidebar.Group class="group-data-[collapsible=icon]:hidden">
-	<Sidebar.GroupLabel>Favorites</Sidebar.GroupLabel>
+	<Sidebar.GroupLabel>Prompt History</Sidebar.GroupLabel>
 	<Sidebar.Menu>
 		{#each favorites as item (item.name)}
 			<Sidebar.MenuItem>
 				<Sidebar.MenuButton>
 					{#snippet child({ props })}
 						<a href={item.url} title={item.name} {...props}>
-							<span>{item.emoji}</span>
 							<span>{item.name}</span>
 						</a>
 					{/snippet}
