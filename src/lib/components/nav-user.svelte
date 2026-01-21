@@ -9,8 +9,11 @@
 		ChevronsUpDown as ChevronsUpDownIcon,
 		CreditCard as CreditCardIcon,
 		LogOut as LogOutIcon,
-		Sparkles as SparklesIcon
+		Sparkles as SparklesIcon,
+		Moon,
+		Sun
 	} from '@lucide/svelte';
+	import { mode, toggleMode } from 'mode-watcher';
 
 	let { user }: { user: { name: string; email: string; avatar: string } } = $props();
 
@@ -77,6 +80,15 @@
 					<DropdownMenu.Item>
 						<BellIcon />
 						Notifications
+					</DropdownMenu.Item>
+					<DropdownMenu.Item onclick={toggleMode}>
+						{#if mode.current === 'dark'}
+							<Sun class="transition-all!" />
+						{:else}
+							<Moon class="transition-all!" />
+						{/if}
+						<span class="sr-only">Toggle theme</span>
+						Dark Mode
 					</DropdownMenu.Item>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Calendars from './calendars.svelte';
-	import DatePicker from './date-picker.svelte';
 	import NavUser from './nav-user.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/';
 	import { Plus as PlusIcon } from '@lucide/svelte';
@@ -36,13 +35,13 @@
 	bind:ref
 	collapsible="none"
 	class="sticky top-0 hidden h-svh border-s lg:flex"
+	style="--sidebar-width: 18rem;"
 	{...restProps}
 >
 	<Sidebar.Header class="h-16 border-b border-sidebar-border">
 		<NavUser user={data.user} />
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<DatePicker />
 		<Sidebar.Separator class="mx-0" />
 		<Calendars calendars={data.calendars} />
 	</Sidebar.Content>
