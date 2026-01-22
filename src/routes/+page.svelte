@@ -38,9 +38,8 @@
 				<Breadcrumb.Root>
 					<Breadcrumb.List>
 						<Breadcrumb.Item>
-							<Breadcrumb.Page class="line-clamp-1">
-								Top Rated AoE2 Casts of the Day
-							</Breadcrumb.Page>
+							<Breadcrumb.Page class="line-clamp-1">Ranking 102 AoE2 casted matches</Breadcrumb.Page
+							>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
