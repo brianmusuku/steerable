@@ -7,6 +7,7 @@
 
 	import { onMount } from 'svelte';
 	import { genState } from '$lib/genState.svelte';
+	import Rankings from '$lib/components/Rankings.svelte';
 
 	let html = $state('');
 
@@ -38,7 +39,7 @@
 					<Breadcrumb.List>
 						<Breadcrumb.Item>
 							<Breadcrumb.Page class="line-clamp-1">
-								Project Management & Task Tracking
+								Top Rated AoE2 Casts of the Day
 							</Breadcrumb.Page>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
@@ -46,7 +47,7 @@
 			</div>
 		</header>
 		<div class="flex h-full flex-col bg-accent p-4">
-			{@html html}
+			<Rankings />
 		</div>
 	</Sidebar.Inset>
 	<SidebarRight />
