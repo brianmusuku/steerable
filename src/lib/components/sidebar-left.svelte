@@ -35,106 +35,73 @@
 		],
 		navMain: [
 			{
-				title: 'Playground',
+				title: 'Civilisations',
 				url: '#',
 				icon: SquareTerminalIcon,
 				isActive: true,
 				items: [
 					{
-						title: 'History',
+						title: 'All',
 						url: '#'
 					},
 					{
-						title: 'Starred',
+						title: 'Aztecs',
 						url: '#'
 					},
 					{
-						title: 'Settings',
+						title: 'Berbers',
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Models',
+				title: 'Casters',
 				url: '#',
 				icon: BotIcon,
 				items: [
 					{
-						title: 'Genesis',
+						title: 'All',
 						url: '#'
 					},
 					{
-						title: 'Explorer',
+						title: 'T90',
 						url: '#'
 					},
 					{
-						title: 'Quantum',
+						title: 'Memb',
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Documentation',
+				title: 'Platform',
 				url: '#',
 				icon: BookOpenIcon,
 				items: [
 					{
-						title: 'Introduction',
+						title: 'Twitch',
 						url: '#'
 					},
 					{
-						title: 'Get Started',
-						url: '#'
-					},
-					{
-						title: 'Tutorials',
-						url: '#'
-					},
-					{
-						title: 'Changelog',
+						title: 'YouTube',
 						url: '#'
 					}
 				]
 			},
 			{
-				title: 'Settings',
+				title: 'Map',
 				url: '#',
 				icon: Settings2Icon,
 				items: [
 					{
-						title: 'General',
+						title: 'Open',
 						url: '#'
 					},
 					{
-						title: 'Team',
-						url: '#'
-					},
-					{
-						title: 'Billing',
-						url: '#'
-					},
-					{
-						title: 'Limits',
+						title: 'Closed',
 						url: '#'
 					}
 				]
-			}
-		],
-		projects: [
-			{
-				name: 'Design Engineering',
-				url: '#',
-				icon: FrameIcon
-			},
-			{
-				name: 'Sales & Marketing',
-				url: '#',
-				icon: ChartPieIcon
-			},
-			{
-				name: 'Travel',
-				url: '#',
-				icon: MapIcon
 			}
 		]
 	};
@@ -142,7 +109,6 @@
 
 <script lang="ts">
 	import NavMain from '$lib/components/nav-main.svelte';
-	import NavProjects from '$lib/components/nav-projects.svelte';
 	import NavUser from '$lib/components/nav-user.svelte';
 	import TeamSwitcher from '$lib/components/team-switcher.svelte';
 	import * as Sidebar from '$lib/components/ui/sidebar/';
@@ -160,7 +126,6 @@
 	</Sidebar.Header>
 	<Sidebar.Content>
 		<NavMain items={data.navMain} />
-		<NavProjects projects={data.projects} />
 	</Sidebar.Content>
 	<Sidebar.Footer>
 		<NavUser user={data.user} />
