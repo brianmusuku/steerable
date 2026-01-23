@@ -43,7 +43,7 @@
 				sideOffset={4}
 			>
 				<DropdownMenu.Label class="text-xs text-muted-foreground">Menu</DropdownMenu.Label>
-				{#each teams as team, index (team.name)}
+				{#each teams.slice(0, 1) as team, index (team.name)}
 					<DropdownMenu.Item onSelect={() => (activeTeam = team)} class="gap-2 p-2">
 						<div class="flex size-6 items-center justify-center rounded-md border">
 							<team.logo class="size-3.5 shrink-0" />
