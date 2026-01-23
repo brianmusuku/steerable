@@ -1,5 +1,8 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/';
+	import * as ButtonGroup from '$lib/components/ui/button-group/';
+	import { Button } from '$lib/components/ui/button/';
+	import * as Select from '$lib/components/ui/select/';
 
 	const ratedGames = [
 		{
@@ -7,6 +10,7 @@
 			caster: 'T90Official',
 			Civs: 'Franks vs Incas',
 			Players: 'Hera vs Viper',
+			Elo: [2400, 2400],
 			Map: 'Arabia',
 			Rating: 9.5,
 			Date: '2026-01-22 12:00:00',
@@ -20,6 +24,7 @@
 			caster: 'MembTV',
 			Civs: 'Britons vs Ethiopians',
 			Players: 'Liereyy vs Mr_Yo',
+			Elo: [2400, 2400],
 			Map: 'Arabia',
 			Rating: 9.2,
 			Date: '2026-01-21 15:30:00',
@@ -33,6 +38,7 @@
 			caster: 'T90Official',
 			Civs: 'Spanish vs Berbers',
 			Players: 'Tatoh vs Daut',
+			Elo: [2400, 2400],
 			Map: 'Arena',
 			Rating: 8.8,
 			Date: '2026-01-20 18:45:00',
@@ -46,6 +52,7 @@
 			caster: 'Dave_AoE',
 			Civs: 'Mongols vs Mayans',
 			Players: 'Nicov vs Villese',
+			Elo: [2400, 2400],
 			Map: 'Nomad',
 			Rating: 9.0,
 			Date: '2026-01-19 20:00:00',
@@ -59,6 +66,7 @@
 			caster: 'Ornlu',
 			Civs: 'Teutons vs Poles',
 			Players: 'Jordan vs Capoch',
+			Elo: [2400, 2400],
 			Map: 'Golden Swamp',
 			Rating: 8.5,
 			Date: '2026-01-18 10:15:00',
@@ -72,6 +80,7 @@
 			caster: 'Nili_AoE',
 			Civs: 'Malians vs Portuguese',
 			Players: 'ACCM vs Sitaux',
+			Elo: [2400, 2400],
 			Map: 'Four Lakes',
 			Rating: 8.7,
 			Date: '2026-01-17 14:20:00',
@@ -85,6 +94,7 @@
 			caster: 'T90Official',
 			Civs: 'Huns vs Goths',
 			Players: 'Hera vs Liereyy',
+			Elo: [2400, 2400],
 			Map: 'Arabia',
 			Rating: 9.4,
 			Date: '2026-01-16 16:40:00',
@@ -98,6 +108,7 @@
 			caster: 'MembTV',
 			Civs: 'Vikings vs Japanese',
 			Players: 'Viper vs MBL',
+			Elo: [2400, 2400],
 			Map: 'Islands',
 			Rating: 8.9,
 			Date: '2026-01-15 11:55:00',
@@ -111,6 +122,7 @@
 			caster: 'Dave_AoE',
 			Civs: 'Aztecs vs Gurjaras',
 			Players: 'TaToH vs Yo',
+			Elo: [2400, 2400],
 			Map: 'Quarry',
 			Rating: 9.1,
 			Date: '2026-01-14 19:10:00',
@@ -124,6 +136,7 @@
 			caster: 'T90Official',
 			Civs: 'Byzantines vs Turks',
 			Players: 'Daut vs Viper',
+			Elo: [2400, 2400],
 			Map: 'Arena',
 			Rating: 8.6,
 			Date: '2026-01-13 13:00:00',
@@ -155,54 +168,105 @@
 		}
 		return `${Math.floor(days / 365)} years ago`;
 	};
+
+	const timeRanges = [
+		{ label: 'Today', value: 'today' },
+		{ label: 'Yesterday', value: 'yesterday' },
+		{ label: 'This Week', value: 'this_week' },
+		{ label: 'This Month', value: 'this_month' },
+		{ label: 'This Year', value: 'this_year' }
+	];
+	let selectedTimeRange = $state('today');
+
+	const fruits = [
+		{ value: 'elo', label: 'By Elo' },
+		{ value: 'date', label: 'By Date' },
+		{ value: 'rating', label: 'By Rating' },
+		{ value: 'game_time', label: 'By Game Time' },
+		{ value: 'caster', label: 'By Caster (A - Z)' }
+	];
+
+	let value = $state('');
+
+	const triggerContent = $derived(fruits.find((f) => f.value === value)?.label ?? 'Order By');
 </script>
 
-<Table.Root>
-	<Table.Caption>Age of Empires II – Recorded Casts Ranking</Table.Caption>
+<div class="flex w-full flex-col gap-6">
+	<div class="flex w-full items-center justify-between">
+		<ButtonGroup.Root>
+			{#each timeRanges as timeRange}
+				<Button class="cursor-pointer" variant="outline" size="sm">{timeRange.label}</Button>
+			{/each}
+		</ButtonGroup.Root>
 
-	<Table.Header>
-		<Table.Row>
-			<Table.Head class="w-[80px]">Rating</Table.Head>
-			<Table.Head>Caster</Table.Head>
-			<Table.Head>Civs</Table.Head>
-			<Table.Head>Players</Table.Head>
-			<Table.Head>Map</Table.Head>
-			<Table.Head>Date</Table.Head>
-			<Table.Head>GameTime</Table.Head>
-			<Table.Head>TwitchLink</Table.Head>
-			<Table.Head>YoutubeLink</Table.Head>
-		</Table.Row>
-	</Table.Header>
+		<Select.Root type="single" name="favoriteFruit" bind:value>
+			<Select.Trigger class="w-48 text-foreground">
+				{triggerContent}
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Group>
+					<Select.Label>Fruits</Select.Label>
+					{#each fruits as fruit (fruit.value)}
+						<Select.Item
+							value={fruit.value}
+							label={fruit.label}
+							disabled={fruit.value === 'grapes'}
+						>
+							{fruit.label}
+						</Select.Item>
+					{/each}
+				</Select.Group>
+			</Select.Content>
+		</Select.Root>
+	</div>
 
-	<Table.Body>
-		{#each ratedGames as game (game.rank)}
+	<Table.Root>
+		<Table.Caption>Age of Empires II – Recorded Casts Ranking</Table.Caption>
+
+		<Table.Header>
 			<Table.Row>
-				<Table.Cell class="font-medium">{game.Rating}</Table.Cell>
-				<Table.Cell class="font-medium">{game.caster}</Table.Cell>
-				<Table.Cell class="font-medium">{game.Civs}</Table.Cell>
-				<Table.Cell class="font-medium">{game.Players}</Table.Cell>
-				<Table.Cell class="font-medium">{game.Map}</Table.Cell>
-				<Table.Cell class="font-medium">{getTimeElapsed(game.Date)}</Table.Cell>
-				<Table.Cell class="font-medium">{game.GameTime}</Table.Cell>
-				<Table.Cell class="font-medium"
-					><a target="_blank" class="underline" rel="noopener noreferrer" href={game.TwitchLink}
-						>Twitch</a
-					></Table.Cell
-				>
-				<Table.Cell class="font-medium"
-					><a target="_blank" class="underline" rel="noopener noreferrer" href={game.YoutubeLink}
-						>Youtube</a
-					></Table.Cell
-				>
+				<Table.Head class="w-[80px]">Rating</Table.Head>
+				<Table.Head>Caster</Table.Head>
+				<Table.Head>Civs</Table.Head>
+				<Table.Head>Players</Table.Head>
+				<Table.Head>Map</Table.Head>
+				<Table.Head>Date</Table.Head>
+				<Table.Head>GameTime</Table.Head>
+				<Table.Head>TwitchLink</Table.Head>
+				<Table.Head>YoutubeLink</Table.Head>
 			</Table.Row>
-		{/each}
-	</Table.Body>
+		</Table.Header>
 
-	<Table.Footer>
-		<Table.Row>
-			<Table.Cell colspan={2}>Total Rated Games</Table.Cell>
-			<Table.Cell class="text-end">{ratedGames.length}</Table.Cell>
-			<Table.Cell colspan={2}></Table.Cell>
-		</Table.Row>
-	</Table.Footer>
-</Table.Root>
+		<Table.Body>
+			{#each ratedGames as game (game.rank)}
+				<Table.Row>
+					<Table.Cell class="font-medium">{game.Rating}</Table.Cell>
+					<Table.Cell class="font-medium">{game.caster}</Table.Cell>
+					<Table.Cell class="font-medium">{game.Civs}</Table.Cell>
+					<Table.Cell class="font-medium">{game.Players}</Table.Cell>
+					<Table.Cell class="font-medium">{game.Map}</Table.Cell>
+					<Table.Cell class="font-medium">{getTimeElapsed(game.Date)}</Table.Cell>
+					<Table.Cell class="font-medium">{game.GameTime}</Table.Cell>
+					<Table.Cell class="font-medium"
+						><a target="_blank" class="underline" rel="noopener noreferrer" href={game.TwitchLink}
+							>Twitch</a
+						></Table.Cell
+					>
+					<Table.Cell class="font-medium"
+						><a target="_blank" class="underline" rel="noopener noreferrer" href={game.YoutubeLink}
+							>Youtube</a
+						></Table.Cell
+					>
+				</Table.Row>
+			{/each}
+		</Table.Body>
+
+		<Table.Footer>
+			<Table.Row>
+				<Table.Cell colspan={2}>Total Rated Games</Table.Cell>
+				<Table.Cell class="text-end">{ratedGames.length}</Table.Cell>
+				<Table.Cell colspan={2}></Table.Cell>
+			</Table.Row>
+		</Table.Footer>
+	</Table.Root>
+</div>
