@@ -1,138 +1,169 @@
-<script lang="ts">
-	import {
-		AudioWaveform as AudioWaveformIcon,
-		Blocks as BlocksIcon,
-		Calendar as CalendarIcon,
-		Command as CommandIcon,
-		House as HouseIcon,
-		Inbox as InboxIcon,
-		MessageCircleQuestion as MessageCircleQuestionIcon,
-		Search as SearchIcon,
-		Settings2 as Settings2Icon,
-		Sparkles as SparklesIcon,
-		Trash2 as Trash2Icon
-	} from '@lucide/svelte';
-
-	import NavPromptHistory from './nav-prompt-history.svelte';
-	import NavMain from './nav-main.svelte';
-	import NavSecondary from './nav-secondary.svelte';
-	import TeamSwitcher from './team-switcher.svelte';
-	import * as Sidebar from '$lib/components/ui/sidebar/';
-	import type { ComponentProps } from 'svelte';
-
+<script lang="ts" module>
+	import AudioWaveformIcon from '@lucide/svelte/icons/audio-waveform';
+	import BookOpenIcon from '@lucide/svelte/icons/book-open';
+	import BotIcon from '@lucide/svelte/icons/bot';
+	import ChartPieIcon from '@lucide/svelte/icons/chart-pie';
+	import CommandIcon from '@lucide/svelte/icons/command';
+	import FrameIcon from '@lucide/svelte/icons/frame';
+	import GalleryVerticalEndIcon from '@lucide/svelte/icons/gallery-vertical-end';
+	import MapIcon from '@lucide/svelte/icons/map';
+	import Settings2Icon from '@lucide/svelte/icons/settings-2';
+	import SquareTerminalIcon from '@lucide/svelte/icons/square-terminal';
 	// This is sample data.
 	const data = {
+		user: {
+			name: 'shadcn',
+			email: 'm@example.com',
+			avatar: '/avatars/shadcn.jpg'
+		},
 		teams: [
 			{
-				name: 'Acme Inc',
-				logo: CommandIcon,
-				plan: 'Enterprise'
+				name: 'Steerable Reviews',
+				logo: GalleryVerticalEndIcon,
+				plan: 'Casted Matches'
 			},
 			{
-				name: 'Acme Corp.',
+				name: 'Steerable AI Casts',
 				logo: AudioWaveformIcon,
-				plan: 'Startup'
+				plan: 'AOE2 AI Casts'
 			},
 			{
-				name: 'Evil Corp.',
+				name: 'Steerable AI Training',
 				logo: CommandIcon,
-				plan: 'Free'
+				plan: 'AI Training Partner'
 			}
 		],
 		navMain: [
 			{
-				title: 'Search',
+				title: 'Playground',
 				url: '#',
-				icon: SearchIcon
+				icon: SquareTerminalIcon,
+				isActive: true,
+				items: [
+					{
+						title: 'History',
+						url: '#'
+					},
+					{
+						title: 'Starred',
+						url: '#'
+					},
+					{
+						title: 'Settings',
+						url: '#'
+					}
+				]
 			},
 			{
-				title: 'Ask AI',
+				title: 'Models',
 				url: '#',
-				icon: SparklesIcon
-			}
-		],
-		navSecondary: [
+				icon: BotIcon,
+				items: [
+					{
+						title: 'Genesis',
+						url: '#'
+					},
+					{
+						title: 'Explorer',
+						url: '#'
+					},
+					{
+						title: 'Quantum',
+						url: '#'
+					}
+				]
+			},
 			{
-				title: 'Calendar',
+				title: 'Documentation',
 				url: '#',
-				icon: CalendarIcon
+				icon: BookOpenIcon,
+				items: [
+					{
+						title: 'Introduction',
+						url: '#'
+					},
+					{
+						title: 'Get Started',
+						url: '#'
+					},
+					{
+						title: 'Tutorials',
+						url: '#'
+					},
+					{
+						title: 'Changelog',
+						url: '#'
+					}
+				]
 			},
 			{
 				title: 'Settings',
 				url: '#',
-				icon: Settings2Icon
-			},
-			{
-				title: 'Templates',
-				url: '#',
-				icon: BlocksIcon
-			},
-			{
-				title: 'Trash',
-				url: '#',
-				icon: Trash2Icon
-			},
-			{
-				title: 'Help',
-				url: '#',
-				icon: MessageCircleQuestionIcon
+				icon: Settings2Icon,
+				items: [
+					{
+						title: 'General',
+						url: '#'
+					},
+					{
+						title: 'Team',
+						url: '#'
+					},
+					{
+						title: 'Billing',
+						url: '#'
+					},
+					{
+						title: 'Limits',
+						url: '#'
+					}
+				]
 			}
 		],
-		history: [
+		projects: [
 			{
-				name: 'Project Management & Task Tracking',
-				url: '#'
+				name: 'Design Engineering',
+				url: '#',
+				icon: FrameIcon
 			},
 			{
-				name: 'Family Recipe Collection & Meal Planning',
-				url: '#'
+				name: 'Sales & Marketing',
+				url: '#',
+				icon: ChartPieIcon
 			},
 			{
-				name: 'Fitness Tracker & Workout Routines',
-				url: '#'
-			},
-			{
-				name: 'Book Notes & Reading List',
-				url: '#'
-			},
-			{
-				name: 'Sustainable Gardening Tips & Plant Care',
-				url: '#'
-			},
-			{
-				name: 'Language Learning Progress & Resources',
-				url: '#'
-			},
-			{
-				name: 'Home Renovation Ideas & Budget Tracker',
-				url: '#'
-			},
-			{
-				name: 'Personal Finance & Investment Portfolio',
-				url: '#'
-			},
-			{
-				name: 'Movie & TV Show Watchlist with Reviews',
-				url: '#'
-			},
-			{
-				name: 'Daily Habit Tracker & Goal Setting',
-				url: '#'
+				name: 'Travel',
+				url: '#',
+				icon: MapIcon
 			}
 		]
 	};
-
-	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
 
-<Sidebar.Root class="border-e-0" {...restProps}>
+<script lang="ts">
+	import NavMain from '$lib/components/nav-main.svelte';
+	import NavProjects from '$lib/components/nav-projects.svelte';
+	import NavUser from '$lib/components/nav-user.svelte';
+	import TeamSwitcher from '$lib/components/team-switcher.svelte';
+	import * as Sidebar from '$lib/components/ui/sidebar/';
+	import type { ComponentProps } from 'svelte';
+	let {
+		ref = $bindable(null),
+		collapsible = 'icon',
+		...restProps
+	}: ComponentProps<typeof Sidebar.Root> = $props();
+</script>
+
+<Sidebar.Root {collapsible} {...restProps}>
 	<Sidebar.Header>
 		<TeamSwitcher teams={data.teams} />
-		<NavMain items={data.navMain} />
 	</Sidebar.Header>
 	<Sidebar.Content>
-		<NavPromptHistory history={data.history} />
-		<NavSecondary items={data.navSecondary} class="mt-auto" />
+		<NavMain items={data.navMain} />
+		<NavProjects projects={data.projects} />
 	</Sidebar.Content>
+	<Sidebar.Footer>
+		<NavUser user={data.user} />
+	</Sidebar.Footer>
 	<Sidebar.Rail />
 </Sidebar.Root>

@@ -1,19 +1,13 @@
 <script lang="ts">
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/';
 	import * as Sidebar from '$lib/components/ui/sidebar/';
-	import { ChevronDown as ChevronDownIcon, Plus as PlusIcon } from '@lucide/svelte';
-	import type { Component } from 'svelte';
-
-	let {
-		teams
-	}: {
-		teams: {
-			name: string;
-			logo: Component;
-			plan: string;
-		}[];
-	} = $props();
-
+	import { useSidebar } from '$lib/components/ui/sidebar/';
+	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
+	import PlusIcon from '@lucide/svelte/icons/plus';
+	// This should be `Component` after @lucide/svelte updates types
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	let { teams }: { teams: { name: string; logo: any; plan: string }[] } = $props();
+	const sidebar = useSidebar();
 	let activeTeam = $state(teams[0]);
 </script>
 
@@ -21,24 +15,38 @@
 	<Sidebar.MenuItem>
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
-				{#snippet child({ props }: any)}
-					<Sidebar.MenuButton {...props} class="w-fit px-1.5">
+				{#snippet child({ props })}
+					<Sidebar.MenuButton
+						{...props}
+						size="lg"
+						class="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+					>
 						<div
-							class="flex aspect-square size-5 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground"
+							class="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground"
 						>
-							<activeTeam.logo class="size-3" />
+							<activeTeam.logo class="size-4" />
 						</div>
-						<span class="truncate font-medium">{activeTeam.name}</span>
-						<ChevronDownIcon class="opacity-50" />
+						<div class="grid flex-1 text-start text-sm leading-tight">
+							<span class="truncate font-medium">
+								{activeTeam.name}
+							</span>
+							<span class="truncate text-xs">{activeTeam.plan}</span>
+						</div>
+						<ChevronsUpDownIcon class="ms-auto" />
 					</Sidebar.MenuButton>
 				{/snippet}
 			</DropdownMenu.Trigger>
-			<DropdownMenu.Content class="w-64 rounded-lg" align="start" side="bottom" sideOffset={4}>
+			<DropdownMenu.Content
+				class="w-(--bits-dropdown-menu-anchor-width) min-w-56 rounded-lg"
+				align="start"
+				side={sidebar.isMobile ? 'bottom' : 'right'}
+				sideOffset={4}
+			>
 				<DropdownMenu.Label class="text-xs text-muted-foreground">Teams</DropdownMenu.Label>
 				{#each teams as team, index (team.name)}
 					<DropdownMenu.Item onSelect={() => (activeTeam = team)} class="gap-2 p-2">
-						<div class="flex size-6 items-center justify-center rounded-xs border">
-							<team.logo class="size-4 shrink-0" />
+						<div class="flex size-6 items-center justify-center rounded-md border">
+							<team.logo class="size-3.5 shrink-0" />
 						</div>
 						{team.name}
 						<DropdownMenu.Shortcut>⌘{index + 1}</DropdownMenu.Shortcut>
@@ -46,7 +54,7 @@
 				{/each}
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item class="gap-2 p-2">
-					<div class="flex size-6 items-center justify-center rounded-md border bg-background">
+					<div class="flex size-6 items-center justify-center rounded-md border bg-transparent">
 						<PlusIcon class="size-4" />
 					</div>
 					<div class="font-medium text-muted-foreground">Add team</div>
