@@ -18,19 +18,19 @@
 		},
 		teams: [
 			{
-				name: 'Steerable Reviews',
+				name: 'Steerable Rankings',
 				logo: GalleryVerticalEndIcon,
 				plan: 'Casted Matches'
 			},
 			{
-				name: 'Steerable AI Casts',
+				name: 'Steerable Auto Cast',
 				logo: AudioWaveformIcon,
-				plan: 'AOE2 AI Casts'
+				plan: 'AOE2 Auto Casts'
 			},
 			{
-				name: 'Steerable AI Training',
+				name: 'Steerable Gameplay',
 				logo: CommandIcon,
-				plan: 'AI Training Partner'
+				plan: 'Advanced Playing Bots'
 			}
 		],
 		navMain: [
