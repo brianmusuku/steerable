@@ -195,7 +195,12 @@
 	<div class="flex w-full items-center justify-between">
 		<ButtonGroup.Root>
 			{#each timeRanges as timeRange}
-				<Button class="cursor-pointer" variant="outline" size="sm">{timeRange.label}</Button>
+				<Button
+					onclick={() => (selectedTimeRange = timeRange.value)}
+					class="cursor-pointer "
+					variant={selectedTimeRange === timeRange.value ? 'default' : 'outline'}
+					size="sm">{timeRange.label}</Button
+				>
 			{/each}
 		</ButtonGroup.Root>
 
