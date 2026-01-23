@@ -4,9 +4,9 @@
 		BookOpen,
 		Bot,
 		Command,
-		GalleryVerticalEnd,
 		Settings2,
-		SquareTerminal
+		SquareTerminal,
+		Waypoints
 	} from '@lucide/svelte';
 	// This is sample data.
 	const data = {
@@ -18,7 +18,7 @@
 		teams: [
 			{
 				name: 'Steerable Rankings',
-				logo: GalleryVerticalEnd,
+				logo: Waypoints,
 				plan: 'Casted Matches'
 			},
 			{
