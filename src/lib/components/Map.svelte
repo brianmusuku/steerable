@@ -233,10 +233,7 @@
 	}
 </script>
 
-<div
-	bind:this={container}
-	class="relative h-full min-h-[500px] w-full overflow-hidden rounded-lg bg-black"
->
+<div bind:this={container} class="relative h-full w-full overflow-hidden rounded-lg bg-black">
 	<div
 		class="pointer-events-none absolute top-4 left-4 rounded bg-black/50 p-2 text-xs text-white/70"
 	>
