@@ -1,7 +1,14 @@
 <script lang="ts">
-	import * as Avatar from '$lib/components/ui/avatar';
+	import { User, ChessKnight, Swords, Activity } from '@lucide/svelte';
 
-	let posts = $state([
+	const iconMap = {
+		villager: User,
+		eco: Activity,
+		scout: ChessKnight,
+		drush: Swords
+	};
+
+	let posts = $state<{ title: string; content: string; avatar: keyof typeof iconMap }[]>([
 		{
 			title: 'Villager',
 			content: '30 villagers made in feudal age.',
@@ -33,12 +40,10 @@
 
 <div class="no-scrollbar flex h-screen w-200 flex-col overflow-auto">
 	{#each posts as post}
+		{@const Icon = iconMap[post.avatar]}
 		<div class="flex border p-4">
-			<div class="flex gap-2">
-				<Avatar.Root class="rounded-lg">
-					<Avatar.Image src="https://github.com/shadcn.png" alt="@shadcn" />
-					<Avatar.Fallback>CN</Avatar.Fallback>
-				</Avatar.Root>
+			<div class="flex items-center gap-2">
+				<Icon />
 
 				<div class="flex flex-col">
 					<h3 class="text-lg font-semibold">{post.title}</h3>
