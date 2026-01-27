@@ -10,7 +10,30 @@
 		position: { x: number; y: number };
 	}
 
-	let { terrainData }: { terrainData: TerrainPoint[] } = $props();
+	let { terrainData }: { terrainData: any } = $props();
+
+	// --- Configuration ---
+	const GRID_WIDTH = 120;
+	const GRID_HEIGHT = 120;
+
+	const processedTerrainData = $derived.by(() => {
+		const flat: TerrainPoint[] = [];
+		// The new format is { "y": { "x": [terrain, elevation] } }
+		for (let y = 0; y < GRID_HEIGHT; y++) {
+			const row = terrainData[y.toString()];
+			if (!row) continue;
+			for (let x = 0; x < GRID_WIDTH; x++) {
+				const point = row[x.toString()];
+				if (!point) continue;
+				flat.push({
+					terrain: point[0],
+					elevation: point[1],
+					position: { x, y }
+				});
+			}
+		}
+		return flat;
+	});
 
 	// --- Variables ---
 	let container: HTMLDivElement;
@@ -20,9 +43,6 @@
 	let controls: OrbitControls;
 	let animationId: number;
 
-	// --- Configuration ---
-	const GRID_WIDTH = 120;
-	const GRID_HEIGHT = 120;
 	const ELEVATION_SCALE = 1; // Increased to make the smooth hills visible
 	const SMOOTHING_ITERATIONS = 3; // Higher = smoother, flatter hills
 
@@ -162,23 +182,23 @@
 	}
 
 	function createSmoothedTerrain() {
-		if (!terrainData || terrainData.length === 0) return;
+		if (!processedTerrainData || processedTerrainData.length === 0) return;
 
 		// --- 1. Pre-calculate Smoothed Heights ---
 		const smoothHeights = getSmoothedElevations(
-			terrainData,
+			processedTerrainData,
 			GRID_WIDTH,
 			GRID_HEIGHT,
 			SMOOTHING_ITERATIONS
 		);
 
 		// --- 2. Generate Buffers ---
-		const vertexCount = terrainData.length;
+		const vertexCount = processedTerrainData.length;
 		const positions = new Float32Array(vertexCount * 3);
 		const colors = new Float32Array(vertexCount * 3);
 
 		for (let i = 0; i < vertexCount; i++) {
-			const point = terrainData[i];
+			const point = processedTerrainData[i];
 			const i3 = i * 3;
 
 			// Use smoothed height
