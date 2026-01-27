@@ -1,13 +1,12 @@
 <script lang="ts">
 	import SidebarLeft from '$lib/components/sidebar-left.svelte';
-	import SidebarRight from '$lib/components/sidebar-right.svelte';
 	import * as Breadcrumb from '$lib/components/ui/breadcrumb/';
 	import { Separator } from '$lib/components/ui/separator/';
 	import * as Sidebar from '$lib/components/ui/sidebar/';
 
 	import { onMount } from 'svelte';
 	import { genState } from '$lib/genState.svelte';
-	import Rankings from '$lib/components/Rankings.svelte';
+	import Feed from '$lib/components/Feed.svelte';
 
 	let html = $state('');
 
@@ -38,16 +37,14 @@
 				<Breadcrumb.Root>
 					<Breadcrumb.List>
 						<Breadcrumb.Item>
-							<Breadcrumb.Page class="line-clamp-1">Ranking 102 AoE2 casted matches</Breadcrumb.Page
-							>
+							<Breadcrumb.Page class="line-clamp-1">Indepth AoE2 Analysis</Breadcrumb.Page>
 						</Breadcrumb.Item>
 					</Breadcrumb.List>
 				</Breadcrumb.Root>
 			</div>
 		</header>
-		<div class="flex h-full flex-col bg-accent p-4">
-			<Rankings />
+		<div class="flex h-full flex-col p-4">
+			<Feed />
 		</div>
 	</Sidebar.Inset>
-	<SidebarRight />
 </Sidebar.Provider>
