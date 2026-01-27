@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Badge } from '$lib/components/ui/badge';
 	import {
 		User,
 		ChessKnight,
@@ -193,9 +194,13 @@
 				>
 					{fomartedCategory}
 					{#if category === 'all'}
-						({posts.length})
+						<Badge class="size-4 rounded-full px-1  tabular-nums">
+							{posts.length}
+						</Badge>
 					{:else}
-						({posts.filter((post) => post.category === category).length})
+						<Badge class="size-4 rounded-full px-1  tabular-nums">
+							{posts.filter((post) => post.category === category).length}
+						</Badge>
 					{/if}
 				</Button>
 			{/each}
