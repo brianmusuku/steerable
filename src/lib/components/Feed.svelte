@@ -31,7 +31,7 @@
 		title: string;
 		content: string;
 		avatar: keyof typeof iconMap;
-		category: string;
+		category: 'military' | 'buildings' | 'research' | 'timing' | 'movement' | 'placement';
 	}
 
 	let posts = $state<Data[]>([
@@ -79,6 +79,12 @@
 			category: 'research'
 		},
 		{
+			title: 'Long Garrison',
+			content: '4 villagers stayed garrisoned for 2 minutes at 15:56',
+			avatar: 'building',
+			category: 'placement'
+		},
+		{
 			title: 'eAPM Gap',
 			content: 'Winner has 30 more eAPM in castle age.',
 			avatar: 'eapm',
@@ -95,13 +101,77 @@
 			content: 'Double bit axe, available in castle age was researched in imperial age.',
 			avatar: 'research',
 			category: 'research'
+		},
+		{
+			title: 'APM',
+			content:
+				'70% of the apm was spent on military movement, while 30% was spent on economy. Opponent spent 60% of apm on economy.',
+			avatar: 'eapm',
+			category: 'movement'
+		},
+		{
+			title: 'Army Placement',
+			content: 'In dark age, army spent 90 % of their time in enemy base.',
+			avatar: 'soldier',
+			category: 'placement'
+		},
+		{
+			title: 'Army Placement',
+			content: 'In castle age, army spent 90 % of their time in the home base.',
+			avatar: 'soldier',
+			category: 'placement'
+		},
+		{
+			title: 'Tactical Retreats',
+			content: '13 tactical retreats in feudal age.',
+			avatar: 'soldier',
+			category: 'movement'
+		},
+		{
+			title: 'Army Size',
+			content: 'Average army group had 20 members in imperial age.',
+			avatar: 'soldier',
+			category: 'movement'
+		},
+		{
+			title: 'Lancer Hunt',
+			content: 'Lancer hunted 20 villagers at minute 11:00',
+			avatar: 'soldier',
+			category: 'movement'
+		},
+		{
+			title: 'Delayed Imperial Age',
+			content: 'Clicked imperial age at 12:09 and then again at 12:56',
+			avatar: 'research',
+			category: 'research'
+		},
+		{
+			title: 'Large Value in Queue',
+			content: 'Largest value unit queue was 6 trebuchet costing 560 gold, 2 minutes after imp',
+			avatar: 'building',
+			category: 'military'
+		},
+		{
+			title: 'Large Unit Queue',
+			content:
+				'Largest unit queue was 13 skirmishers at minute 11:00 costing 650 food, 10 minutes after imp',
+			avatar: 'building',
+			category: 'military'
+		},
+		{
+			title: 'Long waiting time',
+			content:
+				'Longest wait time was 2 minutes for an upgrade was 2 minutes after chemistry was cancelled twice.',
+			avatar: 'research',
+			category: 'research'
 		}
 	]);
 </script>
 
-<div class="no-scrollbar flex h-screen flex-col gap-4 overflow-y-scroll">
+<div class=" flex flex-col gap-4">
 	<div class="flex items-center gap-2">
 		<ButtonGroup.Root>
+			<Button class="cursor-pointer" variant="outline">All ({posts.length})</Button>
 			<Button class="cursor-pointer" variant="outline">Eco</Button>
 			<Button class="cursor-pointer" variant="outline">Military</Button>
 			<Button class="cursor-pointer" variant="outline">Research</Button>
@@ -110,7 +180,7 @@
 			<Button class="cursor-pointer" variant="outline">Movement</Button>
 		</ButtonGroup.Root>
 	</div>
-	<div class="flex flex-col">
+	<div class="no-scrollbar flex h-[calc(100vh-13rem)] flex-col overflow-y-scroll">
 		{#each posts as post}
 			{@const Icon = iconMap[post.avatar]}
 			<div
