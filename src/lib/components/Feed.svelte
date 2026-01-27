@@ -31,7 +31,7 @@
 		title: string;
 		content: string;
 		avatar: keyof typeof iconMap;
-		category: 'military' | 'buildings' | 'research' | 'timing' | 'movement' | 'placement';
+		category: 'military' | 'buildings' | 'research' | 'APM' | 'placement';
 	}
 
 	let posts = $state<Data[]>([
@@ -58,7 +58,7 @@
 			title: 'Expedition',
 			content: '16 cavaliers did not move more than 3 tiles in the entire match.',
 			avatar: 'calvary',
-			category: 'movement'
+			category: 'APM'
 		},
 		{
 			title: 'Missed Research',
@@ -70,7 +70,7 @@
 			title: 'Late Castle',
 			content: 'Castle age came 6 minutes after the opponent.',
 			avatar: 'uptime',
-			category: 'timing'
+			category: 'research'
 		},
 		{
 			title: 'Under Utilised Research',
@@ -88,13 +88,13 @@
 			title: 'eAPM Gap',
 			content: 'Winner has 30 more eAPM in castle age.',
 			avatar: 'eapm',
-			category: 'timing'
+			category: 'APM'
 		},
 		{
 			title: 'Late Imperial',
 			content: 'Looser arrived in imperial age 6 minutes after winner.',
 			avatar: 'uptime',
-			category: 'timing'
+			category: 'research'
 		},
 		{
 			title: 'Late Research',
@@ -105,9 +105,9 @@
 		{
 			title: 'APM',
 			content:
-				'70% of the apm was spent on military movement, while 30% was spent on economy. Opponent spent 60% of apm on economy.',
+				'70% of the apm was spent on military APM, while 30% was spent on economy. Opponent spent 60% of apm on economy.',
 			avatar: 'eapm',
-			category: 'movement'
+			category: 'APM'
 		},
 		{
 			title: 'Army Placement',
@@ -125,19 +125,19 @@
 			title: 'Tactical Retreats',
 			content: '13 tactical retreats in feudal age.',
 			avatar: 'soldier',
-			category: 'movement'
+			category: 'APM'
 		},
 		{
 			title: 'Army Size',
 			content: 'Average army group had 20 members in imperial age.',
 			avatar: 'soldier',
-			category: 'movement'
+			category: 'APM'
 		},
 		{
 			title: 'Lancer Hunt',
 			content: 'Lancer hunted 20 villagers at minute 11:00',
 			avatar: 'soldier',
-			category: 'movement'
+			category: 'APM'
 		},
 		{
 			title: 'Delayed Imperial Age',
@@ -166,22 +166,43 @@
 			category: 'research'
 		}
 	]);
+
+	let activeCategory = $state('all');
+	const categories = ['all', 'eco', 'military', 'research', 'buildings', 'placement', 'APM'];
+	const filterPosts = (category: string) => {
+		activeCategory = category;
+
+		if (category === 'all') {
+			filteredPosts = posts;
+		} else {
+			filteredPosts = posts.filter((post) => post.category === category);
+		}
+	};
+	let filteredPosts = $state(posts);
 </script>
 
 <div class=" flex flex-col gap-4">
 	<div class="flex items-center gap-2">
 		<ButtonGroup.Root>
-			<Button class="cursor-pointer" variant="outline">All ({posts.length})</Button>
-			<Button class="cursor-pointer" variant="outline">Eco</Button>
-			<Button class="cursor-pointer" variant="outline">Military</Button>
-			<Button class="cursor-pointer" variant="outline">Research</Button>
-			<Button class="cursor-pointer" variant="outline">Buildings</Button>
-			<Button class="cursor-pointer" variant="outline">Placement</Button>
-			<Button class="cursor-pointer" variant="outline">Movement</Button>
+			{#each categories as category}
+				{@const fomartedCategory = category.charAt(0).toUpperCase() + category.slice(1)}
+				<Button
+					onclick={() => filterPosts(category)}
+					class="cursor-pointer"
+					variant={activeCategory === category ? 'default' : 'outline'}
+				>
+					{fomartedCategory}
+					{#if category === 'all'}
+						({posts.length})
+					{:else}
+						({posts.filter((post) => post.category === category).length})
+					{/if}
+				</Button>
+			{/each}
 		</ButtonGroup.Root>
 	</div>
 	<div class="no-scrollbar flex h-[calc(100vh-13rem)] flex-col overflow-y-scroll">
-		{#each posts as post}
+		{#each filteredPosts as post}
 			{@const Icon = iconMap[post.avatar]}
 			<div
 				class="flex border-x p-4 first:rounded-t-lg first:border-t last:rounded-b-lg last:border-b even:border-y"
