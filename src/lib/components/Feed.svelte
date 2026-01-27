@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { Badge } from '$lib/components/ui/badge';
+	import { fade, fly } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 	import {
 		User,
 		ChessKnight,
@@ -15,6 +17,7 @@
 	} from '@lucide/svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as ButtonGroup from '$lib/components/ui/button-group/';
+	import { cubicOut } from 'svelte/easing';
 
 	const iconMap = {
 		villager: User,
@@ -193,37 +196,45 @@
 					variant={activeCategory === category ? 'default' : 'outline'}
 				>
 					{fomartedCategory}
-					{#if category === 'all'}
-						<Badge class="size-4 rounded-full px-1  tabular-nums">
+
+					<Badge class="size-4 rounded-full p-2  tabular-nums">
+						{#if category === 'all'}
 							{posts.length}
-						</Badge>
-					{:else}
-						<Badge class="size-4 rounded-full px-1  tabular-nums">
+						{:else}
 							{posts.filter((post) => post.category === category).length}
-						</Badge>
-					{/if}
+						{/if}
+					</Badge>
 				</Button>
 			{/each}
 		</ButtonGroup.Root>
 	</div>
-	<div class="no-scrollbar flex h-[calc(100vh-13rem)] flex-col overflow-y-scroll">
-		{#each filteredPosts as post}
-			{@const Icon = iconMap[post.avatar]}
+	<div
+		class="no-scrollbar flex h-[calc(100vh-13rem)] min-h-[calc(100vh-13rem)] flex-col overflow-y-scroll"
+	>
+		{#each filteredPosts as post, i (post)}
 			<div
+				animate:flip={{ duration: 400 }}
+				in:fly={{ y: 20, duration: 500, delay: i * 100 }}
+				out:fade={{ duration: 300, easing: cubicOut }}
 				class="flex border-x p-4 first:rounded-t-lg first:border-t last:rounded-b-lg last:border-b even:border-y"
 			>
-				<div class="flex items-center gap-2">
-					<Icon class="stroke-[2px]" />
-
-					<div class="flex flex-col">
-						<h3 class="text-base font-semibold">{post.title}</h3>
-						<p class="text-sm text-muted-foreground">{post.content}</p>
-					</div>
-				</div>
+				{@render postContent(post)}
 			</div>
 		{/each}
 	</div>
 </div>
+
+{#snippet postContent(post: Data)}
+	{@const Icon = iconMap[post.avatar]}
+	<div class="flex items-center gap-2">
+		<Icon class="stroke-[2px]" />
+
+		<div class="flex flex-col">
+			<h3 class="text-base font-semibold">{post.title}</h3>
+			<p class="text-sm text-muted-foreground">{post.content}</p>
+		</div>
+	</div>
+{/snippet}
 
 <style>
 	.no-scrollbar::-webkit-scrollbar {
