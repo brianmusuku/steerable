@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { User, ChessKnight, Swords, ChartNoAxesCombined } from '@lucide/svelte';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import * as ButtonGroup from '$lib/components/ui/button-group/';
 
 	const iconMap = {
 		villager: User,
@@ -38,7 +40,16 @@
 	]);
 </script>
 
-<div class="no-scrollbar flex h-screen w-200 flex-col overflow-y-scroll">
+<div class="no-scrollbar flex h-screen w-200 flex-col gap-4 overflow-y-scroll">
+	<div class="flex items-center gap-2">
+		<ButtonGroup.Root>
+			<Button class="cursor-pointer" variant="outline">Eco</Button>
+			<Button class="cursor-pointer" variant="outline">Military</Button>
+			<Button class="cursor-pointer" variant="outline">Research</Button>
+			<Button class="cursor-pointer" variant="outline">Buildings</Button>
+			<Button class="cursor-pointer" variant="outline">Placement</Button>
+		</ButtonGroup.Root>
+	</div>
 	{#each posts as post}
 		{@const Icon = iconMap[post.avatar]}
 		<div class="flex border-x p-4 first:border-t last:border-b even:border-y">
