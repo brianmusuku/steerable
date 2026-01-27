@@ -40,7 +40,7 @@
 	]);
 </script>
 
-<div class="no-scrollbar flex h-screen w-200 flex-col gap-4 overflow-y-scroll">
+<div class="no-scrollbar flex h-screen flex-col gap-4 overflow-y-scroll">
 	<div class="flex items-center gap-2">
 		<ButtonGroup.Root>
 			<Button class="cursor-pointer" variant="outline">Eco</Button>
@@ -58,8 +58,8 @@
 					<Icon class="stroke-[2px]" />
 
 					<div class="flex flex-col">
-						<h3 class="text-lg font-semibold">{post.title}</h3>
-						<p class="text-muted-foreground">{post.content}</p>
+						<h3 class="text-base font-semibold">{post.title}</h3>
+						<p class="text-sm text-muted-foreground">{post.content}</p>
 					</div>
 				</div>
 			</div>

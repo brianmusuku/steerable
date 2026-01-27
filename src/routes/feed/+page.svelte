@@ -1,7 +1,14 @@
 <script>
 	import Feed from '$lib/components/Feed.svelte';
+	import Map from '$lib/components/Map.svelte';
+	import terrainData from '$lib/components/terrain.json';
 </script>
 
-<div class="flex h-screen w-full justify-center p-12">
-	<Feed />
+<div class="flex h-screen w-full justify-center gap-6 p-8">
+	<div class="w-1/2 rounded-lg bg-[#111111] p-8">
+		<Feed />
+	</div>
+	<div class="w-1/2">
+		<Map {terrainData} />
+	</div>
 </div>
