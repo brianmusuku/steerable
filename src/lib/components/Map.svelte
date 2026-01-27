@@ -48,12 +48,12 @@
 
 	// Color Palette
 	const PALETTE: Record<number, THREE.Color> = {
-		1: new THREE.Color(0x1e3a8a), // Blue-900 (deep navy blue)
-		2: new THREE.Color(0x3b82f6), // Blue-500 (primary blue)
+		1: new THREE.Color(0x0000ff), // (blue)
+		2: new THREE.Color(0x0000d1), // light blue)
 		3: new THREE.Color(0x10b981), // Emerald-500 (teal green)
 		5: new THREE.Color(0x047857), // Emerald-700 (dark green)
 		10: new THREE.Color(0xfcd34d), // Amber-300 (golden yellow)
-		23: new THREE.Color(0x3b82f6), // Blue-500 (primary blue)
+		23: new THREE.Color(0x0000a3), //  dark blue)
 		27: new THREE.Color(0x4b5563), // Gray-600 (cool gray)
 		88: new THREE.Color(0xf9fafb), // Gray-50 (near white)
 		100: new THREE.Color(0x7f1d1d) // Red-900 (dark maroon)
