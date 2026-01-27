@@ -50,19 +50,21 @@
 			<Button class="cursor-pointer" variant="outline">Placement</Button>
 		</ButtonGroup.Root>
 	</div>
-	{#each posts as post}
-		{@const Icon = iconMap[post.avatar]}
-		<div class="flex border-x p-4 first:border-t last:border-b even:border-y">
-			<div class="flex items-center gap-2">
-				<Icon class="stroke-[2px]" />
+	<div class="flex flex-col">
+		{#each posts as post}
+			{@const Icon = iconMap[post.avatar]}
+			<div class="flex border-x p-4 first:border-t last:border-b even:border-y">
+				<div class="flex items-center gap-2">
+					<Icon class="stroke-[2px]" />
 
-				<div class="flex flex-col">
-					<h3 class="text-lg font-semibold">{post.title}</h3>
-					<p class="text-muted-foreground">{post.content}</p>
+					<div class="flex flex-col">
+						<h3 class="text-lg font-semibold">{post.title}</h3>
+						<p class="text-muted-foreground">{post.content}</p>
+					</div>
 				</div>
 			</div>
-		</div>
-	{/each}
+		{/each}
+	</div>
 </div>
 
 <style>
