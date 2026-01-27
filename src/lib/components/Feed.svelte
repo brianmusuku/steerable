@@ -43,7 +43,7 @@
 		{@const Icon = iconMap[post.avatar]}
 		<div class="flex border-x p-4 first:border-t last:border-b even:border-y">
 			<div class="flex items-center gap-2">
-				<Icon class="size-8 stroke-[2px]" />
+				<Icon class="stroke-[2px]" />
 
 				<div class="flex flex-col">
 					<h3 class="text-lg font-semibold">{post.title}</h3>
