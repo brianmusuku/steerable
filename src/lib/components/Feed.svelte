@@ -197,7 +197,7 @@
 				>
 					{fomartedCategory}
 
-					<Badge class="size-4 rounded-full p-2  tabular-nums">
+					<Badge class="size-4.5 rounded-full text-[10px] tabular-nums">
 						{#if category === 'all'}
 							{posts.length}
 						{:else}
