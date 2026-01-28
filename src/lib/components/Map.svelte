@@ -262,8 +262,8 @@
 	<div
 		class="pointer-events-none absolute right-4 bottom-4 rounded bg-white/60 p-2 text-xs text-black/70 dark:bg-black/50 dark:text-white/70"
 	>
-		Smoothing: {SMOOTHING_ITERATIONS} passes<br />
-		Shading: Smooth (Vertex Normals)
+		MapName: {SMOOTHING_ITERATIONS} passes<br />
+		Matchup: 1v1, Gujaras vs Aztecs
 	</div>
 </div>
 
