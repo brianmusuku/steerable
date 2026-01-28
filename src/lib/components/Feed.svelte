@@ -35,7 +35,7 @@
 		title: string;
 		content: string;
 		avatar: keyof typeof iconMap;
-		category: 'military' | 'buildings' | 'research' | 'APM' | 'placement';
+		category: 'military' | 'buildings' | 'research' | 'APM' | 'map control';
 	}
 
 	let posts = $state<Data[]>([
@@ -86,7 +86,7 @@
 			title: 'Long Garrison',
 			content: '4 villagers stayed garrisoned for 2 minutes at 15:56',
 			avatar: 'building',
-			category: 'placement'
+			category: 'APM'
 		},
 		{
 			title: 'eAPM Gap',
@@ -114,16 +114,16 @@
 			category: 'APM'
 		},
 		{
-			title: 'Army Placement',
+			title: 'Army map control',
 			content: 'In dark age, army spent 90 % of their time in enemy base.',
 			avatar: 'soldier',
-			category: 'placement'
+			category: 'map control'
 		},
 		{
-			title: 'Army Placement',
+			title: 'Army map control',
 			content: 'In castle age, army spent 90 % of their time in the home base.',
 			avatar: 'soldier',
-			category: 'placement'
+			category: 'map control'
 		},
 		{
 			title: 'Tactical Retreats',
@@ -172,7 +172,9 @@
 	]);
 
 	let activeCategory = $state('all');
-	const categories = ['all', 'eco', 'military', 'research', 'buildings', 'placement', 'APM'];
+	const categories = ['all', 'eco', 'military', 'research', 'buildings', 'map control', 'APM'];
+	let filteredPosts = $state(posts);
+
 	const filterPosts = (category: string) => {
 		activeCategory = category;
 
@@ -182,7 +184,6 @@
 			filteredPosts = posts.filter((post) => post.category === category);
 		}
 	};
-	let filteredPosts = $state(posts);
 </script>
 
 <div class=" flex flex-col gap-4">

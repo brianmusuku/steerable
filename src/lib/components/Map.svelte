@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
+	import { mode } from 'mode-watcher';
 	import * as THREE from 'three';
 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
@@ -86,7 +87,11 @@
 	function initThree() {
 		const ZOOM_OUT_FACTOR = 1.6;
 		scene = new THREE.Scene();
-		scene.background = new THREE.Color(0x111111);
+		if (mode.current === 'dark') {
+			scene.background = new THREE.Color(0x111111);
+		} else {
+			scene.background = new THREE.Color(0xffffff);
+		}
 
 		const width = container.clientWidth;
 		const height = container.clientHeight;
@@ -253,9 +258,9 @@
 	}
 </script>
 
-<div bind:this={container} class="relative h-full w-full overflow-hidden rounded-lg bg-black">
+<div bind:this={container} class="relative h-full w-full overflow-hidden rounded-r-lg">
 	<div
-		class="pointer-events-none absolute top-4 left-4 rounded bg-black/50 p-2 text-xs text-white/70"
+		class="pointer-events-none absolute right-4 bottom-4 rounded bg-white/60 p-2 text-xs text-black/70 dark:bg-black/50 dark:text-white/70"
 	>
 		Smoothing: {SMOOTHING_ITERATIONS} passes<br />
 		Shading: Smooth (Vertex Normals)
