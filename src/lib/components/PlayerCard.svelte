@@ -3,7 +3,7 @@
 		name: 'You',
 		winner: true,
 		civ: 'FRANKS',
-		stats: { apm: 142, ekd: 1.4 }
+		stats: { apm: 142, pop: 120 }
 	};
 </script>
 
@@ -16,8 +16,8 @@
 			<span class="value">{player.stats.apm}</span>
 		</div>
 		<div>
-			<span class="label">E-KD</span>
-			<span class="value">{player.stats.ekd}</span>
+			<span class="label">Pop</span>
+			<span class="value">{player.stats.pop}</span>
 		</div>
 	</div>
 </div>

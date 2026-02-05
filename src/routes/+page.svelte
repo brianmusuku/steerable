@@ -13,13 +13,13 @@
 				name: 'You',
 				winner: true,
 				civ: 'FRANKS',
-				stats: { apm: 142, ekd: 1.4 }
+				stats: { apm: 142, pop: 120 }
 			},
 			{
 				name: 'Opponent',
 				winner: false,
 				civ: 'MAYANS',
-				stats: { apm: 156, ekd: 0.8 }
+				stats: { apm: 156, pop: 115 }
 			}
 		],
 		insights: [
