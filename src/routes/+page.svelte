@@ -4,25 +4,7 @@
 	import PlayerCard from '$lib/components/PlayerCard.svelte';
 	import InsightItem from '$lib/components/InsightItem.svelte';
 
-	let html = $state('');
-
-	onMount(async () => {
-		const resp = await fetch('/api/data', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				prompt: 'Welcome to my website'
-			})
-		});
-
-		const data = await resp.json();
-		html = data.html;
-		genState.currentHtml = data.html;
-	});
-
-	const matchData = {
+	let matchData = $state({
 		id: '#8192',
 		mapType: 'Arabia (1v1)',
 		duration: '34:12',
@@ -84,7 +66,25 @@
 				}
 			}
 		]
-	};
+	});
+
+	onMount(async () => {
+		const resp = await fetch('/api/data', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				prompt: 'Welcome to my website'
+			})
+		});
+
+		const data = await resp.json();
+		matchData.players[0].name = data.info.player_names[0];
+
+		console.log(data);
+		genState.currentHtml = data.aiResponse;
+	});
 
 	let activeFilter = $state('All');
 	const filters = ['All', 'Eco', 'Military', 'Tech'];
