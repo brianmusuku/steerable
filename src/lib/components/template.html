@@ -1,0 +1,548 @@
+<html lang="en" vid="0">
+
+<head vid="1">
+    <meta charset="UTF-8" vid="2">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" vid="3">
+    <title vid="4">AOE2 Post-Game Analysis</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" vid="5">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" vid="6">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Rajdhani:wght@500;600;700&amp;display=swap"
+        rel="stylesheet" vid="7">
+    <style vid="8">
+        :root {
+
+            --bg-color: #dce5ea;
+            --grid-line: #b0bcd6;
+            --accent-purple: #4d3bd4;
+            --text-dark: #1e2a4a;
+            --text-dim: #5c6b8f;
+
+
+            --grid-size: 24px;
+            --border-width: 1px;
+
+
+            --font-display: 'Rajdhani', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image:
+                linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            color: var(--text-dark);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 48px;
+        }
+
+
+        .layout {
+            width: 100%;
+            max-width: 1200px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 24px;
+            border: var(--border-width) solid var(--grid-line);
+            background: var(--bg-color);
+            box-shadow: 24px 24px 0 rgba(77, 59, 212, 0.1);
+        }
+
+
+        h1,
+        h2,
+        h3 {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-purple);
+            line-height: 1;
+        }
+
+        .label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .value {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+
+        .sidebar {
+            border-right: var(--border-width) solid var(--grid-line);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-block {
+            padding: 24px;
+            border-bottom: var(--border-width) solid var(--grid-line);
+        }
+
+        .header-block h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .matchup {
+            padding: 24px;
+            flex-grow: 1;
+        }
+
+        .player-card {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .player-card::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 4px;
+            width: 4px;
+            height: 100%;
+            background: var(--grid-line);
+        }
+
+        .player-card.is-winner::before {
+            background: var(--accent-purple);
+        }
+
+        .civ-badge {
+            display: inline-block;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 2px 6px;
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feed-header {
+            padding: 24px;
+            border-bottom: var(--border-width) solid var(--grid-line);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .feed-header h2 {
+            font-size: 24px;
+        }
+
+        .feed-filter {
+            display: flex;
+            gap: 12px;
+        }
+
+        .filter-btn {
+            background: transparent;
+            border: 1px solid var(--grid-line);
+            color: var(--text-dim);
+            padding: 4px 12px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--accent-purple);
+            background: var(--accent-purple);
+            color: white;
+        }
+
+
+        .feed-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .insight-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 200px;
+            border-bottom: var(--border-width) solid var(--grid-line);
+            transition: background 0.2s;
+        }
+
+        .insight-item:last-child {
+            border-bottom: none;
+        }
+
+        .insight-item:hover {
+            background: rgba(77, 59, 212, 0.03);
+        }
+
+
+        .insight-time {
+            padding: 24px;
+            border-right: var(--border-width) solid var(--grid-line);
+            font-family: var(--font-display);
+            font-size: 18px;
+            color: var(--accent-purple);
+            font-weight: 600;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .insight-content {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .insight-type {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .insight-type::before {
+            content: '';
+            display: block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-purple);
+        }
+
+        .insight-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            max-width: 500px;
+        }
+
+        .insight-metrics {
+            padding: 24px;
+            border-left: var(--border-width) solid var(--grid-line);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 8px;
+        }
+
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+        }
+
+        .bar-label {
+            width: 30px;
+            color: var(--text-dim);
+        }
+
+        .bar-track {
+            flex-grow: 1;
+            height: 6px;
+            background: rgba(176, 188, 214, 0.3);
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: var(--accent-purple);
+        }
+
+        .bar-fill.opponent {
+            background: var(--text-dim);
+        }
+
+        .bar-value {
+            width: 30px;
+            text-align: right;
+            font-weight: 700;
+        }
+
+
+        .actions {
+            padding: 16px 24px;
+            display: flex;
+            gap: 16px;
+            margin-top: 8px;
+        }
+
+        .btn-action {
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--accent-purple);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action:hover {
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+        }
+
+
+        @media (max-width: 900px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: var(--border-width) solid var(--grid-line);
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header-block {
+                border-bottom: none;
+                border-right: var(--border-width) solid var(--grid-line);
+            }
+        }
+    </style>
+</head>
+
+<body vid="9">
+
+    <div class="layout" vid="10">
+        <aside class="sidebar" vid="11">
+            <div class="header-block" vid="12">
+                <span class="label" vid="13">Analysis Matrix</span>
+                <h1 vid="14">Match #8192</h1>
+                <span class="label" vid="15">Map Type</span>
+                <span class="value" vid="16">Arabia (1v1)</span>
+                <span class="label" style="margin-top: 8px;" vid="17">Duration</span>
+                <span class="value" vid="18">34:12</span>
+            </div>
+
+            <div class="matchup" vid="19">
+                <div class="player-card is-winner" vid="20">
+                    <span class="label" vid="21">You (Winner)</span>
+                    <div class="civ-badge" vid="22">FRANKS</div>
+                    <div class="stat-grid" vid="23">
+                        <div vid="24">
+                            <span class="label" vid="25">APM</span>
+                            <span class="value" vid="26">142</span>
+                        </div>
+                        <div vid="27">
+                            <span class="label" vid="28">E-KD</span>
+                            <span class="value" vid="29">1.4</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="player-card" vid="30">
+                    <span class="label" vid="31">Opponent</span>
+                    <div class="civ-badge" vid="32">MAYANS</div>
+                    <div class="stat-grid" vid="33">
+                        <div vid="34">
+                            <span class="label" vid="35">APM</span>
+                            <span class="value" vid="36">156</span>
+                        </div>
+                        <div vid="37">
+                            <span class="label" vid="38">E-KD</span>
+                            <span class="value" vid="39">0.8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="feed-container" vid="40">
+            <div class="feed-header" vid="41">
+                <div vid="42">
+                    <h2 vid="43">Tactical Feed</h2>
+                    <span class="label" vid="44">Critical missed opportunities detected</span>
+                </div>
+                <div class="feed-filter" vid="45">
+                    <button class="filter-btn active" vid="46">All</button>
+                    <button class="filter-btn" vid="47">Eco</button>
+                    <button class="filter-btn" vid="48">Military</button>
+                    <button class="filter-btn" vid="49">Tech</button>
+                </div>
+            </div>
+
+            <div class="feed-list" vid="50">
+
+                <article class="insight-item" vid="51">
+                    <div class="insight-time" vid="52">04:12</div>
+                    <div class="insight-content" vid="53">
+                        <div class="insight-type" vid="54">Economy / Idle Time</div>
+                        <p class="insight-text" vid="55">
+                            Town Center idle time spiked to 45s during Feudal transition. You floated 400 wood that
+                            could have been seeded into farms earlier.
+                        </p>
+                        <div class="actions" vid="56">
+                            <a href="#" class="btn-action" vid="57">View Rec -&gt;</a>
+                        </div>
+                    </div>
+                    <div class="insight-metrics" vid="58">
+                        <span class="label" vid="59">Idle TC Time</span>
+                        <div class="bar-chart" vid="60">
+                            <div class="bar-row" vid="61">
+                                <span class="bar-label" vid="62">YOU</span>
+                                <div class="bar-track" vid="63">
+                                    <div class="bar-fill" style="width: 80%;" vid="64"></div>
+                                </div>
+                                <span class="bar-value" vid="65">45s</span>
+                            </div>
+                            <div class="bar-row" vid="66">
+                                <span class="bar-label" vid="67">OPP</span>
+                                <div class="bar-track" vid="68">
+                                    <div class="bar-fill opponent" style="width: 10%;" vid="69"></div>
+                                </div>
+                                <span class="bar-value" vid="70">5s</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="insight-item" vid="71">
+                    <div class="insight-time" vid="72">12:30</div>
+                    <div class="insight-content" vid="73">
+                        <div class="insight-type" vid="74">Military / Upgrades</div>
+                        <p class="insight-text" vid="75">
+                            Engagement taken without Fletching. Opponent had +1 range advantage leading to inefficient
+                            trade.
+                        </p>
+                    </div>
+                    <div class="insight-metrics" vid="76">
+                        <span class="label" vid="77">K/D Ratio this fight</span>
+                        <div class="bar-chart" vid="78">
+                            <div class="bar-row" vid="79">
+                                <span class="bar-label" vid="80">YOU</span>
+                                <div class="bar-track" vid="81">
+                                    <div class="bar-fill" style="width: 30%;" vid="82"></div>
+                                </div>
+                                <span class="bar-value" vid="83">0.4</span>
+                            </div>
+                            <div class="bar-row" vid="84">
+                                <span class="bar-label" vid="85">OPP</span>
+                                <div class="bar-track" vid="86">
+                                    <div class="bar-fill opponent" style="width: 90%;" vid="87"></div>
+                                </div>
+                                <span class="bar-value" vid="88">2.1</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="insight-item" vid="89">
+                    <div class="insight-time" vid="90">18:45</div>
+                    <div class="insight-content" vid="91">
+                        <div class="insight-type" vid="92">Map Control / Relics</div>
+                        <p class="insight-text" vid="93">
+                            Opponent secured 3 relics uncontested. Monastery built late relative to map control
+                            advantage.
+                        </p>
+                    </div>
+                    <div class="insight-metrics" vid="94">
+                        <span class="label" vid="95">Relic Gold / Min</span>
+                        <div class="bar-chart" vid="96">
+                            <div class="bar-row" vid="97">
+                                <span class="bar-label" vid="98">YOU</span>
+                                <div class="bar-track" vid="99">
+                                    <div class="bar-fill" style="width: 0%;" vid="100"></div>
+                                </div>
+                                <span class="bar-value" vid="101">0</span>
+                            </div>
+                            <div class="bar-row" vid="102">
+                                <span class="bar-label" vid="103">OPP</span>
+                                <div class="bar-track" vid="104">
+                                    <div class="bar-fill opponent" style="width: 75%;" vid="105"></div>
+                                </div>
+                                <span class="bar-value" vid="106">90</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+
+                <article class="insight-item" vid="107">
+                    <div class="insight-time" vid="108">24:10</div>
+                    <div class="insight-content" vid="109">
+                        <div class="insight-type" vid="110">Production / Siege</div>
+                        <p class="insight-text" vid="111">
+                            Missed lethal opportunity. Opponent had no mangonel defense against your forward workshop
+                            for 2 minutes.
+                        </p>
+                        <div class="actions" vid="112">
+                            <a href="#" class="btn-action" vid="113">Analyze Timing -&gt;</a>
+                        </div>
+                    </div>
+                    <div class="insight-metrics" vid="114">
+                        <span class="label" vid="115">Siege Unit Count</span>
+                        <div class="bar-chart" vid="116">
+                            <div class="bar-row" vid="117">
+                                <span class="bar-label" vid="118">YOU</span>
+                                <div class="bar-track" vid="119">
+                                    <div class="bar-fill" style="width: 60%;" vid="120"></div>
+                                </div>
+                                <span class="bar-value" vid="121">3</span>
+                            </div>
+                            <div class="bar-row" vid="122">
+                                <span class="bar-label" vid="123">OPP</span>
+                                <div class="bar-track" vid="124">
+                                    <div class="bar-fill opponent" style="width: 0%;" vid="125"></div>
+                                </div>
+                                <span class="bar-value" vid="126">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+
+</body>
+
+</html>

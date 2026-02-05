@@ -47,7 +47,7 @@
 		},
 		{
 			title: 'Building Utilization',
-			content: 'Majority (67%) of the skirmishers were produced from 1 range.',
+			content: '30 skirmishers were built in 1 range.',
 			avatar: 'building',
 			category: 'buildings'
 		},
