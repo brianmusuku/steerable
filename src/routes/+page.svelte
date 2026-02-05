@@ -80,7 +80,7 @@
 		});
 
 		const data = await resp.json();
-		matchData.players[0].name = data.info.player_names[0];
+		matchData.players = data.info.players;
 
 		console.log(data);
 		genState.currentHtml = data.aiResponse;
