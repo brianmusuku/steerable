@@ -81,6 +81,9 @@
 
 		const data = await resp.json();
 		matchData.players = data.info.players;
+		matchData.id = data.info.id;
+		matchData.mapType = data.info.mapType;
+		matchData.duration = data.info.duration.split('.')[0];
 
 		console.log(data);
 		genState.currentHtml = data.aiResponse;
