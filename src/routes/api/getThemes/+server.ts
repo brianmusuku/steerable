@@ -1,6 +1,6 @@
 // src/routes/api/generate-html/+server.js
 
-import { generateThemes } from '$lib/generator';
+import { generateThemes } from '$lib/ai_generator';
 import { json } from '@sveltejs/kit';
 
 

@@ -190,7 +190,7 @@
 		text-transform: uppercase;
 		font-weight: 700;
 		font-size: 14px;
-		color: var(--success-green, #2d8659);
+		color: var(--success-green, #63dfa1);
 		text-decoration: none;
 		display: inline-flex;
 		align-items: center;
