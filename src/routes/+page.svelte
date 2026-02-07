@@ -3,6 +3,7 @@
 	import { genState } from '$lib/genState.svelte';
 	import PlayerCard from '$lib/components/PlayerCard.svelte';
 	import InsightItem from '$lib/components/InsightItem.svelte';
+	import { CirclePoundSterling, DoorClosedLocked, Power, Tractor } from '@lucide/svelte';
 
 	let matchData = $state({
 		id: '#8192',
@@ -25,15 +26,27 @@
 		insights: [
 			{
 				time: '04:12',
-				type: 'Economy / Idle Time',
-				text: 'Town Center idle time spiked to 45s during Feudal transition. You floated 400 wood that could have been seeded into farms earlier.',
-				action: { label: 'View Rec', href: '#' },
+				icon: CirclePoundSterling,
+				type: 'Economy / Resource Allocation',
+				text: 'Player 1 spent 65% of resources on eco and 35% on military.\n Player 2 spent 50% on eco and 50% on military.',
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80, color: '#d32f2f' },
 					opponent: { value: '5s', percentage: 10 }
 				}
 			},
+			{
+				time: '04:12',
+				type: 'Economy / Garrison Time',
+				text: 'Player 1 villagers were garrisoned for 45s during Feudal, 30s during Castle, and 15s during Imperial. \n Player 2 villagers were garrisoned for 10s in dark ages, 5s in feudal, and 2s in castle.',
+				icon: DoorClosedLocked,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+
 			{
 				time: '12:30',
 				type: 'Military / Upgrades',
@@ -131,7 +144,7 @@
 		<div class="feed-header">
 			<div>
 				<h2 class="font-bold">Tactical Feed</h2>
-				<span class="label">Post match analysis notes</span>
+				<span class="label">Post match analysis (Things to note)</span>
 			</div>
 			<div class="feed-filter">
 				{#each filters as filter}

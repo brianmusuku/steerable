@@ -3,6 +3,7 @@
 		time: string;
 		type: string;
 		text: string;
+		icon?: typeof import('@lucide/svelte').Icon;
 		action?: { label: string; href: string };
 		metrics: {
 			label: string;
@@ -14,6 +15,7 @@
 		time: '00:00',
 		type: 'General',
 		text: '',
+		icon: undefined,
 		/** @type {{ label: string; href: string } | undefined} */
 		action: undefined,
 		metrics: {
@@ -30,11 +32,17 @@
 </script>
 
 <article class="insight-item">
-	<div class="insight-time">{insight.time}</div>
+	<div class="insight-time">
+		{#if insight.icon}
+			<insight.icon />
+		{:else}
+			<span>{insight.time}</span>
+		{/if}
+	</div>
 	<div class="insight-content">
 		<div class="insight-type">{insight.type}</div>
 		<p class="insight-text">
-			{insight.text}
+			{@html insight.text.replaceAll('\n', '<br>')}
 		</p>
 		{#if insight.action && insight.action.label}
 			<div class="actions">
@@ -94,7 +102,8 @@
 		color: var(--text-dark);
 		font-weight: 600;
 		display: flex;
-		align-items: flex-start;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.insight-content {
@@ -126,7 +135,6 @@
 	.insight-text {
 		font-size: 14px;
 		color: var(--text-dark);
-		max-width: 500px;
 	}
 
 	.insight-metrics {
