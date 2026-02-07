@@ -7,6 +7,7 @@
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Power,
+		ShoppingCart,
 		Store,
 		Timer,
 		Tractor
@@ -68,7 +69,7 @@
 				time: '04:12',
 				type: 'Economy / Resource Usage',
 				text: 'Player 1 spent 3000 food, 1000 wood, 500 gold in castle age.\n Player 2 spent 2000 food, 500 wood, 200 gold in castle age.',
-				icon: Tractor,
+				icon: ShoppingCart,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80, color: '#d32f2f' },
@@ -80,6 +81,17 @@
 				type: 'Economy / Market',
 				text: 'Player 1 spent bought 300 resources from the market, sold 100.\n Player 2 bought 100 resources from the market, sold 300.',
 				icon: Store,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Farms',
+				text: 'Player 1 made 0 farms in dark age, 10 in feudal, 20 in castle.\n Player 2 made 10 farms in dark age, 20 in feudal, 30 in castle.',
+				icon: Tractor,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80, color: '#d32f2f' },
