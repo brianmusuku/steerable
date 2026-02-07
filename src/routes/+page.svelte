@@ -82,7 +82,7 @@
 				icon: Store,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#0000FF' },
+					you: { value: '45s', percentage: 80, color: '#d32f2f' },
 					opponent: { value: '5s', percentage: 10 }
 				}
 			},
@@ -142,7 +142,7 @@
 	});
 
 	let activeFilter = $state('All');
-	const filters = ['All', 'Eco', 'Military', 'Tech'];
+	const filters = ['All', 'Economy', 'Military', 'Research'];
 
 	let filteredInsights = $derived(
 		activeFilter === 'All'
