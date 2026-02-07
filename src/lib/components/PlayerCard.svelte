@@ -9,7 +9,7 @@
 
 <div class="player-card" class:is-winner={player.winner}>
 	<span class="label">{player.name} {player.winner ? '(Winner)' : ''}</span>
-	<div class="civ-badge">{player.civ}</div>
+	<div class="civ-badge uppercase">{player.civ}</div>
 	<div class="stat-grid">
 		<div>
 			<span class="label">APM</span>

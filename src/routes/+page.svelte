@@ -131,7 +131,7 @@
 		<div class="feed-header">
 			<div>
 				<h2 class="font-bold">Tactical Feed</h2>
-				<span class="label">Critical missed opportunities detected</span>
+				<span class="label">Post match analysis notes</span>
 			</div>
 			<div class="feed-filter">
 				{#each filters as filter}
