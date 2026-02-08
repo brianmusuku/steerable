@@ -7,6 +7,7 @@
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Power,
+		Sailboat,
 		ShoppingCart,
 		Store,
 		Timer,
@@ -92,6 +93,28 @@
 				type: 'Economy / Farms',
 				text: 'Player 1 made 0 farms in dark age, 10 in feudal, 20 in castle.\n Player 2 made 10 farms in dark age, 20 in feudal, 30 in castle.',
 				icon: Tractor,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Farm APM',
+				text: 'Player 1 went from 0 to 20 farms in 2 minutes.\n Player 2 went from 0 to 11 farms in 3 minutes.',
+				icon: Tractor,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Fishing APM',
+				text: 'Player 1 went from 0 to 20 fishing boats in 2 minutes.\n Player 2 went from 0 to 11 fishing boats in 3 minutes.',
+				icon: Sailboat,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80, color: '#d32f2f' },
