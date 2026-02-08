@@ -233,7 +233,7 @@
 			</div>
 		</div>
 
-		<div class="feed-list">
+		<div class="feed-list no-scrollbar h-[calc(100vh-120px)] overflow-y-auto">
 			{#each filteredInsights as insight}
 				<InsightItem {insight} />
 			{/each}
@@ -242,6 +242,14 @@
 </div>
 
 <style>
+	.no-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+	.no-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+
 	:global(:root) {
 		--bg-color: #ffffff;
 		--grid-line: #d1d1d1;
