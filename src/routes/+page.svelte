@@ -9,7 +9,9 @@
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Fish,
+		GraduationCap,
 		House,
+		Landmark,
 		PersonStanding,
 		Pickaxe,
 		Power,
@@ -44,7 +46,7 @@
 				time: '04:12',
 				icon: ChartPie,
 				type: 'Economy / Resource Allocation',
-				text: 'Player 1 spent 65% of resources on eco and 35% on military.\n Player 2 spent 50% on eco and 50% on military.',
+				text: 'Player 1 spent 65% of resources on eco and 35% on military. He lost the game.\n Player 2 spent 50% on eco and 50% on military. He won the game.',
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80 },
@@ -54,7 +56,7 @@
 			{
 				time: '04:12',
 				type: 'Economy / Garrison Time',
-				text: 'Player 1 villagers were garrisoned for 45s during Feudal, 30s during Castle, and 15s during Imperial. \n Player 2 villagers were garrisoned for 10s in dark ages, 5s in feudal, and 2s in castle.',
+				text: 'Player 1 villagers were garrisoned for 45s during Feudal, 30s during Castle, and 15s during Imperial and still lost. \n Player 2 villagers were garrisoned for 10s in dark ages, 5s in feudal, and 2s in castle.',
 				icon: DoorClosedLocked,
 				metrics: {
 					label: 'Idle TC Time',
@@ -65,7 +67,7 @@
 			{
 				time: '04:12',
 				type: 'Economy / uptime',
-				text: 'Player 1 had 10 min idle time and reached castle age at 15:00.\n Player had 40s of idle time and reached castle age at 12:00.',
+				text: 'Player 1 had 10 min idle time and reached castle age at 15:00, he lost the game.\n Player had 40s of idle time and reached castle age at 12:00.',
 				icon: Timer,
 				metrics: {
 					label: 'Idle TC Time',
@@ -76,7 +78,7 @@
 			{
 				time: '04:12',
 				type: 'Economy / Spending',
-				text: 'Player 1 spent 3000 food, 1000 wood, 500 gold in castle age.\n Player 2 spent 2000 food, 500 wood, 200 gold in castle age.',
+				text: 'Player 1 spent 3000 food, 1000 wood, 500 gold in castle age, was slower to imperial age.\n Player 2 spent 2000 food, 500 wood, 200 gold in castle age, reached imperial age faster.',
 				icon: ShoppingCart,
 				metrics: {
 					label: 'Idle TC Time',
@@ -220,7 +222,40 @@
 				time: '04:12',
 				type: 'Research / University',
 				text: 'Player 1 built 2 universities in imperial age, \n Player 2 built 1 university in imperial age.',
-				icon: University,
+				icon: GraduationCap,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Town Center',
+				text: 'Player 1 built 2 town centers in castle age, \n Player 2 built 1 town center in castle age.',
+				icon: Landmark,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Villager Queue',
+				text: 'At most Player 1 had 20 villagers in queue costing him 1000 food, \n At most Player 2 had 13 villagers in queue costing him 650 food.',
+				icon: PersonStanding,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Fishing Ships Queue',
+				text: 'At most Player 1 had 20 fishing ships in queue costing him 1000 wood, \n At most Player 2 had 13 fishing ships in queue costing him 650 wood.',
+				icon: Sailboat,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 60 },
