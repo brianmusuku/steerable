@@ -54,7 +54,7 @@
 			<div class="bar-row">
 				<span class="bar-label">YOU</span>
 				<div class="bar-track">
-					<div class="bar-fill bg-green-600" style="width: {insight.metrics.you.percentage}%"></div>
+					<div class="bar-fill" style="width: {insight.metrics.you.percentage}%"></div>
 				</div>
 				<span class="bar-value">{insight.metrics.you.value}</span>
 			</div>
@@ -62,7 +62,7 @@
 				<span class="bar-label">OPP</span>
 				<div class="bar-track">
 					<div
-						class="bar-fill opponent bg-blue-600"
+						class="bar-fill opponent"
 						style="width: {insight.metrics.opponent.percentage}%"
 					></div>
 				</div>
@@ -167,11 +167,11 @@
 
 	.bar-fill {
 		height: 100%;
-		/* background: var(--text-dark); */
+		background: var(--text-dark);
 	}
 
 	.bar-fill.opponent {
-		/* background: var(--text-dim); */
+		background: var(--text-dim);
 	}
 
 	.bar-value {
