@@ -40,8 +40,8 @@
 				text: 'Player 1 spent 65% of resources on eco and 35% on military.\n Player 2 spent 50% on eco and 50% on military.',
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 80 },
+					opponent: { value: '5s', percentage: 20 }
 				}
 			},
 			{
@@ -51,8 +51,8 @@
 				icon: DoorClosedLocked,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 70 },
+					opponent: { value: '5s', percentage: 30 }
 				}
 			},
 			{
@@ -62,8 +62,8 @@
 				icon: Timer,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 20 },
+					opponent: { value: '5s', percentage: 80 }
 				}
 			},
 			{
@@ -73,8 +73,8 @@
 				icon: ShoppingCart,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 30 },
+					opponent: { value: '5s', percentage: 70 }
 				}
 			},
 			{
@@ -84,8 +84,8 @@
 				icon: Store,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
 				}
 			},
 			{
@@ -95,8 +95,8 @@
 				icon: Tractor,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
-					opponent: { value: '5s', percentage: 10 }
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
 				}
 			},
 			{
@@ -106,7 +106,7 @@
 				icon: Tractor,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					you: { value: '45s', percentage: 80 },
 					opponent: { value: '5s', percentage: 10 }
 				}
 			},
@@ -117,7 +117,7 @@
 				icon: Sailboat,
 				metrics: {
 					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80, color: '#d32f2f' },
+					you: { value: '45s', percentage: 80 },
 					opponent: { value: '5s', percentage: 10 }
 				}
 			},
@@ -127,7 +127,7 @@
 				text: 'Engagement taken without Fletching. Opponent had +1 range advantage leading to inefficient trade.',
 				metrics: {
 					label: 'K/D Ratio this fight',
-					you: { value: '0.4', percentage: 30 },
+					you: { value: '0.4', percentage: 90 },
 					opponent: { value: '2.1', percentage: 90 }
 				}
 			},
@@ -148,7 +148,7 @@
 				action: { label: 'Analyze Timing', href: '#' },
 				metrics: {
 					label: 'Siege Unit Count',
-					you: { value: '3', percentage: 60, color: 'var(--success-green)' },
+					you: { value: '3', percentage: 60 },
 					opponent: { value: '0', percentage: 0 }
 				}
 			}

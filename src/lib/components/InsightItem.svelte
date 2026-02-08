@@ -7,7 +7,7 @@
 		action?: { label: string; href: string };
 		metrics: {
 			label: string;
-			you: { value: string | number; percentage: number; color?: string };
+			you: { value: string | number; percentage: number };
 			opponent: { value: string | number; percentage: number };
 		}
 	}} */
@@ -22,9 +22,7 @@
 			label: '',
 			you: {
 				value: '',
-				percentage: 0,
-				/** @type {string | undefined} */
-				color: undefined
+				percentage: 0
 			},
 			opponent: { value: '', percentage: 0 }
 		}
@@ -56,11 +54,7 @@
 			<div class="bar-row">
 				<span class="bar-label">YOU</span>
 				<div class="bar-track">
-					<div
-						class="bar-fill"
-						style="width: {insight.metrics.you.percentage}%; background: {insight.metrics.you
-							.color || 'var(--text-dark)'};"
-					></div>
+					<div class="bar-fill bg-green-600" style="width: {insight.metrics.you.percentage}%"></div>
 				</div>
 				<span class="bar-value">{insight.metrics.you.value}</span>
 			</div>
@@ -68,8 +62,8 @@
 				<span class="bar-label">OPP</span>
 				<div class="bar-track">
 					<div
-						class="bar-fill opponent"
-						style="width: {insight.metrics.opponent.percentage}%;"
+						class="bar-fill opponent bg-blue-600"
+						style="width: {insight.metrics.opponent.percentage}%"
 					></div>
 				</div>
 				<span class="bar-value">{insight.metrics.opponent.value}</span>
@@ -173,11 +167,11 @@
 
 	.bar-fill {
 		height: 100%;
-		background: var(--text-dark);
+		/* background: var(--text-dark); */
 	}
 
 	.bar-fill.opponent {
-		background: var(--text-dim);
+		/* background: var(--text-dim); */
 	}
 
 	.bar-value {
