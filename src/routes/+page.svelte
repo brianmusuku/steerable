@@ -4,6 +4,7 @@
 	import PlayerCard from '$lib/components/PlayerCard.svelte';
 	import InsightItem from '$lib/components/InsightItem.svelte';
 	import {
+		ChartPie,
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Fish,
@@ -38,7 +39,7 @@
 		insights: [
 			{
 				time: '04:12',
-				icon: CirclePoundSterling,
+				icon: ChartPie,
 				type: 'Economy / Resource Allocation',
 				text: 'Player 1 spent 65% of resources on eco and 35% on military.\n Player 2 spent 50% on eco and 50% on military.',
 				metrics: {
