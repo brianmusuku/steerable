@@ -4,18 +4,21 @@
 	import PlayerCard from '$lib/components/PlayerCard.svelte';
 	import InsightItem from '$lib/components/InsightItem.svelte';
 	import {
+		Axe,
 		ChartPie,
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Fish,
 		House,
 		PersonStanding,
+		Pickaxe,
 		Power,
 		Sailboat,
 		ShoppingCart,
 		Store,
 		Timer,
-		Tractor
+		Tractor,
+		University
 	} from '@lucide/svelte';
 
 	let matchData = $state({
@@ -159,6 +162,72 @@
 				}
 			},
 			{
+				time: '04:12',
+				type: 'Economy / Lumber Camps',
+				text: 'Player 1 built 2 lumber camps in dark age\n Player 2 built 1 lumber camp in dark age.',
+				icon: Axe,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Mining Camps',
+				text: 'Player 1 built 2 mining camps in dark age\n Player 2 built 1 mining camp in dark age.',
+				icon: Pickaxe,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Market',
+				text: 'Player 1 built 2 market in dark age,\n Player 2 built 1 market in dark age.',
+				icon: Store,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Market',
+				text: 'Player 1 built 2 markets in castle age, \n Player 2 built 1 market in castle age.',
+				icon: Store,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Market',
+				text: 'Player 1 built 2 markets in imperial age, \n Player 2 built 1 market in imperial age.',
+				icon: Store,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Research / University',
+				text: 'Player 1 built 2 universities in imperial age, \n Player 2 built 1 university in imperial age.',
+				icon: University,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
 				time: '12:30',
 				type: 'Military / Upgrades',
 				text: 'Engagement taken without Fletching. Opponent had +1 range advantage leading to inefficient trade.',
@@ -170,7 +239,7 @@
 			},
 			{
 				time: '18:45',
-				type: 'Map Control / Relics',
+				type: 'Military / Relics',
 				text: 'Opponent secured 3 relics uncontested. Monastery built late relative to map control advantage.',
 				metrics: {
 					label: 'Relic Gold / Min',
@@ -180,7 +249,7 @@
 			},
 			{
 				time: '24:10',
-				type: 'Production / Siege',
+				type: 'Military / Siege',
 				text: 'Missed lethal opportunity. Opponent had no mangonel defense against your forward workshop for 2 minutes.',
 				action: { label: 'Analyze Timing', href: '#' },
 				metrics: {
