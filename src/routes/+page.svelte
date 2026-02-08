@@ -6,6 +6,8 @@
 	import {
 		CirclePoundSterling,
 		DoorClosedLocked,
+		Fish,
+		PersonStanding,
 		Power,
 		Sailboat,
 		ShoppingCart,
@@ -68,7 +70,7 @@
 			},
 			{
 				time: '04:12',
-				type: 'Economy / Resource Usage',
+				type: 'Economy / Spending',
 				text: 'Player 1 spent 3000 food, 1000 wood, 500 gold in castle age.\n Player 2 spent 2000 food, 500 wood, 200 gold in castle age.',
 				icon: ShoppingCart,
 				metrics: {
@@ -119,6 +121,28 @@
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80 },
 					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Fish Traps',
+				text: 'Player 1 had 0 fish traps.\n Player 2 had 10 fish traps.',
+				icon: Fish,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Villager Production',
+				text: 'Player 1 made an avarage of 3 villagers per minute in dark age, 2 / min in feudal, 1 / min in castle.\n Player 2 made an avarage of 2 villagers per minute in dark age, 3 / min in feudal, 2 / min in castle.',
+				icon: PersonStanding,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
 				}
 			},
 			{
