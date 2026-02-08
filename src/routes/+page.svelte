@@ -7,6 +7,7 @@
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Fish,
+		House,
 		PersonStanding,
 		Power,
 		Sailboat,
@@ -139,6 +140,17 @@
 				type: 'Economy / Villager Production',
 				text: 'Player 1 made an avarage of 3 villagers per minute in dark age, 2 / min in feudal, 1 / min in castle.\n Player 2 made an avarage of 2 villagers per minute in dark age, 3 / min in feudal, 2 / min in castle.',
 				icon: PersonStanding,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 60 },
+					opponent: { value: '5s', percentage: 40 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Houses',
+				text: 'Player 1 was housed 3 times in the game\n Player 2 was housed 1 time in the game.',
+				icon: House,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 60 },
