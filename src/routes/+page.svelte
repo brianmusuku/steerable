@@ -6,6 +6,7 @@
 	import {
 		Axe,
 		ChartPie,
+		ChessKnight,
 		CirclePoundSterling,
 		DoorClosedLocked,
 		Fish,
@@ -113,6 +114,28 @@
 				type: 'Economy / Farm APM',
 				text: 'Player 1 went from 0 to 20 farms in 2 minutes.\n Player 2 went from 0 to 11 farms in 3 minutes.',
 				icon: Tractor,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80 },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Military / Stable Production',
+				text: 'Player 1 made 20 knights from 1 stable.\n Player 2 made 10 knights from 2 stables.',
+				icon: ChessKnight,
+				metrics: {
+					label: 'Idle TC Time',
+					you: { value: '45s', percentage: 80 },
+					opponent: { value: '5s', percentage: 10 }
+				}
+			},
+			{
+				time: '04:12',
+				type: 'Economy / Villager Production',
+				text: 'Player 1  and Player 2 had same eco upgrades, but player 1 had 10% more villagers.',
+				icon: PersonStanding,
 				metrics: {
 					label: 'Idle TC Time',
 					you: { value: '45s', percentage: 80 },
