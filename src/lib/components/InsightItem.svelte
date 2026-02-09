@@ -52,14 +52,14 @@
 		<span class="label">{insight.metrics.label}</span>
 		<div class="bar-chart">
 			<div class="bar-row">
-				<span class="bar-label">YOU</span>
+				<span class="bar-label">WINNER</span>
 				<div class="bar-track">
 					<div class="bar-fill" style="width: {insight.metrics.you.percentage}%"></div>
 				</div>
 				<span class="bar-value">{insight.metrics.you.value}</span>
 			</div>
 			<div class="bar-row">
-				<span class="bar-label">OPP</span>
+				<span class="bar-label">LOSER</span>
 				<div class="bar-track">
 					<div
 						class="bar-fill opponent"
@@ -154,7 +154,8 @@
 	}
 
 	.bar-label {
-		width: 30px;
+		text-align: left;
+		width: 35px;
 		color: var(--text-dim);
 	}
 

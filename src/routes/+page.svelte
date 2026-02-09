@@ -49,9 +49,9 @@
 				type: 'Economy / Resource Allocation',
 				text: 'Player 1 spent 65% of resources on eco and 35% on military. He lost the game.\n Player 2 spent 50% on eco and 50% on military. He won the game.',
 				metrics: {
-					label: 'Idle TC Time',
-					you: { value: '45s', percentage: 80 },
-					opponent: { value: '5s', percentage: 20 }
+					label: 'Eco / Military Ratio',
+					you: { value: '65%', percentage: 80 },
+					opponent: { value: '50%', percentage: 20 }
 				}
 			},
 			{
@@ -60,7 +60,7 @@
 				text: 'Player 1 villagers were garrisoned for 45s during Feudal, 30s during Castle, and 15s during Imperial and still lost. \n Player 2 villagers were garrisoned for 10s in dark ages, 5s in feudal, and 2s in castle.',
 				icon: DoorClosedLocked,
 				metrics: {
-					label: 'Idle TC Time',
+					label: 'Eco Upgrade',
 					you: { value: '45s', percentage: 70 },
 					opponent: { value: '5s', percentage: 30 }
 				}
