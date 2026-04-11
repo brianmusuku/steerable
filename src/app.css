@@ -111,6 +111,55 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ── Agent Trace design tokens ── */
+
+  /* Structural surfaces */
+  --color-agent: #00d4aa;
+  --color-agent-muted: #003d2e;
+  --color-agent-stage: #0a0e14;
+  --color-agent-surface: #0d1117;
+  --color-agent-raised: #161b22;
+  --color-agent-border: #21262d;
+
+  /* Text hierarchy */
+  --color-agent-dim: #484f58;
+  --color-agent-subtle: #8b949e;
+  --color-agent-default: #c9d1d9;
+  --color-agent-bright: #e6edf3;
+
+  /* Semantic: success / terminal */
+  --color-agent-green: #3fb950;
+  --color-agent-green-bg: #1a3a2a;
+  --color-agent-green-text: #aff5b4;
+
+  /* Semantic: error / deletion */
+  --color-agent-red: #f85149;
+  --color-agent-red-bg: #2c0f0f;
+  --color-agent-red-text: #ffa198;
+
+  /* Semantic: warning / file-create */
+  --color-agent-yellow: #e3b341;
+  --color-agent-yellow-bg: #2d2000;
+
+  /* Semantic: info / diff */
+  --color-agent-blue: #79c0ff;
+  --color-agent-blue-bg: #0d2136;
+  --color-agent-hunk-bg: #0d1e35;
+
+  /* Semantic: thought */
+  --color-agent-purple: #bc8cff;
+  --color-agent-purple-bg: #1e1232;
+  --color-agent-thought-bg: #12102a;
+  --color-agent-thought-border: #2d2466;
+  --color-agent-thought-code-bg: #1e1a3a;
+
+  /* Semantic: read */
+  --color-agent-orange: #ffa657;
+  --color-agent-orange-bg: #2d1a00;
+
+  /* Animation */
+  --animate-fade-up: fade-up 0.25s ease;
 }
 
 @layer base {
@@ -121,4 +170,49 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* ── Agent Trace utility rules ── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--color-agent-border);
+}
+
+.scrollbar-thin-md::-webkit-scrollbar {
+  width: 5px;
+}
+
+.scrollbar-thin-md::-webkit-scrollbar-thumb {
+  background: var(--color-agent-border);
+  border-radius: 3px;
+}
+
+/* Rich-text children inside thought blocks */
+.thought-block strong {
+  color: var(--color-agent-bright);
+}
+
+.thought-block code {
+  font-family: var(--font-mono);
+  background: var(--color-agent-thought-code-bg);
+  color: var(--color-agent-purple);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 11px;
 }
