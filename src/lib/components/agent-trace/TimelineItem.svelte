@@ -28,7 +28,7 @@
 	onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && onJump()}
 >
 	<span
-		class="mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full font-mono text-[9px] font-bold
+		class="mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full font-mono text-[9px] font-bold
       {isDone
 			? 'bg-agent-green-bg text-agent-green'
 			: isActive
