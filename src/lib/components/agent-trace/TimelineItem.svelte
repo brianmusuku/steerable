@@ -22,7 +22,7 @@
 
 <button
 	id="ch-{index}"
-	class="flex cursor-pointer items-start gap-[9px] border-l-2 py-[7px] pr-3 pl-3.5 text-left transition-all duration-100
+	class="flex w-full cursor-pointer items-start gap-[9px] border-l-2 py-[7px] pr-3 pl-3.5 text-left transition-all duration-100
     {isActive ? 'border-l-agent bg-agent-raised' : 'border-l-transparent hover:bg-agent-raised'}"
 	onclick={onJump}
 	onkeydown={(e: KeyboardEvent) => e.key === 'Enter' && onJump()}
