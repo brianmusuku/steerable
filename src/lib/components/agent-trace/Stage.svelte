@@ -58,7 +58,7 @@
 					{/if}
 				</div>
 				<div>
-					<div class="h-0.5 shrink-0 bg-agent-border">
+					<div class="h-[2px] shrink-0 bg-agent-border">
 						<div
 							class="h-full bg-agent transition-all duration-500 ease-out"
 							style="width: {44}%"
