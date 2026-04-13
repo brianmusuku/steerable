@@ -4,11 +4,10 @@
 	import { ACTIONS } from '$lib/data/action';
 	import Timeline from './Timeline.svelte';
 	import Stage from './Stage.svelte';
-	import PlaybackControls from './PlaybackControls.svelte';
 
 	const SPEEDS: number[] = [1, 2, 4];
 
-	let current: number = $state(-1);
+	let current: number = $state(0);
 	let playing: boolean = $state(false);
 	let speed: number = $state(1);
 	let timer: ReturnType<typeof setTimeout> | undefined;
@@ -80,25 +79,8 @@
 		</span>
 	</div>
 
-	<div class="h-0.5 shrink-0 bg-agent-border">
-		<div
-			class="h-full bg-agent transition-all duration-500 ease-out"
-			style="width: {progress}%"
-		></div>
-	</div>
-
 	<div class="flex min-h-0 flex-1">
 		<Timeline {current} actions={ACTIONS} onJump={jumpTo} />
 		<Stage {currentAction} {current} />
 	</div>
-
-	<PlaybackControls
-		{playing}
-		{stepInfo}
-		{speed}
-		onPrev={prevStep}
-		onTogglePlay={togglePlay}
-		onNext={nextStep}
-		onCycleSpeed={cycleSpeed}
-	/>
 </div>
