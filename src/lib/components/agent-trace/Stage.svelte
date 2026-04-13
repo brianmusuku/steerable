@@ -7,6 +7,7 @@
 	import TerminalBlock from './TerminalBlock.svelte';
 	import EmptyState from './EmptyState.svelte';
 	import { Play, SkipBack, SkipForward } from '@lucide/svelte';
+	import { Slider } from '$lib/components/ui/slider/';
 
 	let {
 		currentAction,
@@ -22,6 +23,8 @@
 		currentAction;
 		if (stageEl) stageEl.scrollTop = 0;
 	});
+
+	let value = $state(50);
 </script>
 
 <main
@@ -64,10 +67,15 @@
 							style="width: {44}%"
 						></div>
 					</div>
-					<div class="flex h-16 w-full items-center justify-center gap-8">
-						<SkipBack class="stroke-1.5 cursor-pointer" />
-						<Play class="stroke-1.5 cursor-pointer" />
-						<SkipForward class="stroke-1.5 cursor-pointer" />
+					<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
+						<span class="mr-4 font-mono text-sm text-agent-dim">
+							{currentAction.time}
+						</span>
+
+						<SkipBack class="stroke-1.5 size-4 cursor-pointer" />
+						<Play class="stroke-1.5 size-4 cursor-pointer" />
+						<SkipForward class="stroke-1.5 size-4 cursor-pointer" />
+						<Slider type="single" bind:value max={100} step={1} class="max-w-30" />
 					</div>
 				</div>
 			</div>
@@ -76,3 +84,15 @@
 		<EmptyState />
 	{/if}
 </main>
+
+<style>
+	:global([data-slot='slider-track']) {
+		background-color: var(--color-agent-dim);
+		height: 4px;
+	}
+
+	:global([data-slot='slider-range']) {
+		background-color: var(--color-agent);
+		height: 4px;
+	}
+</style>

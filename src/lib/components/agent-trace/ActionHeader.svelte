@@ -23,8 +23,4 @@
 			{action.title}
 		</div>
 	</div>
-
-	<span class="font-mono text-[10px] text-agent-dim">
-		{action.time}
-	</span>
 </div>
