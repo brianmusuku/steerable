@@ -38,6 +38,7 @@
 <script lang="ts">
 	import * as Collapsible from '$lib/components/ui/collapsible';
 	import * as Sidebar from '$lib/components/ui/sidebar';
+	import { Folder } from '@lucide/svelte';
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 	import FileIcon from '@lucide/svelte/icons/file';
 	import FolderIcon from '@lucide/svelte/icons/folder';
@@ -45,8 +46,14 @@
 	let { ref = $bindable(null), ...restProps }: ComponentProps<typeof Sidebar.Root> = $props();
 </script>
 
-<div class="w-96 border p-8 text-sm">
-	<Sidebar.Menu>
+<div class="w-96 rounded-lg border border-agent-border text-sm">
+	<div
+		class="flex items-center gap-2 rounded-t-lg border-b border-agent-border bg-agent-raised px-3.5 py-[7px]"
+	>
+		<Folder class="size-3 stroke-2" />
+		<span class="font-mono text-[11px] text-agent-bright">Files</span>
+	</div>
+	<Sidebar.Menu class="px-4 pt-2 pb-4">
 		{#each data.tree as item, index (index)}
 			{@render Tree({ item })}
 		{/each}
