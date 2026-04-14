@@ -169,8 +169,12 @@
 >
 	<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
 		<ActionHeader {currentView} />
-		<div class="flex items-start gap-4 p-8">
-			<Tree />
+		<div class="flex items-start justify-center gap-4 p-8">
+			{#if currentView.visual === 'folder tree viewer'}
+				<Tree />
+			{:else if currentView.visual === 'command line shell'}
+				<p>xx</p>
+			{/if}
 		</div>
 		<div>
 			<div class="relative h-[3px] shrink-0 bg-agent-border/30">
