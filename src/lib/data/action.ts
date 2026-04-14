@@ -2,21 +2,6 @@ import type { Action, ActionType } from '$lib/types/action';
 
 export const ACTIONS: Action[] = [
     {
-        id: 1,
-        type: 'thought',
-        icon: 'ai-thought',
-        kind: 'thought',
-        label: 'Reasoning',
-        title: 'Analyzing the task',
-        time: '0:00',
-        content: {
-            paragraphs: [
-                `I need to build a <strong>JWT-based authentication system</strong> for this Express API. Looking at the project structure, I can see it's a TypeScript project with an existing <code>src/index.ts</code> entry point.`,
-                `My plan: (1) Install <code>jsonwebtoken</code> and <code>bcrypt</code> packages, (2) Create <code>src/auth/jwt.ts</code> with token generation and verification helpers, (3) Create <code>src/auth/middleware.ts</code> for route protection, (4) Wire up the auth routes in <code>src/index.ts</code>, (5) Run tests and fix any issues.`
-            ]
-        }
-    },
-    {
         id: 2,
         type: 'read',
         icon: 'ai-read',

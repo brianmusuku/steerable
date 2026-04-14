@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { Action } from '$lib/types/action';
 	import ActionHeader from './ActionHeader.svelte';
-	import ThoughtBlock from './ThoughtBlock.svelte';
 	import FileView from './FileView.svelte';
 	import DiffView from './DiffView.svelte';
 	import TerminalBlock from './TerminalBlock.svelte';
@@ -39,10 +38,7 @@
 				<div class="flex items-start gap-4 p-8">
 					<Tree />
 
-					{#if currentAction.type === 'thought'}
-						<!-- TypeScript narrows content to ThoughtContent here -->
-						<ThoughtBlock content={currentAction.content} />
-					{:else if currentAction.type === 'read'}
+					{#if currentAction.type === 'read'}
 						<FileView
 							content={currentAction.content}
 							badge="reading"
