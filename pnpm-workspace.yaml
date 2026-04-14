@@ -1,3 +1,6 @@
 onlyBuiltDependencies:
-  - esbuild
   - '@tailwindcss/oxide'
+  - esbuild
+  - onnxruntime-node
+  - protobufjs
+  - sharp

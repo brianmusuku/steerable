@@ -24,24 +24,39 @@
 	} = $props();
 
 	let stageEl: HTMLElement | undefined;
-	let volume = $state(40);
-	let isLoading = $state(false);
+	let volume = $state(10);
 	let currentTime = $state(0);
 	let duration = $state(0);
-
-	let text = 'Hello! This is a text to speech example.';
+	let index = $state(0);
+	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
+	let currentUtterance: SpeechSynthesisUtterance | null = $state(null);
+
+	$effect(() => {
+		if (currentUtterance) {
+			currentUtterance.volume = volume / 100;
+		}
+	});
 
 	function speak() {
 		if (!text.trim()) return;
 
-		window.speechSynthesis.cancel(); // stop any ongoing speech
+		window.speechSynthesis.cancel();
 
 		const utterance = new SpeechSynthesisUtterance(text);
+		utterance.volume = volume / 100;
+		currentUtterance = utterance;
 
 		utterance.onstart = () => (speaking = true);
-		utterance.onend = () => (speaking = false);
-		utterance.onerror = () => (speaking = false);
+		utterance.onend = () => {
+			speaking = false;
+			currentUtterance = null;
+			handleNext();
+		};
+		utterance.onerror = () => {
+			speaking = false;
+			currentUtterance = null;
+		};
 
 		window.speechSynthesis.speak(utterance);
 	}
@@ -49,16 +64,21 @@
 	function stop() {
 		window.speechSynthesis.cancel();
 		speaking = false;
+		currentUtterance = null;
 	}
 
 	const handleBack = () => {
-		stop();
-		onPrev();
+		if (index > 0) {
+			index--;
+			speak();
+		}
 	};
 
 	const handleNext = () => {
-		stop();
-		onNext();
+		if (index < narration.content.length - 1) {
+			index++;
+			speak();
+		}
 	};
 
 	const handlePlay = () => {
@@ -68,11 +88,6 @@
 			speak();
 		}
 	};
-
-	$effect(() => {
-		currentAction;
-		if (stageEl) stageEl.scrollTop = 0;
-	});
 </script>
 
 <main
@@ -123,9 +138,7 @@
 						{/if}
 					</div>
 					<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
-						<span class="mr-4 font-mono text-sm text-agent-dim">
-							<!-- {formatTime(currentTime)} / {formatTime(duration)} -->
-						</span>
+						<span class="mr-4 font-mono text-sm text-agent-dim"> </span>
 
 						<SkipBack
 							class="stroke-1.5 size-4 cursor-pointer hover:text-agent"
