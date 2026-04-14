@@ -28,127 +28,46 @@
 	let isLoading = $state(false);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let isAudioPlaying = $state(false);
 
-	// Audio player and cache
-	let audioEl: HTMLAudioElement | undefined;
-	let batchAudioUrl = $state<string | null>(null);
-	let batchTimestamps = $state<number[]>([]);
+	let text = 'Hello! This is a text to speech example.';
+	let speaking = $state(false);
 
-	onMount(() => {
-		audioEl = new Audio();
-		audioEl.volume = volume / 100;
+	function speak() {
+		if (!text.trim()) return;
 
-		// Batch generate animations
-		(async () => {
-			try {
-				const texts = narration.content.map((c) => c.script_text);
-				const response = await fetch('/api/tts', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ texts })
-				});
-				if (response.ok) {
-					const data = await response.json();
-					batchAudioUrl = `/audio/cache/${data.hash}.mp3`;
-					batchTimestamps = data.timestamps;
-				}
-			} catch (err) {
-				console.error('Batch TTS failed:', err);
-			}
-		})();
+		window.speechSynthesis.cancel(); // stop any ongoing speech
 
-		return () => {
-			audioEl?.pause();
-		};
-	});
+		const utterance = new SpeechSynthesisUtterance(text);
 
-	async function playNarration() {
-		if (!audioEl || typeof window === 'undefined' || !batchAudioUrl) return;
+		utterance.onstart = () => (speaking = true);
+		utterance.onend = () => (speaking = false);
+		utterance.onerror = () => (speaking = false);
 
-		const fullUrl = window.location.origin + batchAudioUrl;
-
-		if (audioEl.src !== fullUrl) {
-			audioEl.src = fullUrl;
-			audioEl.load();
-			audioEl.oncanplay = () => {
-				if (audioEl && isAudioPlaying) {
-					audioEl.play().catch((err) => console.error('Audio play failed:', err));
-				}
-			};
-		} else {
-			if (isAudioPlaying) {
-				if (audioEl.paused) {
-					audioEl.play().catch((err) => console.error('Audio play failed:', err));
-				}
-			} else {
-				audioEl.pause();
-			}
-		}
+		window.speechSynthesis.speak(utterance);
 	}
 
-	function handlePlay() {
-		isAudioPlaying = !isAudioPlaying;
+	function stop() {
+		window.speechSynthesis.cancel();
+		speaking = false;
 	}
 
-	function handleNext() {
-		if (audioEl) {
-			audioEl.pause();
-			audioEl.currentTime = 0;
-		}
-		onNext();
-	}
-
-	function handleBack() {
-		if (audioEl) {
-			audioEl.pause();
-			audioEl.currentTime = 0;
-		}
+	const handleBack = () => {
+		stop();
 		onPrev();
-	}
+	};
 
-	// React to internal audio play/pause state change
-	$effect(() => {
-		if (isAudioPlaying) {
-			playNarration();
+	const handleNext = () => {
+		stop();
+		onNext();
+	};
+
+	const handlePlay = () => {
+		if (speaking) {
+			stop();
 		} else {
-			audioEl?.pause();
+			speak();
 		}
-	});
-
-	// Connect audio element state to Svelte state
-	$effect(() => {
-		if (!audioEl) return;
-
-		const updateState = () => {
-			if (audioEl) {
-				currentTime = audioEl.currentTime;
-				duration = audioEl.duration;
-			}
-		};
-
-		audioEl.addEventListener('timeupdate', updateState);
-		audioEl.addEventListener('loadedmetadata', updateState);
-
-		return () => {
-			audioEl?.removeEventListener('timeupdate', updateState);
-			audioEl?.removeEventListener('loadedmetadata', updateState);
-		};
-	});
-
-	// Connect volume slider to audio element
-	$effect(() => {
-		if (audioEl) {
-			audioEl.volume = volume / 100;
-		}
-	});
-
-	function formatTime(s: number) {
-		if (isNaN(s) || !isFinite(s)) return '0:00';
-		return `${Math.floor(s / 60)}:${Math.floor(s % 60)
-			.toString()
-			.padStart(2, '0')}`;
-	}
+	};
 
 	$effect(() => {
 		currentAction;
@@ -205,7 +124,7 @@
 					</div>
 					<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
 						<span class="mr-4 font-mono text-sm text-agent-dim">
-							{formatTime(currentTime)} / {formatTime(duration)}
+							<!-- {formatTime(currentTime)} / {formatTime(duration)} -->
 						</span>
 
 						<SkipBack
@@ -213,7 +132,7 @@
 							onclick={handleBack}
 						/>
 						<button onclick={handlePlay} class="flex items-center justify-center">
-							{#if isAudioPlaying}
+							{#if speaking}
 								<Pause class="stroke-1.5 size-4 cursor-pointer fill-agent text-agent" />
 							{:else}
 								<Play class="stroke-1.5 size-4 cursor-pointer hover:text-agent" />

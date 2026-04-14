@@ -47,11 +47,6 @@
 
 	<div class="flex min-h-0 flex-1">
 		<Timeline {current} actions={ACTIONS} onJump={jumpTo} />
-		<Stage
-			{currentAction}
-			{current}
-			onNext={nextStep}
-			onPrev={prevStep}
-		/>
+		<Stage {currentAction} {current} onNext={nextStep} onPrev={prevStep} />
 	</div>
 </div>
