@@ -8,6 +8,7 @@
 	import EmptyState from './EmptyState.svelte';
 	import { Play, SkipBack, SkipForward } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
+	import Tree from './Tree.svelte';
 
 	let {
 		currentAction,
@@ -34,8 +35,9 @@
 	{#if currentAction}
 		{#key current}
 			<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
-				<div class="p-8">
-					<ActionHeader action={currentAction} />
+				<ActionHeader action={currentAction} />
+				<div class="flex gap-4 p-8">
+					<Tree />
 
 					{#if currentAction.type === 'thought'}
 						<!-- TypeScript narrows content to ThoughtContent here -->

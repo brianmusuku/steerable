@@ -8,7 +8,7 @@
 	let styles = $derived(TYPE_STYLES[action.type]);
 </script>
 
-<div class="mb-4 flex items-center gap-2.5">
+<div class="mb-4 flex items-center gap-2.5 p-8">
 	<div
 		class="flex h-[34px] w-[34px] shrink-0 items-center justify-center rounded-lg text-[15px] {styles.bg} {styles.text}"
 	>
