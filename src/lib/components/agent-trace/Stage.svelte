@@ -143,6 +143,13 @@
 		}
 	});
 
+	function formatTime(s: number) {
+		if (isNaN(s) || !isFinite(s)) return '0:00';
+		return `${Math.floor(s / 60)}:${Math.floor(s % 60)
+			.toString()
+			.padStart(2, '0')}`;
+	}
+
 	$effect(() => {
 		currentAction;
 		if (stageEl) stageEl.scrollTop = 0;
@@ -185,10 +192,10 @@
 						<!-- Overall session progress -->
 						<div
 							class="absolute top-0 left-0 h-full bg-agent/20 transition-all duration-500 ease-out"
-							style="width: {((current + 1) / 8) * 100}%"
+							style="width: 0%"
 						></div>
 						<!-- Global audio progress -->
-						{#if isAudioPlaying && duration > 0}
+						{#if duration > 0}
 							{@const globalProgress = (currentTime / duration) * 100}
 							<div
 								class="absolute top-0 left-0 h-full bg-agent transition-none"
@@ -198,7 +205,7 @@
 					</div>
 					<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
 						<span class="mr-4 font-mono text-sm text-agent-dim">
-							{currentAction.time}
+							{formatTime(currentTime)} / {formatTime(duration)}
 						</span>
 
 						<SkipBack
@@ -217,32 +224,6 @@
 							onclick={handleNext}
 						/>
 						<Slider type="single" bind:value={volume} max={100} step={1} class="max-w-30" />
-					</div>
-					<div
-						class="border-t border-agent-border/40 bg-agent-surface/50 px-8 py-6 backdrop-blur-sm"
-					>
-						<div class="flex items-center justify-between">
-							<div class="flex items-center gap-2.5">
-								<div
-									class={isAudioPlaying
-										? 'size-2 animate-pulse rounded-full bg-agent shadow-[0_0_8px_rgba(var(--color-agent-rgb),0.5)]'
-										: 'size-2 rounded-full bg-agent-dim'}
-								></div>
-								<span class="text-[10px] font-bold tracking-[0.2em] text-agent-dim uppercase">
-									Narration Audio
-								</span>
-							</div>
-							{#if isAudioPlaying && duration > 0}
-								<span class="font-mono text-[10px] text-agent-dim/60">
-									{Math.floor(currentTime)}s / {Math.floor(duration)}s
-								</span>
-							{/if}
-						</div>
-						<p class="mt-3 text-sm leading-relaxed font-medium text-agent-default/95">
-							<span class="mr-1 text-lg leading-none text-agent opacity-60">“</span>
-							{narration.content[current].script_text}
-							<span class="ml-px text-lg leading-none text-agent opacity-60">”</span>
-						</p>
 					</div>
 				</div>
 			</div>

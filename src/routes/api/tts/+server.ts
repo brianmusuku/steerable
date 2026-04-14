@@ -36,6 +36,7 @@ async function generateElevenLabsNotification(texts: string[]): Promise<{ buffer
 	if (existsSync(cachePath) && existsSync(metaPath)) {
 		const buffer = await readFile(cachePath);
 		const meta = JSON.parse(await readFile(metaPath, 'utf-8'));
+		console.log(`[TTS] Using cached audio for ${texts.length} items`);
 		return { buffer, hash, timestamps: meta.timestamps };
 	}
 
@@ -117,7 +118,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	// Batch request mode
 	if (Array.isArray(texts) && texts.length > 0) {
-		console.log(`[TTS] Batch processing ${texts.length} items with ElevenLabs...`);
+		console.log(`[TTS] Generating audio with ElevenLabs...`);
 
 		const result = await generateElevenLabsNotification(texts);
 		if (result) {
