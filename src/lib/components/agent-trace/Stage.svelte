@@ -36,7 +36,7 @@
 		{#key current}
 			<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
 				<ActionHeader action={currentAction} />
-				<div class="flex gap-4 p-8">
+				<div class="flex items-start gap-4 p-8">
 					<Tree />
 
 					{#if currentAction.type === 'thought'}

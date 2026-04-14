@@ -46,19 +46,23 @@
 </script>
 
 <div class="w-96 border p-8 text-sm">
-	{#each data.tree as item, index (index)}
-		{@render Tree({ item })}
-	{/each}
+	<Sidebar.Menu>
+		{#each data.tree as item, index (index)}
+			{@render Tree({ item })}
+		{/each}
+	</Sidebar.Menu>
 </div>
 
 <!-- eslint-disable-next-line @typescript-eslint/no-explicit-any -->
 {#snippet Tree({ item }: { item: string | any[] })}
 	{@const [name, ...items] = Array.isArray(item) ? item : [item]}
 	{#if !items.length}
-		<div class="flex items-center gap-1 p-1">
-			<FileIcon class="size-4" />
-			{name}
-		</div>
+		<Sidebar.MenuItem>
+			<div class="flex items-center gap-1 py-1">
+				<FileIcon class="size-4" />
+				{name}
+			</div>
+		</Sidebar.MenuItem>
 	{:else}
 		<Sidebar.MenuItem>
 			<Collapsible.Root
@@ -67,11 +71,11 @@
 			>
 				<Collapsible.Trigger>
 					{#snippet child({ props })}
-						<Sidebar.MenuButton {...props}>
-							<ChevronRightIcon class="transition-transform" />
-							<FolderIcon />
+						<button class="flex cursor-pointer items-center gap-1 py-1" {...props}>
+							<ChevronRightIcon class="size-4 transition-transform" />
+							<FolderIcon class="size-4" />
 							{name}
-						</Sidebar.MenuButton>
+						</button>
 					{/snippet}
 				</Collapsible.Trigger>
 				<Collapsible.Content>
