@@ -1,16 +1,10 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import type { Action } from '$lib/types/action';
 	import { ACTIONS } from '$lib/data/action';
 	import Timeline from './Timeline.svelte';
 	import Stage from './Stage.svelte';
 
-	const SPEEDS: number[] = [1, 2, 4];
-
 	let current: number = $state(0);
-	let playing: boolean = $state(false);
-	let speed: number = $state(1);
-	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	let progress: number = $derived(
 		current < 0 ? 0 : Math.round(((current + 1) / ACTIONS.length) * 100)
@@ -22,45 +16,17 @@
 
 	function jumpTo(idx: number): void {
 		current = idx;
-		if (playing) schedNext();
 	}
 
 	function nextStep(): void {
 		if (current < ACTIONS.length - 1) {
 			jumpTo(current + 1);
-		} else {
-			playing = false;
-			clearTimeout(timer);
 		}
 	}
 
 	function prevStep(): void {
 		if (current > 0) jumpTo(current - 1);
 	}
-
-	function togglePlay(): void {
-		playing = !playing;
-		if (playing) {
-			if (current >= ACTIONS.length - 1) current = -1;
-			nextStep();
-		} else {
-			clearTimeout(timer);
-		}
-	}
-
-	function schedNext(): void {
-		clearTimeout(timer);
-		timer = setTimeout(() => {
-			if (playing) nextStep();
-		}, 2500 / speed);
-	}
-
-	function cycleSpeed(): void {
-		const idx: number = SPEEDS.indexOf(speed);
-		speed = SPEEDS[(idx + 1) % SPEEDS.length];
-	}
-
-	onMount(() => () => clearTimeout(timer));
 </script>
 
 <div
@@ -84,8 +50,6 @@
 		<Stage
 			{currentAction}
 			{current}
-			playing={playing}
-			onTogglePlay={togglePlay}
 			onNext={nextStep}
 			onPrev={prevStep}
 		/>

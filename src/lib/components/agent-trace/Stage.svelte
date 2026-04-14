@@ -14,93 +14,81 @@
 	let {
 		currentAction,
 		current,
-		playing,
-		onTogglePlay,
 		onNext,
 		onPrev
 	}: {
 		currentAction: Action | null;
 		current: number;
-		playing: boolean;
-		onTogglePlay: () => void;
 		onNext: () => void;
 		onPrev: () => void;
 	} = $props();
 
 	let stageEl: HTMLElement | undefined;
-	let narrationIndex = $state(0);
-	let volume = $state(80);
+	let volume = $state(40);
 	let isLoading = $state(false);
+	let currentTime = $state(0);
+	let duration = $state(0);
+	let isAudioPlaying = $state(false);
 
 	// Audio player and cache
 	let audioEl: HTMLAudioElement | undefined;
-	const audioCache = new Map<number, string>(); // index -> blob URL
+	let batchAudioUrl = $state<string | null>(null);
+	let batchTimestamps = $state<number[]>([]);
 
 	onMount(() => {
 		audioEl = new Audio();
 		audioEl.volume = volume / 100;
 
+		// Batch generate animations
+		(async () => {
+			try {
+				const texts = narration.content.map((c) => c.script_text);
+				const response = await fetch('/api/tts', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ texts })
+				});
+				if (response.ok) {
+					const data = await response.json();
+					batchAudioUrl = `/audio/cache/${data.hash}.mp3`;
+					batchTimestamps = data.timestamps;
+				}
+			} catch (err) {
+				console.error('Batch TTS failed:', err);
+			}
+		})();
+
 		return () => {
-			// Cleanup blob URLs and audio on unmount
 			audioEl?.pause();
-			audioCache.forEach((url) => URL.revokeObjectURL(url));
-			audioCache.clear();
 		};
 	});
 
-	async function fetchTTSAudio(text: string): Promise<string | null> {
-		try {
-			const response = await fetch('/api/tts', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ text })
-			});
-
-			if (!response.ok) {
-				const errText = await response.text();
-				console.error('TTS API error:', response.status, errText);
-				return null;
-			}
-
-			// Server returns binary WAV audio directly
-			const blob = await response.blob();
-			return URL.createObjectURL(blob);
-		} catch (err) {
-			console.error('Failed to fetch TTS audio:', err);
-			return null;
-		}
-	}
-
 	async function playNarration() {
-		if (!audioEl || typeof window === 'undefined') return;
+		if (!audioEl || typeof window === 'undefined' || !batchAudioUrl) return;
 
-		// Stop current playback
-		audioEl.pause();
-		audioEl.currentTime = 0;
+		const fullUrl = window.location.origin + batchAudioUrl;
 
-		isLoading = true;
-
-		// Check cache first
-		let audioUrl = audioCache.get(narrationIndex);
-		if (!audioUrl) {
-			const text = narration.content[narrationIndex].script_text;
-			audioUrl = (await fetchTTSAudio(text)) ?? undefined;
-			if (audioUrl) {
-				audioCache.set(narrationIndex, audioUrl);
+		if (audioEl.src !== fullUrl) {
+			audioEl.src = fullUrl;
+			audioEl.load();
+			audioEl.oncanplay = () => {
+				if (audioEl && isAudioPlaying) {
+					audioEl.play().catch((err) => console.error('Audio play failed:', err));
+				}
+			};
+		} else {
+			if (isAudioPlaying) {
+				if (audioEl.paused) {
+					audioEl.play().catch((err) => console.error('Audio play failed:', err));
+				}
+			} else {
+				audioEl.pause();
 			}
 		}
-
-		isLoading = false;
-
-		if (!audioUrl || !playing) return;
-
-		audioEl.src = audioUrl;
-		audioEl.volume = volume / 100;
-		audioEl.play().catch((err) => console.error('Audio play failed:', err));
 	}
 
 	function handlePlay() {
-		onTogglePlay();
+		isAudioPlaying = !isAudioPlaying;
 	}
 
 	function handleNext() {
@@ -108,11 +96,7 @@
 			audioEl.pause();
 			audioEl.currentTime = 0;
 		}
-		if (narrationIndex < narration.content.length - 1) {
-			narrationIndex++;
-		}
 		onNext();
-		if (playing) playNarration();
 	}
 
 	function handleBack() {
@@ -120,55 +104,42 @@
 			audioEl.pause();
 			audioEl.currentTime = 0;
 		}
-		if (narrationIndex > 0) {
-			narrationIndex--;
-		}
 		onPrev();
-		if (playing) playNarration();
 	}
 
-	// React to play/pause
+	// React to internal audio play/pause state change
 	$effect(() => {
-		if (playing) {
+		if (isAudioPlaying) {
 			playNarration();
 		} else {
-			if (audioEl) {
-				audioEl.pause();
-				audioEl.currentTime = 0;
-			}
+			audioEl?.pause();
 		}
+	});
+
+	// Connect audio element state to Svelte state
+	$effect(() => {
+		if (!audioEl) return;
+
+		const updateState = () => {
+			if (audioEl) {
+				currentTime = audioEl.currentTime;
+				duration = audioEl.duration;
+			}
+		};
+
+		audioEl.addEventListener('timeupdate', updateState);
+		audioEl.addEventListener('loadedmetadata', updateState);
+
+		return () => {
+			audioEl?.removeEventListener('timeupdate', updateState);
+			audioEl?.removeEventListener('loadedmetadata', updateState);
+		};
 	});
 
 	// Connect volume slider to audio element
 	$effect(() => {
 		if (audioEl) {
 			audioEl.volume = volume / 100;
-		}
-	});
-
-	// Auto-advance to next narration when current finishes
-	$effect(() => {
-		if (!audioEl) return;
-		const handler = () => {
-			if (playing && narrationIndex < narration.content.length - 1) {
-				narrationIndex++;
-				playNarration();
-			} else if (narrationIndex === narration.content.length - 1) {
-				if (playing) onTogglePlay();
-			}
-		};
-		audioEl.addEventListener('ended', handler);
-		return () => audioEl?.removeEventListener('ended', handler);
-	});
-
-	// Preload next narration audio
-	$effect(() => {
-		const nextIdx = narrationIndex + 1;
-		if (nextIdx < narration.content.length && !audioCache.has(nextIdx)) {
-			const text = narration.content[nextIdx].script_text;
-			fetchTTSAudio(text).then((url) => {
-				if (url) audioCache.set(nextIdx, url);
-			});
 		}
 	});
 
@@ -210,11 +181,20 @@
 					{/if}
 				</div>
 				<div>
-					<div class="h-[2px] shrink-0 bg-agent-border">
+					<div class="relative h-[3px] shrink-0 bg-agent-border/30">
+						<!-- Overall session progress -->
 						<div
-							class="h-full bg-agent transition-all duration-500 ease-out"
-							style="width: {44}%"
+							class="absolute top-0 left-0 h-full bg-agent/20 transition-all duration-500 ease-out"
+							style="width: {((current + 1) / 8) * 100}%"
 						></div>
+						<!-- Global audio progress -->
+						{#if isAudioPlaying && duration > 0}
+							{@const globalProgress = (currentTime / duration) * 100}
+							<div
+								class="absolute top-0 left-0 h-full bg-agent transition-none"
+								style="width: {globalProgress}%"
+							></div>
+						{/if}
 					</div>
 					<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
 						<span class="mr-4 font-mono text-sm text-agent-dim">
@@ -226,7 +206,7 @@
 							onclick={handleBack}
 						/>
 						<button onclick={handlePlay} class="flex items-center justify-center">
-							{#if playing}
+							{#if isAudioPlaying}
 								<Pause class="stroke-1.5 size-4 cursor-pointer fill-agent text-agent" />
 							{:else}
 								<Play class="stroke-1.5 size-4 cursor-pointer hover:text-agent" />
@@ -238,15 +218,30 @@
 						/>
 						<Slider type="single" bind:value={volume} max={100} step={1} class="max-w-30" />
 					</div>
-					<div class="bg-agent-surface/30 border-t border-agent-border px-8 py-6">
-						<div class="flex items-center gap-2">
-							<div class={playing ? 'size-1.5 animate-pulse rounded-full bg-agent' : 'size-1.5 rounded-full bg-agent-dim'}></div>
-							<span class="text-[10px] font-bold tracking-widest text-agent-dim uppercase">
-								Narration Sequence {narrationIndex + 1} / {narration.content.length}
-							</span>
+					<div
+						class="border-t border-agent-border/40 bg-agent-surface/50 px-8 py-6 backdrop-blur-sm"
+					>
+						<div class="flex items-center justify-between">
+							<div class="flex items-center gap-2.5">
+								<div
+									class={isAudioPlaying
+										? 'size-2 animate-pulse rounded-full bg-agent shadow-[0_0_8px_rgba(var(--color-agent-rgb),0.5)]'
+										: 'size-2 rounded-full bg-agent-dim'}
+								></div>
+								<span class="text-[10px] font-bold tracking-[0.2em] text-agent-dim uppercase">
+									Narration Audio
+								</span>
+							</div>
+							{#if isAudioPlaying && duration > 0}
+								<span class="font-mono text-[10px] text-agent-dim/60">
+									{Math.floor(currentTime)}s / {Math.floor(duration)}s
+								</span>
+							{/if}
 						</div>
-						<p class="mt-2 text-sm leading-relaxed text-agent-default/90 italic">
-							"{narration.content[narrationIndex].script_text}"
+						<p class="mt-3 text-sm leading-relaxed font-medium text-agent-default/95">
+							<span class="mr-1 text-lg leading-none text-agent opacity-60">“</span>
+							{narration.content[current].script_text}
+							<span class="ml-px text-lg leading-none text-agent opacity-60">”</span>
 						</p>
 					</div>
 				</div>
