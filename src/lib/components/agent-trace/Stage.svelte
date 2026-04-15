@@ -16,7 +16,7 @@
 	let duration = $state(0);
 	let index = $state(-1);
 	let currentView = $derived(narration.content[index]);
-	let text = $derived(narration.content[index].script_text);
+	let text = $state('');
 	let speaking = $state(false);
 	let currentUtterance: SpeechSynthesisUtterance | null = $state(null);
 
@@ -45,7 +45,8 @@
 	});
 
 	function speak() {
-		if (!text.trim()) return;
+		text = narration.content[index].script_text;
+		if (!text.trim() || text.trim() === '') return;
 
 		isIntentionalCancel = true;
 		window.speechSynthesis.cancel();
