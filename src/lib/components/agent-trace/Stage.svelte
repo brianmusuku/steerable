@@ -15,7 +15,7 @@
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(3);
+	let index = $state(0);
 	let currentView = $derived(narration.content[index]);
 	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
