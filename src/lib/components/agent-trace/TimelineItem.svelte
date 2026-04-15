@@ -1,5 +1,19 @@
 <script lang="ts">
-	import { TYPE_CONFIG, KIND_COLORS } from '$lib/data/action';
+	const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
+		thought: { icon: '&#x1F9E0;', label: 'Reasoning' },
+		read: { icon: '&#x1F4C4;', label: 'File Read' },
+		terminal: { icon: '&#x25A0;', label: 'Shell' },
+		file: { icon: '&#x2B;', label: 'File Created' },
+		diff: { icon: '&#x2A57;', label: 'Diff' }
+	};
+
+	const KIND_COLORS: Record<string, string> = {
+		thought: 'text-agent-purple',
+		read: 'text-agent-orange',
+		terminal: 'text-agent-green',
+		file: 'text-agent-yellow',
+		diff: 'text-agent-blue'
+	};
 
 	let {
 		action,
