@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Action } from '$lib/types/action';
 	import TimelineItem from './TimelineItem.svelte';
 
 	let {
@@ -8,7 +7,7 @@
 		onJump
 	}: {
 		current: number;
-		actions: Action[];
+		actions: any[];
 		onJump: (idx: number) => void;
 	} = $props();
 

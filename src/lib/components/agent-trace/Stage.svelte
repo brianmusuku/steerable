@@ -14,7 +14,7 @@
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(-1);
+	let { index = $bindable(-1) } = $props();
 	let currentView = $derived(narration.content[index]);
 	let text = $state('');
 	let speaking = $state(false);

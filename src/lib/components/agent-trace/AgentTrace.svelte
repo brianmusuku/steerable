@@ -1,32 +1,9 @@
 <script lang="ts">
-	import type { Action } from '$lib/types/action';
-	import { ACTIONS } from '$lib/data/action';
 	import Timeline from './Timeline.svelte';
 	import Stage from './Stage.svelte';
+	import { narration } from '$lib/data/llm_output2';
 
-	let current: number = $state(0);
-
-	let progress: number = $derived(
-		current < 0 ? 0 : Math.round(((current + 1) / ACTIONS.length) * 100)
-	);
-
-	let stepInfo: string = $derived(`${current < 0 ? '—' : current + 1} / ${ACTIONS.length}`);
-
-	let currentAction: Action | null = $derived(current >= 0 ? ACTIONS[current] : null);
-
-	function jumpTo(idx: number): void {
-		current = idx;
-	}
-
-	function nextStep(): void {
-		if (current < ACTIONS.length - 1) {
-			jumpTo(current + 1);
-		}
-	}
-
-	function prevStep(): void {
-		if (current > 0) jumpTo(current - 1);
-	}
+	let current: number = $state(-1);
 </script>
 
 <div
@@ -41,12 +18,12 @@
 			AgentTrace
 		</span>
 		<span class="font-mono text-xs text-agent-dim">
-			session · build-auth-system · {ACTIONS.length} steps
+			session · build-auth-system · {narration.content.length} steps
 		</span>
 	</div>
 
 	<div class="flex min-h-0 flex-1">
-		<Timeline {current} actions={ACTIONS} onJump={jumpTo} />
-		<Stage {currentAction} {current} onNext={nextStep} onPrev={prevStep} />
+		<Timeline {current} actions={narration.content} onJump={(i) => (current = i)} />
+		<Stage bind:index={current} />
 	</div>
 </div>

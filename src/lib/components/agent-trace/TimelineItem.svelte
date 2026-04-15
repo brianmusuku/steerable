@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Action } from '$lib/types/action';
 	import { TYPE_CONFIG, KIND_COLORS } from '$lib/data/action';
 
 	let {
@@ -9,15 +8,31 @@
 		isActive,
 		onJump
 	}: {
-		action: Action;
+		action: any;
 		index: number;
 		isDone: boolean;
 		isActive: boolean;
 		onJump: () => void;
 	} = $props();
 
-	let config = $derived(TYPE_CONFIG[action.type]);
-	let kindColor: string = $derived(KIND_COLORS[action.kind] ?? 'text-agent-dim');
+	function getType(visual: string) {
+		switch (visual) {
+			case 'folder tree viewer':
+				return 'file';
+			case 'file viewer':
+				return 'read';
+			case 'command line shell':
+				return 'terminal';
+			case 'code diff':
+				return 'diff';
+			default:
+				return 'thought';
+		}
+	}
+
+	let type = $derived(getType(action.visual));
+	let config = $derived(TYPE_CONFIG[type]);
+	let kindColor: string = $derived(KIND_COLORS[type] ?? 'text-agent-dim');
 </script>
 
 <button
@@ -46,7 +61,7 @@
 			{action.title}
 		</div>
 		<div class="mt-px font-mono text-[10px] {kindColor}">
-			{action.time} · {config.label}
+			{config?.label ?? action.visual}
 		</div>
 	</div>
 </button>
