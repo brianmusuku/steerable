@@ -6,7 +6,7 @@
 
 	gsap.registerPlugin(SplitText);
 
-	let { currentView } = $props();
+	let { currentView, onComplete } = $props();
 	let titleEl: HTMLElement;
 
 	onMount(() => {
@@ -16,7 +16,10 @@
 			opacity: 0,
 			duration: 0.7,
 			ease: 'power4',
-			stagger: 0.04
+			stagger: 0.04,
+			onComplete: () => {
+				if (onComplete) onComplete();
+			}
 		});
 	});
 </script>

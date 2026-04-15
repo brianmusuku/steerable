@@ -19,6 +19,7 @@
 	let text = $state('');
 	let speaking = $state(false);
 	let currentUtterance: SpeechSynthesisUtterance | null = $state(null);
+	let showContent = $state(false);
 
 	// Variables to handle live volume switching workaround
 	let activeText = '';
@@ -133,6 +134,7 @@
 	}
 
 	function start() {
+		showContent = false;
 		index = 0;
 		speak();
 	}
@@ -147,6 +149,7 @@
 
 	const handleBack = () => {
 		if (index > 0) {
+			showContent = false;
 			index--;
 			speak();
 		}
@@ -154,6 +157,7 @@
 
 	const handleNext = () => {
 		if (index < narration.content.length - 1) {
+			showContent = false;
 			index++;
 			speak();
 		}
@@ -174,18 +178,22 @@
 >
 	<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
 		{#if currentView}
-			<ActionHeader {currentView} />
+			{#key index}
+				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
+			{/key}
 			<div class="flex items-start justify-center gap-4 p-8">
-				{#if currentView.visual === 'folder tree viewer'}
-					<Tree filetree={currentView.filetree} />
-				{:else if currentView.visual === 'command line shell'}
-					<TerminalBlock content={currentView.agents_output} />
-				{:else if currentView.visual === 'file viewer'}
-					<FileView
-						content={{ lines: currentView.agents_output, filename: currentView.filename }}
-					/>
-				{:else if currentView.visual === 'code diff'}
-					<DiffView content={currentView.agents_output} filename={currentView.filename} />
+				{#if showContent}
+					{#if currentView.visual === 'folder tree viewer'}
+						<Tree filetree={currentView.filetree} />
+					{:else if currentView.visual === 'command line shell'}
+						<TerminalBlock content={currentView.agents_output} />
+					{:else if currentView.visual === 'file viewer'}
+						<FileView
+							content={{ lines: currentView.agents_output, filename: currentView.filename }}
+						/>
+					{:else if currentView.visual === 'code diff'}
+						<DiffView content={currentView.agents_output} filename={currentView.filename} />
+					{/if}
 				{/if}
 			</div>
 		{:else}

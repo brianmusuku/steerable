@@ -33,6 +33,8 @@
 
 	let containerEl: HTMLDivElement;
 
+	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 	onMount(() => {
 		const ctx = gsap.context(() => {
 			// Animate the outer container sliding down + fading in
