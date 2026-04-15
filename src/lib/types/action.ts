@@ -18,11 +18,7 @@ export interface TerminalContent {
     lines: TerminalLine[];
 }
 
-export interface DiffLine {
-    t: 'ctx' | 'add' | 'del' | 'hunk';
-    ln: string;
-    text: string;
-}
+
 
 export interface DiffContent {
     filename: string;

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Action } from '$lib/types/action';
 	import ActionHeader from './ActionHeader.svelte';
 	import FileView from './FileView.svelte';
 	import DiffView from './DiffView.svelte';
@@ -8,14 +7,14 @@
 	import { Play, Pause, SkipBack, SkipForward } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
-	import { narration } from '$lib/data/llm_output';
+	import { narration } from '$lib/data/llm_output2';
 	import { onMount } from 'svelte';
 
 	let stageEl: HTMLElement | undefined;
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(2);
+	let index = $state(3);
 	let currentView = $derived(narration.content[index]);
 	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
@@ -176,6 +175,8 @@
 				<TerminalBlock content={currentView.agents_output} />
 			{:else if currentView.visual === 'file viewer'}
 				<FileView content={{ lines: currentView.agents_output, filename: currentView.filename }} />
+			{:else if currentView.visual === 'code diff'}
+				<DiffView content={currentView.agents_output} filename={currentView.filename} />
 			{/if}
 		</div>
 		<div>
