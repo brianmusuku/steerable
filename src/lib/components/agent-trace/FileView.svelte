@@ -44,7 +44,10 @@
 	});
 </script>
 
-<div bind:this={container} class="w-120 overflow-hidden rounded-lg border border-agent-border text-left">
+<div
+	bind:this={container}
+	class="w-180 overflow-hidden rounded-lg border border-agent-border text-left"
+>
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] {iconColor}">{@html icon}</span>
 		<span class="font-mono text-[11px] text-agent-bright">{content.filename}</span>

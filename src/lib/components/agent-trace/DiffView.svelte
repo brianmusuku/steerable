@@ -44,7 +44,7 @@
 	});
 </script>
 
-<div class="w-120 overflow-hidden rounded-lg border border-agent-border">
+<div class="w-180 overflow-hidden rounded-lg border border-agent-border">
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] text-agent-blue underline">{@html '&#x2A57;'}</span>
 		<span class="font-mono text-[11px] text-agent-bright">{parsedContent().filename}</span>
