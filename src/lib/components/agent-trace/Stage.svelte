@@ -14,7 +14,7 @@
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(3);
+	let index = $state(-1);
 	let currentView = $derived(narration.content[index]);
 	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
@@ -167,18 +167,25 @@
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
 	<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
-		<ActionHeader {currentView} />
-		<div class="flex items-start justify-center gap-4 p-8">
-			{#if currentView.visual === 'folder tree viewer'}
-				<Tree filetree={currentView.filetree} />
-			{:else if currentView.visual === 'command line shell'}
-				<TerminalBlock content={currentView.agents_output} />
-			{:else if currentView.visual === 'file viewer'}
-				<FileView content={{ lines: currentView.agents_output, filename: currentView.filename }} />
-			{:else if currentView.visual === 'code diff'}
-				<DiffView content={currentView.agents_output} filename={currentView.filename} />
-			{/if}
-		</div>
+		{#if currentView}
+			<ActionHeader {currentView} />
+			<div class="flex items-start justify-center gap-4 p-8">
+				{#if currentView.visual === 'folder tree viewer'}
+					<Tree filetree={currentView.filetree} />
+				{:else if currentView.visual === 'command line shell'}
+					<TerminalBlock content={currentView.agents_output} />
+				{:else if currentView.visual === 'file viewer'}
+					<FileView
+						content={{ lines: currentView.agents_output, filename: currentView.filename }}
+					/>
+				{:else if currentView.visual === 'code diff'}
+					<DiffView content={currentView.agents_output} filename={currentView.filename} />
+				{/if}
+			</div>
+		{:else}
+			<EmptyState />
+		{/if}
+
 		<div>
 			<div class="relative h-[3px] shrink-0 bg-agent-border/30">
 				<div
@@ -223,39 +230,6 @@
 			</div>
 		</div>
 	</div>
-	<!-- {#if currentAction}
-		{#key current}
-			<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
-				<ActionHeader action={currentAction} />
-				<div class="flex items-start gap-4 p-8">
-					<Tree />
-
-					{#if currentAction.type === 'read'}
-						<FileView
-							content={currentAction.content}
-							badge="reading"
-							icon="&#x1F4C4;"
-							iconColor="text-agent-orange"
-						/>
-					{:else if currentAction.type === 'file'}
-						<FileView
-							content={currentAction.content}
-							badge={currentAction.content.badge || 'new'}
-							icon="&#x2B;"
-							iconColor="text-agent-yellow"
-						/>
-					{:else if currentAction.type === 'diff'}
-						<DiffView content={currentAction.content} />
-					{:else if currentAction.type === 'terminal'}
-						<TerminalBlock content={currentAction.content} />
-					{/if}
-				</div>
-				
-			</div>
-		{/key}
-	{:else}
-		<EmptyState />
-	{/if} -->
 </main>
 
 <style>
