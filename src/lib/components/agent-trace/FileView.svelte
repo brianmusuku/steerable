@@ -1,5 +1,8 @@
 <script lang="ts">
 	import { esc } from '$lib/lib/utils';
+	import { onMount } from 'svelte';
+	import gsap from 'gsap';
+	import { TextPlugin } from 'gsap/dist/TextPlugin';
 
 	let {
 		content,
@@ -12,9 +15,36 @@
 		icon?: string;
 		iconColor?: string;
 	} = $props();
+
+	let container: HTMLDivElement;
+
+	onMount(() => {
+		gsap.registerPlugin(TextPlugin);
+		const tl = gsap.timeline();
+
+		tl.from(container, {
+			y: 20,
+			opacity: 0,
+			duration: 0.8,
+			ease: 'power2.out'
+		});
+
+		const lineEls = container.querySelectorAll('.file-line');
+
+		lineEls.forEach((el) => {
+			const node = el as HTMLElement;
+			const originalText = node.innerText;
+			node.innerText = '';
+			tl.to(node, {
+				text: originalText,
+				duration: Math.max(originalText.length * 0.02, 0.1),
+				ease: 'none'
+			});
+		});
+	});
 </script>
 
-<div class="w-120 overflow-hidden rounded-lg border border-agent-border">
+<div bind:this={container} class="w-120 overflow-hidden rounded-lg border border-agent-border text-left">
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] {iconColor}">{@html icon}</span>
 		<span class="font-mono text-[11px] text-agent-bright">{content.filename}</span>
@@ -36,7 +66,7 @@
 				>
 					{i + 1}
 				</span>
-				<span class="whitespace-pre text-agent-default">{esc(line)}</span>
+				<span class="file-line whitespace-pre text-agent-default">{esc(line)}</span>
 			</div>
 		{/each}
 	</div>
