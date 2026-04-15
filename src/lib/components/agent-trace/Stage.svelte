@@ -15,7 +15,7 @@
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(0);
+	let index = $state(2);
 	let currentView = $derived(narration.content[index]);
 	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
@@ -174,6 +174,8 @@
 				<Tree filetree={currentView.filetree} />
 			{:else if currentView.visual === 'command line shell'}
 				<TerminalBlock content={currentView.agents_output} />
+			{:else if currentView.visual === 'file viewer'}
+				<FileView content={{ lines: currentView.agents_output, filename: currentView.filename }} />
 			{/if}
 		</div>
 		<div>
