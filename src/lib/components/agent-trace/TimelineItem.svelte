@@ -9,9 +9,9 @@
 
 	const KIND_COLORS: Record<string, string> = {
 		thought: 'text-agent-purple',
-		read: 'text-agent-orange',
-		terminal: 'text-agent-green',
-		file: 'text-agent-yellow',
+		read: 'text-agent-blue',
+		terminal: 'text-agent-blue',
+		file: 'text-agent-blue',
 		diff: 'text-agent-blue'
 	};
 
