@@ -173,7 +173,7 @@
 			{#if currentView.visual === 'folder tree viewer'}
 				<Tree filetree={currentView.filetree} />
 			{:else if currentView.visual === 'command line shell'}
-				<p>xx</p>
+				<TerminalBlock content={currentView.agents_output} />
 			{/if}
 		</div>
 		<div>
