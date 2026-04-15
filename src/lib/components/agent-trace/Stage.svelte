@@ -132,6 +132,11 @@
 		window.speechSynthesis.speak(utterance);
 	}
 
+	function start() {
+		index = 0;
+		speak();
+	}
+
 	function stop() {
 		isIntentionalCancel = true;
 		clearTimeout(restartTimeout);
@@ -184,7 +189,7 @@
 				{/if}
 			</div>
 		{:else}
-			<EmptyState />
+			<EmptyState {start} />
 		{/if}
 
 		<div>
