@@ -1,32 +1,36 @@
 export const narration = {
     "content": [
         {
-            "script_text": "I started by assessing the current project structure. The goal was to establish a clear separation of concerns, so I decided the best course of action was to create a dedicated 'frontend' directory to house all the upcoming UI work.",
-            "visual": "folder tree viewer",
-            "visual animation": "Show the current directory structure, then highlight the root where the new 'frontend' folder will be placed.",
-            "title": "Project Structure Assessment",
-            "filename": "root"
-        },
-        {
-            "script_text": "To make this happen, I jumped into the terminal. I used the 'mkdir -p' command because it is the most reliable way to create directories; it ensures the folder is created and doesn't throw an error if it already exists or if parent paths are missing.",
+            "script_text": "Alright, let's get this project organized. The user wants a new frontend directory and a readme to go with it. [ls -la] I'll start by listing the current files just to get my bearings and ensure I'm not stepping on any existing directories.",
             "visual": "command line shell",
-            "visual animation": "Type out 'mkdir -p frontend' and show it executing successfully.",
-            "title": "Creating Frontend Directory",
-            "filename": "terminal"
+            "visual animation": "typing: ls -la",
+            "title": "Checking Workspace Context",
+            "filename": "opencode.json",
+            "filetree": "[\n  {\n    \"name\": \"opencode.json\",\n    \"type\": \"file\"\n  }\n]"
         },
         {
-            "script_text": "Once the folder was in place, I didn't want it to be empty. I added a README.md file. My reasoning here is simple: every new module should have an entry point for documentation to help other developers understand the purpose of the folder right away.",
+            "script_text": "The path is clear. [mkdir frontend] I'm executing a simple mkdir command to create the 'frontend' folder. This sets the stage for the rest of the project structure.",
+            "visual": "command line shell",
+            "visual animation": "typing: mkdir frontend",
+            "title": "Creating the Frontend Directory",
+            "filename": "opencode.json",
+            "filetree": "[\n  {\n    \"name\": \"opencode.json\",\n    \"type\": \"file\"\n  },\n  {\n    \"name\": \"frontend\",\n    \"type\": \"folder\",\n    \"children\": []\n  }\n]"
+        },
+        {
+            "script_text": "Now, a folder without content doesn't help much, especially if we're using version control. [frontend/README.md] I'm initializing a basic README.md file inside the new folder. Even without specific instructions on content, providing this documentation is a best practice that makes the project's purpose clear from the start.",
             "visual": "file viewer",
-            "visual animation": "Show the 'frontend/README.md' file being created with a simple 'Frontend Documentation' header.",
-            "title": "Initializing Documentation",
-            "filename": "frontend/README.md"
+            "visual animation": "creating file: frontend/README.md",
+            "title": "Adding Documentation",
+            "filename": "frontend/README.md",
+            "filetree": "[\n  {\n    \"name\": \"opencode.json\",\n    \"type\": \"file\"\n  },\n  {\n    \"name\": \"frontend\",\n    \"type\": \"folder\",\n    \"children\": [\n      {\n        \"name\": \"README.md\",\n        \"type\": \"file\"\n      }\n    ]\n  }\n]"
         },
         {
-            "script_text": "And there we go. By looking at the file tree now, you can see the 'frontend' folder is active and documented. This provides a clean, professional starting point for the rest of the application development.",
+            "script_text": "Everything is set. [folder tree viewer] As you can see in the file tree, we now have our frontend directory populated with its readme. The foundation for the frontend development is ready to go.",
             "visual": "folder tree viewer",
-            "visual animation": "Expand the newly created 'frontend' directory in the tree to reveal the 'README.md' file inside.",
-            "title": "Verifying Structure",
-            "filename": "root"
+            "visual animation": "highlight: frontend folder",
+            "title": "Task Complete",
+            "filename": "opencode.json",
+            "filetree": "[\n  {\n    \"name\": \"opencode.json\",\n    \"type\": \"file\"\n  },\n  {\n    \"name\": \"frontend\",\n    \"type\": \"folder\",\n    \"children\": [\n      {\n        \"name\": \"README.md\",\n        \"type\": \"file\"\n      }\n    ]\n  }\n]"
         }
     ]
 }

@@ -15,7 +15,7 @@
 	let volume = $state(20);
 	let currentTime = $state(0);
 	let duration = $state(0);
-	let index = $state(0);
+	let index = $state(3);
 	let currentView = $derived(narration.content[index]);
 	let text = $derived(narration.content[index].script_text);
 	let speaking = $state(false);
@@ -171,7 +171,7 @@
 		<ActionHeader {currentView} />
 		<div class="flex items-start justify-center gap-4 p-8">
 			{#if currentView.visual === 'folder tree viewer'}
-				<Tree />
+				<Tree filetree={currentView.filetree} />
 			{:else if currentView.visual === 'command line shell'}
 				<p>xx</p>
 			{/if}
