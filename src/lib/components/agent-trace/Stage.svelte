@@ -4,7 +4,7 @@
 	import DiffView from './DiffView.svelte';
 	import TerminalBlock from './TerminalBlock.svelte';
 	import EmptyState from './EmptyState.svelte';
-	import { Play, Pause, SkipBack, SkipForward } from '@lucide/svelte';
+	import { Play, Pause, SkipBack, SkipForward, Loader } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
 	import { narration } from '$lib/data/llm_output2';
@@ -12,71 +12,257 @@
 	import { slide, fade } from 'svelte/transition';
 
 	let stageEl: HTMLElement | undefined;
-	let volume = $state(20);
+	let volume = $state(40);
 	let currentTime = $state(0);
-	let duration = $state(0);
 	let { index = $bindable(-1) } = $props();
 	let currentView = $derived(narration.content[index]);
 	let speaking = $state(false);
 	let fileTreeActive = $state(false);
+	let showContent = $state(false);
+	let voice = $state('am_echo');
 
-	let text = $state('Hello! This is a test of the Kokoro TTS API running on Modal.');
-	let voice = $state('af_heart');
-	let endpointUrl = $state('https://findmjuaji--kokoro-api-pipeline-tts-api.modal.run');
+	// ── Audio cache & pre-generation ─────────────────────────────────────
+	// Map from narration index -> Object URL for the cached audio blob
+	let audioCache = $state<Map<number, string>>(new Map());
+	let pregenStatus = $state<'idle' | 'loading' | 'done' | 'error'>('idle');
+	let pregenProgress = $state(0);
+	let pregenTotal = $state(narration.content.length);
 
-	let status = $state('idle'); // idle | loading | success | error
-	let errorMsg = $state('');
-	let audioUrl = $state<string | null>(null);
-	let audioDuration = $state<string | null>(null);
+	// Track each clip's duration so the timer shows total across ALL clips
+	let clipDurations = $state<Map<number, number>>(new Map());
+	let totalDuration = $derived(
+		Array.from(clipDurations.values()).reduce((sum, d) => sum + d, 0)
+	);
+	// Cumulative elapsed = sum of durations of all completed clips + currentTime in the active clip
+	let globalElapsed = $derived.by(() => {
+		let elapsed = 0;
+		for (let i = 0; i < index; i++) {
+			elapsed += clipDurations.get(i) ?? 0;
+		}
+		elapsed += currentTime;
+		return elapsed;
+	});
 
-	const voices = [
-		{ value: 'af_heart', label: 'af_heart (default)' },
-		{ value: 'af_sky', label: 'af_sky' },
-		{ value: 'af_bella', label: 'af_bella' },
-		{ value: 'am_adam', label: 'am_adam' },
-		{ value: 'am_michael', label: 'am_michael' },
-		{ value: 'bf_emma', label: 'bf_emma (British)' },
-		{ value: 'bm_george', label: 'bm_george (British)' }
-	];
+	let audio: HTMLAudioElement | null = $state(null);
+	let animFrameId: number = 0;
 
-	async function generate() {
-		if (!text.trim()) return;
-		status = 'loading';
-		errorMsg = '';
-		audioUrl = null;
-		audioDuration = null;
+	onMount(() => {
+		audio = new Audio();
+		audio.volume = volume / 100;
 
-		try {
-			const res = await fetch(endpointUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ text, voice })
-			});
+		// Continuously sync currentTime from the audio element
+		function tick() {
+			if (audio && !audio.paused) {
+				currentTime = audio.currentTime;
+				// Update the clip duration for the currently playing clip
+				const d = audio.duration;
+				if (d && isFinite(d) && index >= 0) {
+					clipDurations.set(index, d);
+				}
+			}
+			animFrameId = requestAnimationFrame(tick);
+		}
+		animFrameId = requestAnimationFrame(tick);
 
-			if (!res.ok) {
-				const msg = await res.text();
-				throw new Error(`HTTP ${res.status}: ${msg}`);
+		return () => {
+			cancelAnimationFrame(animFrameId);
+			audio?.pause();
+			// Revoke all cached blob URLs
+			for (const url of audioCache.values()) {
+				URL.revokeObjectURL(url);
+			}
+		};
+	});
+
+	// ── Pre-generate all audio in parallel ───────────────────────────────
+	async function pregenAll() {
+		pregenStatus = 'loading';
+		pregenProgress = 0;
+		pregenTotal = narration.content.length;
+
+		const newCache = new Map<number, string>();
+
+		// Fire all requests in parallel
+		const promises = narration.content.map(async (item, i) => {
+			const text = item.script_text;
+			if (!text.trim()) {
+				pregenProgress++;
+				return;
 			}
 
-			const blob = await res.blob();
-			audioUrl = URL.createObjectURL(blob);
-			status = 'success';
-		} catch (e: any) {
-			errorMsg = e.message;
-			status = 'error';
+			try {
+				const res = await fetch('/api/tts-kokoro', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ text, voice })
+				});
+
+				if (res.ok) {
+					const blob = await res.blob();
+					const blobUrl = URL.createObjectURL(blob);
+					newCache.set(i, blobUrl);
+				} else {
+					console.error(`[TTS pregen] Failed step ${i}:`, await res.text());
+				}
+			} catch (err) {
+				console.error(`[TTS pregen] Exception step ${i}:`, err);
+			}
+
+			pregenProgress++;
+			// Update cache reactively so UI sees progress
+			audioCache = new Map(newCache);
+		});
+
+		await Promise.all(promises);
+
+		audioCache = new Map(newCache);
+		pregenStatus = newCache.size > 0 ? 'done' : 'error';
+
+		// Probe all blob URLs to get their durations
+		await probeDurations(newCache);
+	}
+
+	// ── Probe audio blobs for their durations ────────────────────────────
+	async function probeDurations(cache: Map<number, string>) {
+		const probes = Array.from(cache.entries()).map(
+			([i, url]) =>
+				new Promise<void>((resolve) => {
+					const a = new Audio();
+					a.preload = 'metadata';
+					a.src = url;
+					a.onloadedmetadata = () => {
+						if (a.duration && isFinite(a.duration)) {
+							clipDurations.set(i, a.duration);
+							// Trigger reactivity
+							clipDurations = new Map(clipDurations);
+						}
+						resolve();
+					};
+					a.onerror = () => resolve();
+				})
+		);
+		await Promise.all(probes);
+	}
+
+	// ── Volume binding ───────────────────────────────────────────────────
+	$effect(() => {
+		if (audio) {
+			audio.volume = volume / 100;
 		}
+	});
+
+	// ── Play the audio for the current index ─────────────────────────────
+	function playCurrentAudio() {
+		if (!audio) return;
+
+		const cachedUrl = audioCache.get(index);
+		if (!cachedUrl) {
+			console.warn(`[TTS] No cached audio for index ${index}`);
+			return;
+		}
+
+		// Reset state
+		audio.pause();
+		audio.src = cachedUrl;
+		audio.currentTime = 0;
+		currentTime = 0;
+
+		audio.onloadedmetadata = () => {
+			if (audio && audio.duration && isFinite(audio.duration)) {
+				clipDurations.set(index, audio.duration);
+				clipDurations = new Map(clipDurations);
+			}
+		};
+
+		audio.onended = () => {
+			speaking = false;
+			// Auto-advance to next step on audio end
+			if (index < narration.content.length - 1) {
+				showContent = false;
+				index++;
+				playCurrentAudio();
+			}
+		};
+
+		audio.onerror = () => {
+			speaking = false;
+		};
+
+		audio.play().then(() => {
+			speaking = true;
+		}).catch((err) => {
+			console.error('[TTS] Play failed:', err);
+			speaking = false;
+		});
 	}
 
-	function onAudioLoaded(e: any) {
-		audioDuration = e.target.duration?.toFixed(2);
-	}
+	// ── Controls ─────────────────────────────────────────────────────────
+	const start = () => {
+		showContent = false;
+		index = 0;
 
-	function reset() {
-		if (audioUrl) URL.revokeObjectURL(audioUrl);
-		audioUrl = null;
-		status = 'idle';
-		errorMsg = '';
-		audioDuration = null;
+		if (pregenStatus !== 'done') {
+			// Start pre-generation, and when the first one is ready, play
+			pregenAll().then(() => {
+				if (audioCache.has(0)) {
+					playCurrentAudio();
+				}
+			});
+		} else {
+			playCurrentAudio();
+		}
+	};
+
+	const handleBack = () => {
+		if (index > 0) {
+			showContent = false;
+			audio?.pause();
+			speaking = false;
+			index--;
+			if (audioCache.has(index)) {
+				playCurrentAudio();
+			}
+		}
+	};
+
+	const handleNext = () => {
+		if (index < narration.content.length - 1) {
+			showContent = false;
+			audio?.pause();
+			speaking = false;
+			index++;
+			if (audioCache.has(index)) {
+				playCurrentAudio();
+			}
+		}
+	};
+
+	const handlePlay = () => {
+		if (!audio) return;
+
+		if (speaking) {
+			audio.pause();
+			speaking = false;
+		} else {
+			// If we have cached audio for current index, play it
+			if (audioCache.has(index)) {
+				// If already loaded for this index, just resume
+				const cachedUrl = audioCache.get(index);
+				if (audio.src === cachedUrl || audio.src.startsWith('blob:')) {
+					audio.play().then(() => (speaking = true)).catch(console.error);
+				} else {
+					playCurrentAudio();
+				}
+			}
+		}
+	};
+
+	// ── Time formatting ──────────────────────────────────────────────────
+	function formatTime(s: number): string {
+		if (isNaN(s) || !isFinite(s)) return '0:00';
+		const mins = Math.floor(s / 60);
+		const secs = Math.floor(s % 60).toString().padStart(2, '0');
+		return `${mins}:${secs}`;
 	}
 </script>
 
@@ -84,19 +270,108 @@
 	bind:this={stageEl}
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
-	{#if status === 'success' && audioUrl}
-		<section class="card result">
-			<h2>✅ Audio Ready</h2>
-			{#if audioDuration}
-				<p class="meta">Duration: {audioDuration}s · Voice: <code>{voice}</code></p>
+	<div class="m-8 flex h-180 flex-col justify-between border border-gray-600">
+		{#if currentView}
+			{#key index}
+				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
+			{/key}
+			<div class="flex w-full flex-1 items-start justify-center gap-4 overflow-hidden p-8">
+				{#if currentView.visual === 'folder tree viewer' || fileTreeActive}
+					<div transition:slide={{ axis: 'x', duration: 500 }}>
+						<Tree
+							filetree={currentView.filetree}
+							currentFilename={currentView.filename}
+							onTreeMount={() => (fileTreeActive = true)}
+						/>
+					</div>
+				{/if}
+				{#if currentView.visual === 'command line shell' || currentView.visual === 'file viewer' || currentView.visual === 'code diff'}
+					<div transition:slide={{ axis: 'x', duration: 500 }} class="grid">
+						{#if currentView.visual === 'command line shell'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<TerminalBlock content={currentView.agents_output} />
+							</div>
+						{:else if currentView.visual === 'file viewer'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<FileView
+									content={{ lines: currentView.agents_output, filename: currentView.filename }}
+								/>
+							</div>
+						{:else if currentView.visual === 'code diff'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<DiffView content={currentView.agents_output} filename={currentView.filename} />
+							</div>
+						{/if}
+					</div>
+				{/if}
+			</div>
+		{:else}
+			<EmptyState {start} />
+		{/if}
+
+		<div>
+			<!-- Pre-generation status indicator -->
+			{#if pregenStatus === 'loading'}
+				<div class="flex items-center gap-2 px-6 py-1 text-xs text-agent-dim">
+					<Loader class="size-3 animate-spin" />
+					<span>Generating audio… {pregenProgress}/{pregenTotal}</span>
+					<div class="h-1 flex-1 rounded-full bg-agent-border/30">
+						<div
+							class="h-full rounded-full bg-agent/60 transition-all duration-300"
+							style="width: {(pregenProgress / pregenTotal) * 100}%"
+						></div>
+					</div>
+				</div>
 			{/if}
 
-			<!-- svelte-ignore a11y_media_has_caption -->
-			<audio controls autoplay src={audioUrl} onloadedmetadata={onAudioLoaded}></audio>
+			<!-- Progress bar (global across all clips) -->
+			<div class="relative h-[3px] shrink-0 bg-agent-border/30">
+				<div
+					class="absolute top-0 left-0 h-full bg-agent/20 transition-all duration-500 ease-out"
+					style="width: {currentView ? ((index + 1) / narration.content.length) * 100 : 0}%"
+				></div>
 
-			<a href={audioUrl} download="kokoro_output.wav" class="download-btn"> ⬇ Download WAV </a>
-		</section>
-	{/if}
+				{#if totalDuration > 0}
+					{@const progress = (globalElapsed / totalDuration) * 100}
+					<div
+						class="absolute top-0 left-0 h-full bg-agent transition-none"
+						style="width: {Math.min(progress, 100)}%"
+					></div>
+				{/if}
+			</div>
+
+			<!-- Controls -->
+			<div class="flex h-16 w-full items-center justify-start gap-6 px-6">
+				<span class="mr-4 font-mono text-sm text-agent-dim">
+					{formatTime(globalElapsed)} / {formatTime(totalDuration)}
+				</span>
+
+				<SkipBack class="stroke-1.5 size-4 cursor-pointer hover:text-agent" onclick={handleBack} />
+				<button onclick={handlePlay} class="flex items-center justify-center">
+					{#if speaking}
+						<Pause class="stroke-1.5 size-4 cursor-pointer fill-agent text-agent" />
+					{:else}
+						<Play class="stroke-1.5 size-4 cursor-pointer hover:text-agent" />
+					{/if}
+				</button>
+				<SkipForward
+					class="stroke-1.5 size-4 cursor-pointer hover:text-agent"
+					onclick={handleNext}
+				/>
+
+				<Slider
+					type="single"
+					value={volume}
+					onValueChange={(v) => {
+						volume = Array.isArray(v) ? v[0] : v;
+					}}
+					max={100}
+					step={1}
+					class="max-w-30"
+				/>
+			</div>
+		</div>
+	</div>
 </main>
 
 <style>
