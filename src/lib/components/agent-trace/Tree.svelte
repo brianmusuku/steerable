@@ -12,9 +12,10 @@
 	let {
 		ref = $bindable(null),
 		filetree = '[]',
+		currentFilename = '',
 		onTreeMount,
 		...restProps
-	}: ComponentProps<typeof Sidebar.Root> & { filetree?: string; onTreeMount?: () => void } = $props();
+	}: ComponentProps<typeof Sidebar.Root> & { filetree?: string; currentFilename?: string; onTreeMount?: () => void } = $props();
 
 	let parsedTree = $derived.by(() => {
 		try {
@@ -86,10 +87,11 @@
 </div>
 
 <!-- eslint-disable-next-line @typescript-eslint/no-explicit-any -->
-{#snippet TreeNode({ item }: { item: any })}
+{#snippet TreeNode({ item, path = '' }: { item: any; path?: string })}
+	{@const itemPath = path ? `${path}/${item.name}` : item.name}
 	{#if item.type === 'file'}
 		<Sidebar.MenuItem>
-			<div class="tree-item flex items-center gap-1 py-1">
+			<div class="tree-item flex items-center gap-1 py-1 px-2 -mx-2 rounded-md transition-colors {itemPath === currentFilename ? 'text-agent bg-agent/15' : ''}">
 				<FileIcon class="size-4" />
 				{item.name}
 			</div>
@@ -112,7 +114,7 @@
 				<Collapsible.Content>
 					<Sidebar.MenuSub>
 						{#each item.children || [] as subItem, index (index)}
-							{@render TreeNode({ item: subItem })}
+							{@render TreeNode({ item: subItem, path: itemPath })}
 						{/each}
 					</Sidebar.MenuSub>
 				</Collapsible.Content>

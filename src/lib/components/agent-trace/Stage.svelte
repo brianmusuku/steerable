@@ -187,7 +187,7 @@
 			<div class="flex w-full flex-1 items-start justify-center gap-4 overflow-hidden p-8">
 				{#if currentView.visual === 'folder tree viewer' || fileTreeActive}
 					<div transition:slide={{ axis: 'x', duration: 500 }}>
-						<Tree filetree={currentView.filetree} onTreeMount={() => (fileTreeActive = true)} />
+						<Tree filetree={currentView.filetree} currentFilename={currentView.filename} onTreeMount={() => (fileTreeActive = true)} />
 					</div>
 				{/if}
 				{#if currentView.visual === 'command line shell' || currentView.visual === 'file viewer' || currentView.visual === 'code diff'}
