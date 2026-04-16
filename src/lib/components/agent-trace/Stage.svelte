@@ -9,6 +9,7 @@
 	import Tree from './Tree.svelte';
 	import { narration } from '$lib/data/llm_output2';
 	import { onMount } from 'svelte';
+	import { slide, fade } from 'svelte/transition';
 
 	let stageEl: HTMLElement | undefined;
 	let volume = $state(20);
@@ -182,18 +183,30 @@
 			{#key index}
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
 			{/key}
-			<div class="flex items-start justify-center gap-4 p-8">
+			<div class="flex w-full flex-1 items-start justify-center gap-4 overflow-hidden p-8">
 				{#if currentView.visual === 'folder tree viewer' || fileTreeActive}
-					<Tree filetree={currentView.filetree} onTreeMount={() => (fileTreeActive = true)} />
+					<div transition:slide={{ axis: 'x', duration: 500 }}>
+						<Tree filetree={currentView.filetree} onTreeMount={() => (fileTreeActive = true)} />
+					</div>
 				{/if}
-				{#if currentView.visual === 'command line shell'}
-					<TerminalBlock content={currentView.agents_output} />
-				{:else if currentView.visual === 'file viewer'}
-					<FileView
-						content={{ lines: currentView.agents_output, filename: currentView.filename }}
-					/>
-				{:else if currentView.visual === 'code diff'}
-					<DiffView content={currentView.agents_output} filename={currentView.filename} />
+				{#if currentView.visual === 'command line shell' || currentView.visual === 'file viewer' || currentView.visual === 'code diff'}
+					<div transition:slide={{ axis: 'x', duration: 500 }} class="grid">
+						{#if currentView.visual === 'command line shell'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<TerminalBlock content={currentView.agents_output} />
+							</div>
+						{:else if currentView.visual === 'file viewer'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<FileView
+									content={{ lines: currentView.agents_output, filename: currentView.filename }}
+								/>
+							</div>
+						{:else if currentView.visual === 'code diff'}
+							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
+								<DiffView content={currentView.agents_output} filename={currentView.filename} />
+							</div>
+						{/if}
+					</div>
 				{/if}
 			</div>
 		{:else}
