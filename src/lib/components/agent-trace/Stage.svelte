@@ -20,6 +20,99 @@
 	let fileTreeActive = $state(false);
 	let showContent = $state(false);
 	let voice = $state('am_echo');
+	let canvasEl = $state<HTMLElement>();
+
+	let visibleComponents = $derived.by(() => {
+		if (index < 0) return [];
+		const items: { component: any; props: any; id: string }[] = [];
+		let treeAdded = false;
+
+		const pushTree = () => {
+			if (!treeAdded) {
+				items.push({
+					component: Tree,
+					props: {
+						filetree: currentView.filetree,
+						currentFilename: highlightedFilename,
+						onTreeMount: () => (fileTreeActive = true)
+					},
+					id: 'persistent-tree'
+				});
+				treeAdded = true;
+			}
+		};
+
+		for (let i = 0; i <= index; i++) {
+			const item = narration.content[i];
+			if (!item) continue;
+
+			if (item.visual === 'folder tree viewer') {
+				pushTree();
+			} else if (item.visual === 'command line shell') {
+				items.push({
+					component: TerminalBlock,
+					props: { content: item.agents_output },
+					id: `step-${i}`
+				});
+			} else if (item.visual === 'file viewer') {
+				items.push({
+					component: FileView,
+					props: { content: { lines: item.agents_output, filename: item.filename } },
+					id: `step-${i}`
+				});
+			} else if (item.visual === 'code diff') {
+				items.push({
+					component: DiffView,
+					props: { content: item.agents_output, filename: item.filename },
+					id: `step-${i}`
+				});
+			}
+		}
+
+		if (fileTreeActive && !treeAdded) {
+			pushTree();
+		}
+
+		return items;
+	});
+
+	$effect(() => {
+		// Run whenever index or visible components change
+		if (index >= 0 && canvasEl && visibleComponents) {
+			// A short timeout ensures the DOM has updated and the new row is being rendered
+			setTimeout(() => {
+				canvasEl?.scrollTo({ top: canvasEl.scrollHeight, behavior: 'smooth' });
+			}, 100);
+		}
+	});
+
+	// ── Filename highlight timing ───────────────────────────────────────
+	// Computed filename to highlight in the Tree. Searches backwards to find moving mention.
+	let highlightedFilename = $derived.by(() => {
+		if (index < 0) return '';
+
+		// 1. Check current clip up to the current playback time
+		const currentTs = timestampsCache.get(index);
+		const currentFn = narration.content[index]?.filename;
+		if (currentTs && currentFn) {
+			const mTime = findFilenameMentionTime(currentTs, currentFn);
+			if (mTime >= 0 && currentTime >= mTime) {
+				return currentFn;
+			}
+		}
+
+		// 2. If no mention yet in current clip, look backwards through previous clips
+		for (let i = index - 1; i >= 0; i--) {
+			const ts = timestampsCache.get(i);
+			const fn = narration.content[i]?.filename;
+			if (ts && fn) {
+				const mTime = findFilenameMentionTime(ts, fn);
+				if (mTime >= 0) return fn;
+			}
+		}
+
+		return '';
+	});
 
 	// ── Audio cache & pre-generation ─────────────────────────────────────
 	// Map from narration index -> Object URL for the cached audio blob
@@ -247,6 +340,49 @@
 	};
 
 	// ── Time formatting ──────────────────────────────────────────────────
+	/**
+	 * Find the timestamp (start time in seconds) at which the narration mentions
+	 * the given filename. Returns -1 if no mention is found.
+	 * Handles filenames without extensions by matching the basename stem.
+	 */
+	function findFilenameMentionTime(
+		timestamps: { word: string; start: number; end: number }[],
+		filename: string
+	): number {
+		if (!timestamps?.length || !filename) return -1;
+
+		// Extract the basename and the stem (without extension)
+		const parts = filename.split('/');
+		const basename = parts[parts.length - 1]; // e.g. "README.md"
+		const stem = basename.replace(/\.[^.]+$/, ''); // e.g. "README"
+
+		for (const ts of timestamps) {
+			// Clean punctuation from the word for comparison
+			const cleanWord = ts.word.replace(/[.,;:!?"'()\[\]]/g, '');
+
+			if (
+				cleanWord.toLowerCase() === basename.toLowerCase() ||
+				cleanWord.toLowerCase() === stem.toLowerCase()
+			) {
+				return ts.start;
+			}
+		}
+
+		// Also check for path segments (e.g. "frontend/README" mentioned as separate words)
+		// Try to find the last path segment match
+		for (const part of parts) {
+			const partStem = part.replace(/\.[^.]+$/, '');
+			for (const ts of timestamps) {
+				const cleanWord = ts.word.replace(/[.,;:!?"'()\[\]]/g, '');
+				if (cleanWord.toLowerCase() === partStem.toLowerCase() && partStem.length > 2) {
+					return ts.start;
+				}
+			}
+		}
+
+		return -1;
+	}
+
 	function formatTime(s: number): string {
 		if (isNaN(s) || !isFinite(s)) return '0:00';
 		const mins = Math.floor(s / 60);
@@ -266,55 +402,26 @@
 			{#key index}
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
 			{/key}
-			<div class="flex w-full flex-1 items-start justify-center gap-4 overflow-hidden p-8">
-				{#if currentView.visual === 'folder tree viewer' || fileTreeActive}
-					<div transition:slide={{ axis: 'x', duration: 500 }}>
-						<Tree
-							filetree={currentView.filetree}
-							currentFilename={currentView.filename}
-							onTreeMount={() => (fileTreeActive = true)}
-						/>
+			<div
+				bind:this={canvasEl}
+				class="canvas scrollbar-thin-md grid flex-1 grid-cols-2 content-start items-start gap-x-3 gap-y-3 overflow-y-auto p-8"
+			>
+				{#each visibleComponents as { component: VisualComp, props, id }, i (id)}
+					<div
+						transition:slide={{ axis: 'y', duration: 500 }}
+						class="flex h-fit flex-col {i % 2 === 0 ? 'justify-self-end' : 'justify-self-start'}"
+					>
+						<div transition:fade={{ duration: 300 }}>
+							<VisualComp {...props} />
+						</div>
 					</div>
-				{/if}
-				{#if currentView.visual === 'command line shell' || currentView.visual === 'file viewer' || currentView.visual === 'code diff'}
-					<div transition:slide={{ axis: 'x', duration: 500 }} class="grid">
-						{#if currentView.visual === 'command line shell'}
-							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
-								<TerminalBlock content={currentView.agents_output} />
-							</div>
-						{:else if currentView.visual === 'file viewer'}
-							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
-								<FileView
-									content={{ lines: currentView.agents_output, filename: currentView.filename }}
-								/>
-							</div>
-						{:else if currentView.visual === 'code diff'}
-							<div class="col-start-1 row-start-1" transition:fade={{ duration: 300 }}>
-								<DiffView content={currentView.agents_output} filename={currentView.filename} />
-							</div>
-						{/if}
-					</div>
-				{/if}
+				{/each}
 			</div>
 		{:else}
-			<EmptyState {start} />
+			<EmptyState {start} {pregenStatus} {pregenProgress} {pregenTotal} />
 		{/if}
 
 		<div>
-			<!-- Pre-generation status indicator -->
-			{#if pregenStatus === 'loading'}
-				<div class="flex items-center gap-2 px-6 py-1 text-xs text-agent-dim">
-					<Loader class="size-3 animate-spin" />
-					<span>Generating audio… {pregenProgress}/{pregenTotal}</span>
-					<div class="h-1 flex-1 rounded-full bg-agent-border/30">
-						<div
-							class="h-full rounded-full bg-agent/60 transition-all duration-300"
-							style="width: {(pregenProgress / pregenTotal) * 100}%"
-						></div>
-					</div>
-				</div>
-			{/if}
-
 			<!-- Progress bar (global across all clips) -->
 			<div class="relative h-[3px] shrink-0 bg-agent-border/30">
 				<div

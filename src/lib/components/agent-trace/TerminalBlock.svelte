@@ -37,7 +37,7 @@
 
 <div
 	bind:this={container}
-	class="w-180 overflow-hidden rounded-lg border border-agent-border text-left"
+	class="w-140 overflow-hidden rounded-lg border border-agent-border text-left"
 >
 	<div
 		class="flex items-center gap-[5px] border-b border-agent-border bg-agent-raised px-3 py-[7px]"
