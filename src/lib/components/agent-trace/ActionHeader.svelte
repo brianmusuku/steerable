@@ -9,19 +9,19 @@
 	let { currentView, onComplete } = $props();
 	let titleEl: HTMLElement;
 
-	onMount(() => {
-		const split = new SplitText(titleEl, { type: 'chars' });
-		gsap.from(split.chars, {
-			x: 70,
-			opacity: 0,
-			duration: 0.7,
-			ease: 'power4',
-			stagger: 0.04,
-			onComplete: () => {
-				if (onComplete) onComplete();
-			}
-		});
-	});
+	// onMount(() => {
+	// 	const split = new SplitText(titleEl, { type: 'chars' });
+	// 	gsap.from(split.chars, {
+	// 		x: 70,
+	// 		opacity: 0,
+	// 		duration: 0.7,
+	// 		ease: 'power4',
+	// 		stagger: 0.04,
+	// 		onComplete: () => {
+	// 			if (onComplete) onComplete();
+	// 		}
+	// 	});
+	// });
 </script>
 
 <div class="mb-4 flex items-center gap-2.5 p-8">

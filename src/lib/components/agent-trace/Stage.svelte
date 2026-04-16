@@ -26,7 +26,6 @@
 	// Variables to handle live volume switching workaround
 	let activeText = '';
 	let absoluteCharIndex = 0;
-	let isIntentionalCancel = false;
 	let prevVolume = -1;
 	let restartTimeout: ReturnType<typeof setTimeout>;
 
@@ -51,7 +50,6 @@
 		text = narration.content[index].script_text;
 		if (!text.trim() || text.trim() === '') return;
 
-		isIntentionalCancel = true;
 		window.speechSynthesis.cancel();
 		speaking = false;
 
@@ -61,19 +59,22 @@
 		const utterance = new SpeechSynthesisUtterance(activeText);
 		utterance.volume = volume / 100;
 		currentUtterance = utterance;
-		isIntentionalCancel = false;
 
 		// Track the exact character index of words as they are spoken
 		utterance.onboundary = (event) => {
-			if (event.name === 'word') {
+			if (currentUtterance === utterance && event.name === 'word') {
 				absoluteCharIndex += event.charIndex;
 			}
 		};
 
-		utterance.onstart = () => (speaking = true);
+		utterance.onstart = () => {
+			if (currentUtterance === utterance) {
+				speaking = true;
+			}
+		};
 
 		utterance.onend = () => {
-			if (!isIntentionalCancel) {
+			if (currentUtterance === utterance) {
 				speaking = false;
 				currentUtterance = null;
 				handleNext();
@@ -81,7 +82,7 @@
 		};
 
 		utterance.onerror = () => {
-			if (!isIntentionalCancel) {
+			if (currentUtterance === utterance) {
 				speaking = false;
 				currentUtterance = null;
 			}
@@ -91,13 +92,11 @@
 	}
 
 	function restartSpeechFromCurrentPosition() {
-		isIntentionalCancel = true;
 		window.speechSynthesis.cancel();
 
 		const remainingText = activeText.substring(absoluteCharIndex);
 
 		if (!remainingText.trim()) {
-			isIntentionalCancel = false;
 			speaking = false;
 			currentUtterance = null;
 			handleNext();
@@ -107,18 +106,21 @@
 		const utterance = new SpeechSynthesisUtterance(remainingText);
 		utterance.volume = volume / 100;
 		currentUtterance = utterance;
-		isIntentionalCancel = false;
 
 		utterance.onboundary = (event) => {
-			if (event.name === 'word') {
+			if (currentUtterance === utterance && event.name === 'word') {
 				absoluteCharIndex += event.charIndex;
 			}
 		};
 
-		utterance.onstart = () => (speaking = true);
+		utterance.onstart = () => {
+			if (currentUtterance === utterance) {
+				speaking = true;
+			}
+		};
 
 		utterance.onend = () => {
-			if (!isIntentionalCancel) {
+			if (currentUtterance === utterance) {
 				speaking = false;
 				currentUtterance = null;
 				handleNext();
@@ -126,7 +128,7 @@
 		};
 
 		utterance.onerror = () => {
-			if (!isIntentionalCancel) {
+			if (currentUtterance === utterance) {
 				speaking = false;
 				currentUtterance = null;
 			}
@@ -142,7 +144,6 @@
 	}
 
 	function stop() {
-		isIntentionalCancel = true;
 		clearTimeout(restartTimeout);
 		window.speechSynthesis.cancel();
 		speaking = false;
