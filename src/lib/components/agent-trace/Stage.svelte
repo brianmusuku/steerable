@@ -19,6 +19,7 @@
 	let text = $state('');
 	let speaking = $state(false);
 	let currentUtterance: SpeechSynthesisUtterance | null = $state(null);
+	let fileTreeActive = $state(false);
 	let showContent = $state(false);
 
 	// Variables to handle live volume switching workaround
@@ -182,18 +183,17 @@
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
 			{/key}
 			<div class="flex items-start justify-center gap-4 p-8">
-				{#if showContent}
-					{#if currentView.visual === 'folder tree viewer'}
-						<Tree filetree={currentView.filetree} />
-					{:else if currentView.visual === 'command line shell'}
-						<TerminalBlock content={currentView.agents_output} />
-					{:else if currentView.visual === 'file viewer'}
-						<FileView
-							content={{ lines: currentView.agents_output, filename: currentView.filename }}
-						/>
-					{:else if currentView.visual === 'code diff'}
-						<DiffView content={currentView.agents_output} filename={currentView.filename} />
-					{/if}
+				{#if currentView.visual === 'folder tree viewer' || fileTreeActive}
+					<Tree filetree={currentView.filetree} onTreeMount={() => (fileTreeActive = true)} />
+				{/if}
+				{#if currentView.visual === 'command line shell'}
+					<TerminalBlock content={currentView.agents_output} />
+				{:else if currentView.visual === 'file viewer'}
+					<FileView
+						content={{ lines: currentView.agents_output, filename: currentView.filename }}
+					/>
+				{:else if currentView.visual === 'code diff'}
+					<DiffView content={currentView.agents_output} filename={currentView.filename} />
 				{/if}
 			</div>
 		{:else}

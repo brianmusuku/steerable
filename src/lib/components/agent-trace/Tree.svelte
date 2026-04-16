@@ -12,8 +12,9 @@
 	let {
 		ref = $bindable(null),
 		filetree = '[]',
+		onTreeMount,
 		...restProps
-	}: ComponentProps<typeof Sidebar.Root> & { filetree?: string } = $props();
+	}: ComponentProps<typeof Sidebar.Root> & { filetree?: string; onTreeMount?: () => void } = $props();
 
 	let parsedTree = $derived.by(() => {
 		try {
@@ -36,6 +37,7 @@
 	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 	onMount(() => {
+		onTreeMount?.();
 		const ctx = gsap.context(() => {
 			// Animate the outer container sliding down + fading in
 			gsap.from(containerEl, {
