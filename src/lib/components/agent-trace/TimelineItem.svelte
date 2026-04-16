@@ -1,10 +1,10 @@
 <script lang="ts">
-	const TYPE_CONFIG: Record<string, { icon: string; label: string }> = {
-		thought: { icon: '&#x1F9E0;', label: 'Reasoning' },
-		read: { icon: '&#x1F4C4;', label: 'File Read' },
-		terminal: { icon: '&#x25A0;', label: 'Shell' },
-		file: { icon: '&#x2B;', label: 'File Created' },
-		diff: { icon: '&#x2A57;', label: 'Diff' }
+	const TYPE_CONFIG: Record<string, { label: string }> = {
+		thought: { label: 'Reasoning' },
+		read: { label: 'File' },
+		terminal: { label: 'Shell' },
+		file: { label: 'File' },
+		diff: { label: 'Diff' }
 	};
 
 	const KIND_COLORS: Record<string, string> = {
@@ -15,6 +15,19 @@
 		diff: 'text-agent-blue'
 	};
 
+	const VISUAL_TO_KIND: Record<string, string> = {
+		'folder tree viewer': 'file',
+		'file viewer': 'read',
+		'command line shell': 'terminal',
+		'code diff': 'diff'
+	};
+
+	interface NarrationAction {
+		title: string;
+		visual: string;
+		[key: string]: any;
+	}
+
 	let {
 		action,
 		index,
@@ -22,29 +35,14 @@
 		isActive,
 		onJump
 	}: {
-		action: any;
+		action: NarrationAction;
 		index: number;
 		isDone: boolean;
 		isActive: boolean;
 		onJump: () => void;
 	} = $props();
 
-	function getType(visual: string) {
-		switch (visual) {
-			case 'folder tree viewer':
-				return 'file';
-			case 'file viewer':
-				return 'read';
-			case 'command line shell':
-				return 'terminal';
-			case 'code diff':
-				return 'diff';
-			default:
-				return 'thought';
-		}
-	}
-
-	let type = $derived(getType(action.visual));
+	let type = $derived(VISUAL_TO_KIND[action.visual] ?? 'thought');
 	let config = $derived(TYPE_CONFIG[type]);
 	let kindColor: string = $derived(KIND_COLORS[type] ?? 'text-agent-dim');
 </script>
@@ -74,8 +72,8 @@
 		>
 			{action.title}
 		</div>
-		<div class="mt-px font-mono text-[10px] {kindColor}">
-			{config?.label ?? action.visual}
+		<div class="mt-px flex items-center gap-1 font-mono text-[10px] {kindColor}">
+			<span>{config?.label ?? action.visual}</span>
 		</div>
 	</div>
 </button>

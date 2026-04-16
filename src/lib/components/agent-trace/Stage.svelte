@@ -176,7 +176,7 @@
 	bind:this={stageEl}
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
-	<div class="m-8 flex h-180 flex-col justify-between border border-agent-border">
+	<div class="m-8 flex h-180 flex-col justify-between border border-gray-600">
 		{#if currentView}
 			{#key index}
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
