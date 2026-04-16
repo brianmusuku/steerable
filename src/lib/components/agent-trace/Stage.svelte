@@ -30,9 +30,7 @@
 
 	// Track each clip's duration so the timer shows total across ALL clips
 	let clipDurations = $state<Map<number, number>>(new Map());
-	let totalDuration = $derived(
-		Array.from(clipDurations.values()).reduce((sum, d) => sum + d, 0)
-	);
+	let totalDuration = $derived(Array.from(clipDurations.values()).reduce((sum, d) => sum + d, 0));
 	// Cumulative elapsed = sum of durations of all completed clips + currentTime in the active clip
 	let globalElapsed = $derived.by(() => {
 		let elapsed = 0;
@@ -188,27 +186,31 @@
 			speaking = false;
 		};
 
-		audio.play().then(() => {
-			speaking = true;
-		}).catch((err) => {
-			console.error('[TTS] Play failed:', err);
-			speaking = false;
-		});
+		audio
+			.play()
+			.then(() => {
+				speaking = true;
+			})
+			.catch((err) => {
+				console.error('[TTS] Play failed:', err);
+				speaking = false;
+			});
 	}
 
 	// ── Controls ─────────────────────────────────────────────────────────
 	const start = () => {
 		showContent = false;
-		index = 0;
 
 		if (pregenStatus !== 'done') {
 			// Start pre-generation, and when the first one is ready, play
 			pregenAll().then(() => {
 				if (audioCache.has(0)) {
+					index = 0;
 					playCurrentAudio();
 				}
 			});
 		} else {
+			index = 0;
 			playCurrentAudio();
 		}
 	};
@@ -249,7 +251,10 @@
 				// If already loaded for this index, just resume
 				const cachedUrl = audioCache.get(index);
 				if (audio.src === cachedUrl || audio.src.startsWith('blob:')) {
-					audio.play().then(() => (speaking = true)).catch(console.error);
+					audio
+						.play()
+						.then(() => (speaking = true))
+						.catch(console.error);
 				} else {
 					playCurrentAudio();
 				}
@@ -261,7 +266,9 @@
 	function formatTime(s: number): string {
 		if (isNaN(s) || !isFinite(s)) return '0:00';
 		const mins = Math.floor(s / 60);
-		const secs = Math.floor(s % 60).toString().padStart(2, '0');
+		const secs = Math.floor(s % 60)
+			.toString()
+			.padStart(2, '0');
 		return `${mins}:${secs}`;
 	}
 </script>
