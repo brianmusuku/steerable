@@ -24,81 +24,831 @@ export async function generateThemes(html: string) {
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `given the following log for an AI agent, please create a script where you walkthrough your actions, taking the persona someone explaining what he did. include into the "why" of the choices because we can see "what" changed through diffs. Try to identify and very briefly explain important things that the user should know about the actions the agent is taking. This will help the reader see loopholes, caveats or better ways to do things. the person consuming this will do it via a text to speech software so make sure your script is voice ready
+	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did. Delve into the "why" of the choices because we can see "what" changed through diffs. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Interleave the script with instruction text between [ and ] for all visual components we will show as the TTS is running. file tree structure should remain as is. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
 
 [
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
 "type": "text",
-"text": "create a new frontend folder add a readme",
+"text": "in the readme, it should be svelte 5 not 5.1",
 "author": "human"
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
 "type": "reasoning",
-"text": "The user wants me to create a new folder called "frontend" and add a README file to it. Let me first check the current directory structure to understand what exists.",
+"text": "The user wants me to update the README to change "svelte 5.1" to "svelte 5". Let me first find and read the README file to see what it currently says.\n",
 "author": "ai"
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
-"type": "text",
-"text": "\n\nI'll create the frontend folder and add a README file.",
-"author": "ai"
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
 "type": "tool",
 "status": "completed",
-"toolcommand": "mkdir -p frontend",
-"tooltype": "bash",
-"toolcommandDescription": "Create frontend directory",
+"tooltype": "glob",
 "toolTimeStartEnd": {
-"start": 1775933733154,
-"end": 1775933733179
+"start": 1776251016245,
+"end": 1776251016462
 },
 "author": "ai"
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
 "type": "reasoning",
-"text": "Now I need to write a README.md file in the frontend folder. Since the user didn't specify what should be in the README, I'll create a basic placeholder README.",
+"text": "Let me read the README to find where it mentions Svelte 5.1.\n",
 "author": "ai"
 },
 {
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "tool",
+"status": "completed",
+"tooltype": "grep",
+"toolTimeStartEnd": {
+"start": 1776251019346,
+"end": 1776251019493
+},
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "reasoning",
+"text": "I found it in the frontend README at line 7. Let me fix it.\n",
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "tool",
+"status": "error",
+"error": "You must read file /home/brian/Downloads/thespian/frontend/README.md before overwriting it. Use the Read tool first",
+"tooltype": "edit",
+"toolTimeStartEnd": {
+"start": 1776251023529,
+"end": 1776251023538
+},
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "reasoning",
+"text": "I need to read the file first before editing it.\n",
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "tool",
+"status": "completed",
+"tooltype": "read",
+"toolTimeStartEnd": {
+"start": 1776251030194,
+"end": 1776251030273
+},
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "reasoning",
+"text": "Now I can make the edit.\n",
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
 "type": "file.edited",
 "properties": {
 "file": "/home/brian/Downloads/thespian/frontend/README.md"
 }
 },
 {
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
 "type": "file.watcher.updated",
 "properties": {
 "file": "/home/brian/Downloads/thespian/frontend/README.md",
+"event": "change"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "tool",
+"status": "completed",
+"tooltype": "edit",
+"toolTimeStartEnd": {
+"start": 1776251038533,
+"end": 1776251038540
+},
+"diff": {
+"file": "/home/brian/Downloads/thespian/frontend/README.md",
+"patch": "Index: /home/brian/Downloads/thespian/frontend/README.md\n===================================================================\n--- /home/brian/Downloads/thespian/frontend/README.md\n+++ /home/brian/Downloads/thespian/frontend/README.md\ n@ @ -3,6 +3,6 @@\n Frontend application for thespian project.\n \n ## Tech Stack\n \n-- Framework: Svelte 5.1\n+- Framework: Svelte 5\n - Database: PostgreSQL\n\ No newline at end of file\n",
+"additions": 1,
+"deletions": 1
+},
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "reasoning",
+"text": "Done! I updated the README to say Svelte 5 instead of Svelte 5.1.\n",
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"sessionID": "ses_26f307eacffe0Od90widaEpIoV",
+"type": "text",
+"text": "\n\nDone. Updated "Svelte 5.1" to "Svelte 5" in the frontend README.",
+"author": "ai"
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
 "event": "add"
 }
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
-"type": "tool",
-"status": "completed",
-"tooltype": "write",
-"toolTimeStartEnd": {
-"start": 1775933735783,
-"end": 1775933735800
-},
-"author": "ai"
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
-"type": "reasoning",
-"text": "The task is now complete - I've created the frontend folder and a README.md file inside it.",
-"author": "ai"
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
 },
 {
-"sessionID": "ses_28219d492ffeWVFq286HOIbMvt",
-"type": "text",
-"text": "\n\nDone. Created frontend/ folder with README.md.",
-"author": "ai"
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "add"
+}
+},
+{
+"fileTree": [
+{
+"name": "opencode.json",
+"type": "file"
+},
+{
+"name": "frontend",
+"type": "folder",
+"children": [
+{
+"name": "README.md",
+"type": "file"
+}
+]
+}
+],
+"type": "file.watcher.updated",
+"properties": {
+"file": "/home/brian/Downloads/thespian/.git/index.lock",
+"event": "unlink"
+}
 }
 ]`
 
@@ -124,17 +874,37 @@ export async function generateThemes(html: string) {
 						},
 						visual_animation: {
 							type: "STRING"
+						},
+						title: {
+							type: "STRING"
+						},
+						filename: {
+							type: "STRING"
+						},
+						filetree: {
+							type: "STRING"
+						},
+						agents_output: {
+							type: "STRING"
 						}
 					},
 					propertyOrdering: [
 						"script_text",
 						"visual",
-						"visual animation"
+						"visual animation",
+						"title",
+						"filename",
+						"filetree",
+						"agents_output"
 					],
 					required: [
 						"script_text",
 						"visual",
-						"visual animation"
+						"visual animation",
+						"title",
+						"filename",
+						"filetree",
+						"agents_output"
 					]
 				}
 			}
@@ -146,7 +916,6 @@ export async function generateThemes(html: string) {
 			"content"
 		]
 	}
-
 	const response = await ai.models.generateContent({
 		model: FAST_MODEL,
 		contents: prompt,
