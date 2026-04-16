@@ -24,6 +24,8 @@
 	// ── Audio cache & pre-generation ─────────────────────────────────────
 	// Map from narration index -> Object URL for the cached audio blob
 	let audioCache = $state<Map<number, string>>(new Map());
+	// Map from narration index -> timestamps array from the backend
+	let timestampsCache = $state<Map<number, any>>(new Map());
 	let pregenStatus = $state<'idle' | 'loading' | 'done' | 'error'>('idle');
 	let pregenProgress = $state(0);
 	let pregenTotal = $state(narration.content.length);
@@ -52,11 +54,6 @@
 		function tick() {
 			if (audio && !audio.paused) {
 				currentTime = audio.currentTime;
-				// Update the clip duration for the currently playing clip
-				const d = audio.duration;
-				if (d && isFinite(d) && index >= 0) {
-					clipDurations.set(index, d);
-				}
 			}
 			animFrameId = requestAnimationFrame(tick);
 		}
@@ -72,13 +69,21 @@
 		};
 	});
 
+	/** Decode a base64 string into a Blob URL */
+	function b64ToBlobUrl(b64: string, mime = 'audio/wav'): string {
+		const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+		return URL.createObjectURL(new Blob([bytes], { type: mime }));
+	}
+
 	// ── Pre-generate all audio in parallel ───────────────────────────────
 	async function pregenAll() {
 		pregenStatus = 'loading';
 		pregenProgress = 0;
 		pregenTotal = narration.content.length;
 
-		const newCache = new Map<number, string>();
+		const newAudioCache = new Map<number, string>();
+		const newTimestampsCache = new Map<number, any>();
+		const newDurations = new Map<number, number>();
 
 		// Fire all requests in parallel
 		const promises = narration.content.map(async (item, i) => {
@@ -96,9 +101,16 @@
 				});
 
 				if (res.ok) {
-					const blob = await res.blob();
-					const blobUrl = URL.createObjectURL(blob);
-					newCache.set(i, blobUrl);
+					const payload = await res.json();
+					const blobUrl = b64ToBlobUrl(payload.audio);
+					newAudioCache.set(i, blobUrl);
+
+					if (payload.timestamps) {
+						newTimestampsCache.set(i, payload.timestamps);
+					}
+					if (payload.duration != null) {
+						newDurations.set(i, payload.duration);
+					}
 				} else {
 					console.error(`[TTS pregen] Failed step ${i}:`, await res.text());
 				}
@@ -107,39 +119,18 @@
 			}
 
 			pregenProgress++;
-			// Update cache reactively so UI sees progress
-			audioCache = new Map(newCache);
+			// Update caches reactively so UI sees progress
+			audioCache = new Map(newAudioCache);
+			timestampsCache = new Map(newTimestampsCache);
+			clipDurations = new Map(newDurations);
 		});
 
 		await Promise.all(promises);
 
-		audioCache = new Map(newCache);
-		pregenStatus = newCache.size > 0 ? 'done' : 'error';
-
-		// Probe all blob URLs to get their durations
-		await probeDurations(newCache);
-	}
-
-	// ── Probe audio blobs for their durations ────────────────────────────
-	async function probeDurations(cache: Map<number, string>) {
-		const probes = Array.from(cache.entries()).map(
-			([i, url]) =>
-				new Promise<void>((resolve) => {
-					const a = new Audio();
-					a.preload = 'metadata';
-					a.src = url;
-					a.onloadedmetadata = () => {
-						if (a.duration && isFinite(a.duration)) {
-							clipDurations.set(i, a.duration);
-							// Trigger reactivity
-							clipDurations = new Map(clipDurations);
-						}
-						resolve();
-					};
-					a.onerror = () => resolve();
-				})
-		);
-		await Promise.all(probes);
+		audioCache = new Map(newAudioCache);
+		timestampsCache = new Map(newTimestampsCache);
+		clipDurations = new Map(newDurations);
+		pregenStatus = newAudioCache.size > 0 ? 'done' : 'error';
 	}
 
 	// ── Volume binding ───────────────────────────────────────────────────
@@ -164,13 +155,6 @@
 		audio.src = cachedUrl;
 		audio.currentTime = 0;
 		currentTime = 0;
-
-		audio.onloadedmetadata = () => {
-			if (audio && audio.duration && isFinite(audio.duration)) {
-				clipDurations.set(index, audio.duration);
-				clipDurations = new Map(clipDurations);
-			}
-		};
 
 		audio.onended = () => {
 			speaking = false;
