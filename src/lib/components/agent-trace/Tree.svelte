@@ -76,12 +76,12 @@
 	});
 </script>
 
-<div bind:this={containerEl} class="w-140 rounded-lg border border-agent-border text-sm">
+<div bind:this={containerEl} class="w-140 rounded-lg border border-agent-border font-mono text-sm">
 	<div
 		class="tree-header flex items-center gap-2 rounded-t-lg border-b border-agent-border bg-agent-raised px-3.5 py-[7px]"
 	>
 		<Folder class="size-3 stroke-2" />
-		<span class="font-mono text-[11px] text-agent-bright">Files</span>
+		<span class="text-[11px] text-agent-bright">Files</span>
 	</div>
 	<Sidebar.Menu class="px-4 pt-2 pb-4">
 		{#each parsedTree as item, index (index)}
