@@ -4,7 +4,7 @@
 	import DiffView from './DiffView.svelte';
 	import TerminalBlock from './TerminalBlock.svelte';
 	import EmptyState from './EmptyState.svelte';
-	import { Play, Pause, SkipBack, SkipForward, Loader } from '@lucide/svelte';
+	import { Play, Pause, SkipBack, SkipForward, Loader, RotateCcw } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
 	import { narration } from '$lib/data/llm_output3';
@@ -21,6 +21,7 @@
 	let showContent = $state(false);
 	let voice = $state('am_echo');
 	let canvasEl = $state<HTMLElement>();
+	let playbackComplete = $state(false);
 
 	let visibleComponents = $derived.by(() => {
 		if (index < 0) return [];
@@ -271,6 +272,8 @@
 				showContent = false;
 				index++;
 				playCurrentAudio();
+			} else {
+				playbackComplete = true;
 			}
 		};
 
@@ -309,6 +312,7 @@
 
 	const handleBack = () => {
 		if (index > 0) {
+			playbackComplete = false;
 			showContent = false;
 			audio?.pause();
 			speaking = false;
@@ -328,6 +332,10 @@
 			if (audioCache.has(index)) {
 				playCurrentAudio();
 			}
+		} else {
+			playbackComplete = true;
+			speaking = false;
+			audio?.pause();
 		}
 	};
 
@@ -338,6 +346,11 @@
 			audio.pause();
 			speaking = false;
 		} else {
+			if (playbackComplete) {
+				handleRestart();
+				return;
+			}
+
 			// If we have cached audio for current index, play it
 			if (audioCache.has(index)) {
 				// If already loaded for this index, just resume
@@ -352,6 +365,14 @@
 				}
 			}
 		}
+	};
+
+	const handleRestart = () => {
+		playbackComplete = false;
+		fileTreeActive = false;
+		showContent = false;
+		index = 0;
+		playCurrentAudio();
 	};
 
 	// ── Time formatting ──────────────────────────────────────────────────
@@ -379,7 +400,7 @@
 				cleanWord.toLowerCase() === basename.toLowerCase() ||
 				cleanWord.toLowerCase() === stem.toLowerCase()
 			) {
-				return ts.start;
+				return ts.start - 1.8;
 			}
 		}
 
@@ -390,7 +411,7 @@
 			for (const ts of timestamps) {
 				const cleanWord = ts.word.replace(/[.,;:!?"'()\[\]]/g, '');
 				if (cleanWord.toLowerCase() === partStem.toLowerCase() && partStem.length > 2) {
-					return ts.start;
+					return ts.start - 1.8;
 				}
 			}
 		}
@@ -511,6 +532,11 @@
 				<button onclick={handlePlay} class="flex items-center justify-center">
 					{#if speaking}
 						<Pause class="stroke-1.5 size-4 cursor-pointer fill-agent text-agent" />
+					{:else if playbackComplete}
+						<RotateCcw
+							onclick={handleRestart}
+							class="stroke-1.5 size-4 cursor-pointer hover:text-agent"
+						/>
 					{:else}
 						<Play class="stroke-1.5 size-4 cursor-pointer hover:text-agent" />
 					{/if}
@@ -519,6 +545,12 @@
 					class="stroke-1.5 size-4 cursor-pointer hover:text-agent"
 					onclick={handleNext}
 				/>
+				{#if !playbackComplete}
+					<RotateCcw
+						onclick={handleRestart}
+						class="stroke-1.5 size-4 cursor-pointer hover:text-agent"
+					/>
+				{/if}
 
 				<Slider
 					type="single"
