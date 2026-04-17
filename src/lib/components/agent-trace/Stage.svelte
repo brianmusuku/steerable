@@ -342,6 +342,11 @@
 	const handlePlay = () => {
 		if (!audio) return;
 
+		if (index === -1) {
+			start();
+			return;
+		}
+
 		if (speaking) {
 			audio.pause();
 			speaking = false;
