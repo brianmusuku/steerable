@@ -7,7 +7,7 @@
 	import { Play, Pause, SkipBack, SkipForward, Loader } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
-	import { narration } from '$lib/data/llm_output2';
+	import { narration } from '$lib/data/llm_output3';
 	import { onMount } from 'svelte';
 	import { slide, fade } from 'svelte/transition';
 
@@ -46,26 +46,41 @@
 			const item = narration.content[i];
 			if (!item) continue;
 
-			if (item.visual === 'folder tree viewer') {
-				pushTree();
-			} else if (item.visual === 'command line shell') {
-				items.push({
-					component: TerminalBlock,
-					props: { content: item.agents_output },
-					id: `step-${i}`
-				});
-			} else if (item.visual === 'file viewer') {
-				items.push({
-					component: FileView,
-					props: { content: { lines: item.agents_output, filename: item.filename } },
-					id: `step-${i}`
-				});
-			} else if (item.visual === 'code diff') {
-				items.push({
-					component: DiffView,
-					props: { content: item.agents_output, filename: item.filename },
-					id: `step-${i}`
-				});
+			let shouldShow = true;
+			if (i === index) {
+				const phrase = item.script_text_3word_phrase_where_visual_starts;
+				const timestamps = timestampsCache.get(i);
+				if (phrase && timestamps) {
+					const startTime = findPhraseStartTime(timestamps, phrase);
+					// Show component slightly before the phrase is spoken to account for animation
+					if (currentTime < startTime - 1.8) {
+						shouldShow = false;
+					}
+				}
+			}
+
+			if (shouldShow) {
+				if (item.visual === 'folder tree viewer') {
+					pushTree();
+				} else if (item.visual === 'command line shell') {
+					items.push({
+						component: TerminalBlock,
+						props: { content: item.agents_output },
+						id: `step-${i}`
+					});
+				} else if (item.visual === 'file viewer') {
+					items.push({
+						component: FileView,
+						props: { content: { lines: item.agents_output, filename: item.filename } },
+						id: `step-${i}`
+					});
+				} else if (item.visual === 'code diff') {
+					items.push({
+						component: DiffView,
+						props: { content: item.agents_output, filename: item.filename },
+						id: `step-${i}`
+					});
+				}
 			}
 		}
 
@@ -381,6 +396,54 @@
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Find the start timestamp where the specific phrase begins.
+	 */
+	function findPhraseStartTime(
+		timestamps: { word: string; start: number; end: number }[],
+		phrase: string
+	): number {
+		if (!timestamps?.length || !phrase) return 0;
+
+		const normalizedPhrase = phrase
+			.toLowerCase()
+			.replace(/[.,;:!?"'()\[\]]/g, '')
+			.replace(/\s+/g, ' ')
+			.trim();
+		if (!normalizedPhrase) return 0;
+
+		let concatenatedText = '';
+		const charToStartMap: number[] = [];
+
+		for (const ts of timestamps) {
+			const cleanWord = ts.word.toLowerCase().replace(/[.,;:!?"'()\[\]]/g, '');
+			if (!cleanWord) continue;
+
+			concatenatedText += cleanWord + ' ';
+
+			for (let j = 0; j <= cleanWord.length; j++) {
+				charToStartMap.push(ts.start);
+			}
+		}
+
+		concatenatedText = concatenatedText.trim();
+		const matchIdx = concatenatedText.indexOf(normalizedPhrase);
+		if (matchIdx !== -1 && matchIdx < charToStartMap.length) {
+			return charToStartMap[matchIdx];
+		}
+
+		const words = normalizedPhrase.split(' ');
+		if (words.length > 3) {
+			const partialPhrase = words.slice(0, 3).join(' ');
+			const partialMatchIdx = concatenatedText.indexOf(partialPhrase);
+			if (partialMatchIdx !== -1 && partialMatchIdx < charToStartMap.length) {
+				return charToStartMap[partialMatchIdx];
+			}
+		}
+
+		return 0;
 	}
 
 	function formatTime(s: number): string {

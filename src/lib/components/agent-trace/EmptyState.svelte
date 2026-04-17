@@ -17,7 +17,7 @@
 {#if pregenStatus === 'loading'}
 	<div class="flex items-center gap-2 px-6 py-1 text-xs text-agent-dim">
 		<Loader class="size-3 animate-spin" />
-		<span>Generating audio… {pregenProgress}/{pregenTotal}</span>
+		<span>Generating video… {pregenProgress}/{pregenTotal}</span>
 		<div class="h-1 flex-1 rounded-full bg-agent-border/30">
 			<div
 				class="h-full rounded-full bg-agent/60 transition-all duration-300"
