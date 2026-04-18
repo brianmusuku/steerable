@@ -1,44 +1,16 @@
 import { ELEVEN_LABS_KEY } from '$env/static/private';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { createHash } from 'crypto';
-import { readFile, writeFile, mkdir } from 'fs/promises';
-import { existsSync } from 'fs';
-import { join } from 'path';
-
-const CACHE_DIR = join(process.cwd(), 'static/audio/cache');
-
-function getTextHash(text: string): string {
-	return createHash('sha256').update(text).digest('hex').substring(0, 16);
-}
 
 const ELEVEN_LABS_VOICE_ID = 'cjVigY5qzO86Huf0OWal';
 const ELEVEN_LABS_MODEL_ID = 'eleven_flash_v2_5';
 
-function getCachePath(hash: string): string {
-	return join(CACHE_DIR, `${hash}.mp3`);
-}
-
-async function generateElevenLabsNotification(texts: string[]): Promise<{ buffer: Buffer; hash: string; timestamps: number[] } | null> {
+async function generateElevenLabsNotification(
+	texts: string[]
+): Promise<{ audio_base64: string; timestamps: number[] } | null> {
 	if (!ELEVEN_LABS_KEY) return null;
 
 	const joinedText = texts.join('\n\n');
-	const hash = getTextHash(joinedText);
-	const cachePath = getCachePath(hash);
-	const metaPath = cachePath.replace('.mp3', '.json');
-
-	// Ensure cache directory exists
-	try {
-		await mkdir(CACHE_DIR, { recursive: true });
-	} catch (e) { }
-
-	// Check disk cache
-	if (existsSync(cachePath) && existsSync(metaPath)) {
-		const buffer = await readFile(cachePath);
-		const meta = JSON.parse(await readFile(metaPath, 'utf-8'));
-		console.log(`[TTS] Using cached audio for ${texts.length} items`);
-		return { buffer, hash, timestamps: meta.timestamps };
-	}
 
 	try {
 		const response = await fetch(
@@ -67,22 +39,15 @@ async function generateElevenLabsNotification(texts: string[]): Promise<{ buffer
 		}
 
 		const data = await response.json();
-		const audioBuffer = Buffer.from(data.audio_base64, 'base64');
 		const alignment = data.alignment;
 
-		// Calculate timestamps for each text chunk by searching for the start of each text block
+		// Calculate timestamps for each text chunk
 		const timestamps: number[] = [0];
 		let searchIndex = 0;
 
-		// We skip the first one as it's at 0
 		for (let i = 1; i < texts.length; i++) {
-			// Estimate where the next block should start
-			// ElevenLabs alignment indices follow the character positions in the combined text.
-			// We join with \n\n which is 2 characters.
 			const previousTotalLength = texts.slice(0, i).join('\n\n').length + 2;
 
-			// Find the character index in the alignment data that corresponds to the start of this block
-			// We search from where we left off
 			let foundIndex = -1;
 			for (let j = searchIndex; j < alignment.character_start_times_seconds.length; j++) {
 				if (j >= previousTotalLength) {
@@ -95,22 +60,17 @@ async function generateElevenLabsNotification(texts: string[]): Promise<{ buffer
 				timestamps.push(alignment.character_start_times_seconds[foundIndex]);
 				searchIndex = foundIndex;
 			} else {
-				// Fallback: estimate based on previous + duration
 				const lastTime = timestamps[timestamps.length - 1];
-				timestamps.push(lastTime + 5.0); // Rough 5s fallback per block
+				timestamps.push(lastTime + 5.0);
 			}
 		}
 
-		await writeFile(cachePath, audioBuffer);
-		await writeFile(metaPath, JSON.stringify({ timestamps }));
-
-		return { buffer: audioBuffer, hash, timestamps };
+		return { audio_base64: data.audio_base64, timestamps };
 	} catch (err) {
 		console.error('[TTS] ElevenLabs exception:', err);
 		return null;
 	}
 }
-
 
 export const POST: RequestHandler = async ({ request }) => {
 	const body = await request.json();
@@ -118,14 +78,9 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	// Batch request mode
 	if (Array.isArray(texts) && texts.length > 0) {
-		console.log(`[TTS] Generating audio with ElevenLabs...`);
-
 		const result = await generateElevenLabsNotification(texts);
 		if (result) {
-			return json({
-				hash: result.hash,
-				timestamps: result.timestamps
-			});
+			return json(result);
 		}
 		return json({ error: 'Generation failed' }, { status: 500 });
 	}
@@ -134,13 +89,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	if (text && typeof text === 'string') {
 		const result = await generateElevenLabsNotification([text]);
 		if (result) {
-			return new Response(new Uint8Array(result.buffer), {
-				headers: {
-					'Content-Type': 'audio/mpeg',
-					'Content-Length': result.buffer.length.toString(),
-					'X-TTS-Hash': result.hash
-				}
-			});
+			return json(result);
 		}
 		return json({ error: 'Generation failed' }, { status: 500 });
 	}

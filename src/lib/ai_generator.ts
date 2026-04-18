@@ -872,9 +872,6 @@ export async function generateThemes(html: string) {
 								"command line shell"
 							]
 						},
-						visual_animation: {
-							type: "STRING"
-						},
 						title: {
 							type: "STRING"
 						},
@@ -886,34 +883,42 @@ export async function generateThemes(html: string) {
 						},
 						agents_output: {
 							type: "STRING"
+						},
+						script_text_3word_phrase_where_visual_starts: {
+							type: "STRING"
 						}
 					},
 					propertyOrdering: [
 						"script_text",
 						"visual",
-						"visual animation",
 						"title",
 						"filename",
 						"filetree",
-						"agents_output"
+						"agents_output",
+						"script_text_3word_phrase_where_visual_starts"
 					],
 					required: [
 						"script_text",
 						"visual",
-						"visual animation",
 						"title",
 						"filename",
 						"filetree",
-						"agents_output"
+						"agents_output",
+						"script_text_3word_phrase_where_visual_starts"
 					]
 				}
+			},
+			one_sentence_1st_person_summary: {
+				type: "STRING"
 			}
 		},
 		propertyOrdering: [
-			"content"
+			"content",
+			"one_sentence_1st_person_summary"
 		],
 		required: [
-			"content"
+			"content",
+			"one_sentence_1st_person_summary"
 		]
 	}
 	const response = await ai.models.generateContent({

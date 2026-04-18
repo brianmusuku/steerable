@@ -10,6 +10,7 @@
 	import { narration } from '$lib/data/llm_output3';
 	import { onMount } from 'svelte';
 	import { slide, fade } from 'svelte/transition';
+	import { getCachedTTS, saveTTS } from '$lib/utils/ttsCache';
 
 	let stageEl: HTMLElement | undefined;
 	let volume = $state(40);
@@ -184,6 +185,14 @@
 		return URL.createObjectURL(new Blob([bytes], { type: mime }));
 	}
 
+	/** Browser-compatible hash function */
+	async function getHash(text: string, voice: string): Promise<string> {
+		const msgUint8 = new TextEncoder().encode(`${voice}:${text}`);
+		const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
+		const hashArray = Array.from(new Uint8Array(hashBuffer));
+		return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+	}
+
 	// ── Pre-generate all audio in parallel ───────────────────────────────
 	async function pregenAll() {
 		pregenStatus = 'loading';
@@ -203,25 +212,46 @@
 			}
 
 			try {
-				const res = await fetch('/api/tts-kokoro', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ text, voice })
-				});
+				const hash = await getHash(text, voice);
+				const cached = await getCachedTTS(hash);
 
-				if (res.ok) {
-					const payload = await res.json();
-					const blobUrl = b64ToBlobUrl(payload.audio);
+				if (cached) {
+					console.log(`[TTS Cache] Hit for step ${i}: ${hash}`);
+					const blobUrl = b64ToBlobUrl(cached.audio);
 					newAudioCache.set(i, blobUrl);
-
-					if (payload.timestamps) {
-						newTimestampsCache.set(i, payload.timestamps);
-					}
-					if (payload.duration != null) {
-						newDurations.set(i, payload.duration);
-					}
+					newTimestampsCache.set(i, cached.timestamps);
+					newDurations.set(i, cached.duration);
 				} else {
-					console.error(`[TTS pregen] Failed step ${i}:`, await res.text());
+					const res = await fetch('/api/tts-kokoro', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ text, voice })
+					});
+
+					if (res.ok) {
+						const payload = await res.json();
+						const blobUrl = b64ToBlobUrl(payload.audio);
+						newAudioCache.set(i, blobUrl);
+
+						if (payload.timestamps) {
+							newTimestampsCache.set(i, payload.timestamps);
+						}
+						if (payload.duration != null) {
+							newDurations.set(i, payload.duration);
+						}
+
+						// Save to client-side IndexedDB
+						await saveTTS({
+							hash,
+							audio: payload.audio,
+							timestamps: payload.timestamps,
+							duration: payload.duration,
+							text,
+							voice
+						});
+					} else {
+						console.error(`[TTS pregen] Failed step ${i}:`, await res.text());
+					}
 				}
 			} catch (err) {
 				console.error(`[TTS pregen] Exception step ${i}:`, err);

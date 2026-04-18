@@ -21,9 +21,9 @@ binding = "ASSETS"
 
 
 # (Optional) Bindings: add these if you use KV, D1, R2, Durable Objects, etc.
-# [[kv_namespaces]]
-# binding = "MY_KV"
-# id = "xxxxxxxxxxxxxxxxxxxxxx"
+[[kv_namespaces]]
+binding = "MY_KV_STORE"
+id = "a588a22dc9a54de8986932b5e672deac"
 
 # [[d1_databases]]
 # binding = "DB"

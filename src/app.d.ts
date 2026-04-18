@@ -7,7 +7,14 @@ declare global {
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
+		interface Platform {
+			env: {
+				MY_KV_STORE: KVNamespace;
+			};
+			context: ExecutionContext;
+			caches: CacheStorage;
+		}
 	}
 }
 
-export {};
+export { };

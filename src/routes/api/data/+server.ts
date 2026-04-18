@@ -1,27 +1,26 @@
-// src/routes/api/generate-html/+server.js
-
-import { ENDPOINT } from '$env/static/private';
-import { generateHtmlSection } from '$lib/ai_generator';
+// src/routes/api/data/+server.js
 import { json } from '@sveltejs/kit';
 
-
 /** @type {import('./$types').RequestHandler} */
-export async function POST({ request }) {
-  const { prompt } = await request.json();
-
-  const response = await fetch(ENDPOINT, {
-    method: 'GET',
-
-  });
-  const info = await response.json();
+export async function POST({ request, platform }) {
+  const uuid = crypto.randomUUID();
 
   try {
-    const aiResponse = ""; //await generateHtmlSection(prompt);
-    return json({
-      info,
-      aiResponse
-    });
+    const { datastring } = await request.json();
+
+    if (!datastring) {
+      return json({ error: 'Missing datastring' }, { status: 400 });
+    }
+
+    //  Ensure platform exists (it won't during local 'npm run dev' without wrangler)
+    if (!platform?.env?.MY_KV_STORE) {
+      return json({ error: 'KV storage not found' }, { status: 500 });
+    }
+    await platform.env.MY_KV_STORE.put(uuid, datastring);
+
+    return json({ uuid });
+
   } catch (error) {
-    return json({ error }, { status: 500 });
+    return json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
