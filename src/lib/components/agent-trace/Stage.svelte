@@ -190,7 +190,10 @@
 		const msgUint8 = new TextEncoder().encode(`${voice}:${text}`);
 		const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
 		const hashArray = Array.from(new Uint8Array(hashBuffer));
-		return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('').substring(0, 16);
+		return hashArray
+			.map((b) => b.toString(16).padStart(2, '0'))
+			.join('')
+			.substring(0, 16);
 	}
 
 	// ── Pre-generate all audio in parallel ───────────────────────────────
@@ -516,7 +519,7 @@
 	bind:this={stageEl}
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
-	<div class="m-8 flex h-180 flex-col justify-between border border-gray-600">
+	<div class="m-8 flex h-200 flex-col justify-between border border-gray-600">
 		{#if currentView}
 			{#key index}
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
@@ -535,6 +538,33 @@
 						</div>
 					</div>
 				{/each}
+			</div>
+			<div
+				class="subtitle font-base hidden w-full flex-wrap justify-center gap-x-1.5 px-16 py-8 text-center text-lg leading-relaxed"
+			>
+				{#if timestampsCache.has(index)}
+					{@const words = timestampsCache.get(index)}
+					{#each words as ts, i}
+						{@const isPast = currentTime >= ts.start}
+						{@const isCurrentWord = currentTime >= ts.start && currentTime <= ts.end}
+						{@const isNextWord =
+							i > 0 && currentTime >= words[i - 1].start && currentTime <= words[i - 1].end}
+						{@const isHighlighted = isCurrentWord || isNextWord}
+						<span
+							class="transition-all duration-200 {isPast ? 'text-agent-bright' : 'text-agent-dim'}"
+							class:!text-agent={isHighlighted}
+							style={isHighlighted
+								? 'text-shadow: 0 0 12px rgba(0, 212, 170, 0.4); transform: scale(1.00);'
+								: 'transform: scale(1);'}
+						>
+							{ts.word}
+						</span>
+					{/each}
+				{:else}
+					<span class="text-agent-dim transition-opacity duration-300">
+						{currentView?.script_text}
+					</span>
+				{/if}
 			</div>
 		{:else}
 			<EmptyState {start} {pregenStatus} {pregenProgress} {pregenTotal} />
