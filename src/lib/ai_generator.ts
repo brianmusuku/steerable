@@ -1,7 +1,7 @@
 // src/lib/gemini-html-generator.js
 
 import { GoogleGenAI } from '@google/genai';
-import { GEMINI_API_KEY, GUMROAD_PRODUCT_PERMALINK } from '$env/static/private';
+import { GEMINI_API_KEY, GUMROAD_PRODUCT_ID } from '$env/static/private';
 
 const VFAST_MODEL = 'gemini-3-flash-lite';
 const FAST_MODEL = 'gemini-3-flash-preview';
@@ -132,7 +132,7 @@ export async function verifyGumroadLicense(licenseKey: string) {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				product_permalink: GUMROAD_PRODUCT_PERMALINK,
+				product_id: GUMROAD_PRODUCT_ID,
 				license_key: licenseKey
 			})
 		});
