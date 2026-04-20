@@ -173,41 +173,43 @@
 		<!-- Terminal / Video preview -->
 		<div class="hero-preview-container">
 			{#if !showVideo}
-				<div class="hero-terminal absolute" transition:fade={{ duration: 500 }}>
-					<div class="hero-term-bar">
-						<div class="hero-term-dots">
-							<span class="dot-red"></span>
-							<span class="dot-yellow"></span>
-							<span class="dot-green"></span>
+				<div class="hero-preview-stack" transition:fade={{ duration: 500 }}>
+					<div class="hero-terminal">
+						<div class="hero-term-bar">
+							<div class="hero-term-dots">
+								<span class="dot-red"></span>
+								<span class="dot-yellow"></span>
+								<span class="dot-green"></span>
+							</div>
+							<span class="hero-term-title">steerable</span>
 						</div>
-						<span class="hero-term-title">steerable</span>
-					</div>
-					<div class="hero-term-body">
-						<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
-						<span class="tl">&nbsp;</span>
-						<span class="tl tl-white">→ Parsing reasoning trace...</span>
-						<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
-						<span class="tl">&nbsp;</span>
-						<span class="tl tl-teal">→ Segmenting and filtering</span>
-						<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
-						<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
-						<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
-						<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
-						<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
-						<span class="tl">&nbsp;</span>
-						<span class="tl tl-white">→ Upload reasoning traces...</span>
-						<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
-						<span class="tl">&nbsp;</span>
-						<button
-							class="tl tl-teal text-left transition-all hover:underline"
-							onclick={() => (showVideo = true)}
-						>
-							✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span>
-						</button>
+						<div class="hero-term-body">
+							<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
+							<span class="tl">&nbsp;</span>
+							<span class="tl tl-white">→ Parsing reasoning trace...</span>
+							<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
+							<span class="tl">&nbsp;</span>
+							<span class="tl tl-teal">→ Segmenting and filtering</span>
+							<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
+							<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
+							<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
+							<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
+							<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
+							<span class="tl">&nbsp;</span>
+							<span class="tl tl-white">→ Upload reasoning traces...</span>
+							<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
+							<span class="tl">&nbsp;</span>
+							<button
+								class="tl tl-teal text-left transition-all hover:underline"
+								onclick={() => (showVideo = true)}
+							>
+								✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span>
+							</button>
+						</div>
 					</div>
 				</div>
 			{:else}
-				<div class="absolute" transition:fade={{ duration: 500 }}>
+				<div class="hero-preview-stack" transition:fade={{ duration: 500 }}>
 					<LandingVideoMock active={showVideo} onFinish={handleVideoFinish} />
 					<button
 						class="mx-auto mt-4 flex items-center gap-2 text-[11px] text-agent-dim transition-colors hover:text-agent-subtle"
@@ -639,8 +641,17 @@
 		position: relative;
 		width: 100%;
 		max-width: 580px;
-		justify-self: end;
-		padding-bottom: 40px;
+		justify-self: start;
+		display: grid;
+		grid-template-columns: 1fr;
+		align-items: center;
+	}
+
+	.hero-preview-stack {
+		grid-area: 1 / 1;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* ─── Hero Terminal ──────────────────────────────────────────── */
