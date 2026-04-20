@@ -217,15 +217,11 @@
 				<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
 				<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
 				<span class="tl">&nbsp;</span>
-				<span class="tl tl-white">→ Generating AI narration...</span>
-				<span class="tl tl-dim">&nbsp; voice: neural-01 · 5 scenes</span>
-				<span class="tl">&nbsp;</span>
-				<span class="tl tl-white">→ Rendering video</span>
+				<span class="tl tl-white">→ Upload reasoning traces...</span>
 				<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
 				<span class="tl">&nbsp;</span>
-				<span class="tl tl-teal">✓ output/demo-trace.mp4 (2:34 · 1080p · 18.4 MB)</span>
 				<span class="tl tl-teal"
-					>✓ Hosted: steerable.io/v/abc123<span class="landing-cursor"></span></span
+					>✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span></span
 				>
 			</div>
 		</div>
