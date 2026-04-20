@@ -24,63 +24,29 @@
 		);
 		document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
 
-		// Auto-transition after terminal sequence (simulated)
-		setTimeout(() => {
-			showVideo = true;
-		}, 8000);
+		// Continuous loop between terminal and video
+		function startLoop() {
+			setTimeout(() => {
+				if (!showVideo) {
+					showVideo = true;
+				}
+			}, 4000); // Wait 4s in terminal
+		}
+
+		startLoop();
 
 		return () => observer.disconnect();
 	});
 
-	/* features */
-	const features = [
-		{
-			dot: 'bg-[#00d4aa]',
-			glow: 'shadow-[0_0_6px_rgba(0,212,170,0.5)]',
-			name: 'Backtrack detection',
-			desc: 'Spots "wait, actually…" moments with high accuracy. Renders pivots as animated diff views showing exactly what changed and why.',
-			code: [
-				{ text: '- greedy approach selected', cls: 'text-[#f85149]' },
-				{ text: '+ LP relaxation (conf: 0.94)', cls: 'text-[#3fb950]' },
-				{ text: '✓ pivot flagged at 01:04', cls: 'text-[#00d4aa]' }
-			]
-		},
-		{
-			dot: 'bg-[#79c0ff]',
-			glow: 'shadow-[0_0_6px_rgba(121,192,255,0.4)]',
-			name: 'AI narration',
-			desc: "Expressive voiceover narration for each scene — summarizing the model's intent in plain language, synced to the visuals.",
-			code: [
-				{ text: '// scene 03', cls: 'text-[#e6edf3]' },
-				{ text: '"The model recognises a greedy', cls: 'text-[#8b949e]' },
-				{ text: 'approach will fail and pivots to', cls: 'text-[#8b949e]' },
-				{ text: 'LP relaxation."', cls: 'text-[#00d4aa]' }
-			]
-		},
-		{
-			dot: 'bg-[#e3b341]',
-			glow: 'shadow-[0_0_6px_rgba(227,179,65,0.4)]',
-			name: 'Branching visualiser',
-			desc: 'When the model explores alternatives, AgentTrace renders the decision tree as an animated branching diagram with confidence scores.',
-			code: [
-				{ text: 'branch_a → Dijkstra     [0.30]', cls: 'text-[#e3b341]' },
-				{ text: 'branch_b → Greedy       [0.20]', cls: 'text-[#e3b341]' },
-				{ text: 'branch_c → LP relax  ✓ [0.94]', cls: 'text-[#00d4aa]' }
-			]
-		},
-		{
-			dot: 'bg-[#bc8cff]',
-			glow: 'shadow-[0_0_6px_rgba(188,140,255,0.4)]',
-			name: 'Custom branding',
-			desc: 'Apply your own colors, fonts, and logo. Export videos that look like they belong in your product — not a generic demo tool.',
-			code: [
-				{ text: '// theme.config.json', cls: 'text-[#e6edf3]' },
-				{ text: 'accent: "#a78bfa"', cls: 'text-[#bc8cff]' },
-				{ text: 'logo: "./brand.svg"', cls: 'text-[#bc8cff]' },
-				{ text: 'watermark: false', cls: 'text-[#bc8cff]' }
-			]
-		}
-	];
+	function handleVideoFinish() {
+		setTimeout(() => {
+			showVideo = false;
+			// Restart terminal sequence cycle
+			setTimeout(() => {
+				showVideo = true;
+			}, 5000); // 10s in terminal before switching back
+		}, 2000); // Wait 2s on "finished" screen
+	}
 
 	/* integrations */
 	const integrations = [
@@ -95,7 +61,7 @@
 	const plans = [
 		{
 			tag: 'Free',
-			tagClass: 'text-[#484f58] bg-[#1c1f28] border-[#21262d]',
+			tagClass: 'text-agent-dim bg-[#1c1f28] border-agent-border',
 			name: 'Explorer',
 			desc: 'For researchers and tinkerers trying it out.',
 			price: '0',
@@ -113,7 +79,7 @@
 		},
 		{
 			tag: 'Studio',
-			tagClass: 'text-[#00d4aa] bg-[rgba(0,212,170,0.12)] border-[rgba(0,212,170,0.2)]',
+			tagClass: 'text-agent bg-[rgba(0,212,170,0.12)] border-[rgba(0,212,170,0.2)]',
 			name: 'Studio',
 			desc: 'For teams shipping AI products and demos.',
 			price: '49',
@@ -131,7 +97,7 @@
 		},
 		{
 			tag: 'Enterprise',
-			tagClass: 'text-[#8b949e] bg-[#1c1f28] border-[#21262d]',
+			tagClass: 'text-agent-subtle bg-[#1c1f28] border-agent-border',
 			name: 'Reel',
 			desc: 'For labs and enterprises with high-volume needs.',
 			price: 'custom',
@@ -163,9 +129,9 @@
 	<header class="landing-topbar">
 		<div class="landing-brand">STEERABLE</div>
 		<div class="landing-path">
-			<span class="text-[#8b949e]">reasoning traces</span>
-			<span class="text-[#484f58]">→</span>
-			<span class="text-[#00d4aa]">explainable video</span>
+			<span class="text-agent-subtle">reasoning traces</span>
+			<span class="text-agent-dim">→</span>
+			<span class="text-agent">explainable video</span>
 		</div>
 		<nav class="landing-nav">
 			<button class="landing-nav-btn" onclick={() => scrollTo('how')}>how it works</button>
@@ -207,10 +173,7 @@
 		<!-- Terminal / Video preview -->
 		<div class="hero-preview-container">
 			{#if !showVideo}
-				<div 
-					class="hero-terminal" 
-					out:scale={{ duration: 400, start: 0.98, opacity: 0 }}
-				>
+				<div class="hero-terminal absolute" transition:fade={{ duration: 500 }}>
 					<div class="hero-term-bar">
 						<div class="hero-term-dots">
 							<span class="dot-red"></span>
@@ -235,20 +198,20 @@
 						<span class="tl tl-white">→ Upload reasoning traces...</span>
 						<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
 						<span class="tl">&nbsp;</span>
-						<button 
-							class="tl tl-teal text-left hover:underline transition-all"
-							onclick={() => showVideo = true}
+						<button
+							class="tl tl-teal text-left transition-all hover:underline"
+							onclick={() => (showVideo = true)}
 						>
 							✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span>
 						</button>
 					</div>
 				</div>
 			{:else}
-				<div in:fade={{ duration: 600, delay: 200 }}>
-					<LandingVideoMock active={showVideo} />
-					<button 
-						class="mt-4 text-[11px] text-[#484f58] hover:text-[#8b949e] flex items-center gap-2 mx-auto transition-colors"
-						onclick={() => showVideo = false}
+				<div class="absolute" transition:fade={{ duration: 500 }}>
+					<LandingVideoMock active={showVideo} onFinish={handleVideoFinish} />
+					<button
+						class="mx-auto mt-4 flex items-center gap-2 text-[11px] text-agent-dim transition-colors hover:text-agent-subtle"
+						onclick={() => (showVideo = false)}
 					>
 						← Back to terminal
 					</button>
@@ -320,11 +283,11 @@
 				{#each integrations as item}
 					<div class="landing-compat-item">
 						<div
-							class="h-2 w-2 shrink-0 rounded-full bg-[#00d4aa] shadow-[0_0_6px_rgba(0,212,170,0.5)]"
+							class="h-2 w-2 shrink-0 rounded-full bg-agent shadow-[0_0_6px_rgba(0,212,170,0.5)]"
 						></div>
 						<div>
-							<div class="text-[11px] text-[#c9d1d9]">{item.name}</div>
-							<div class="mt-0.5 text-[10px] text-[#484f58]">{item.type}</div>
+							<div class="text-[11px] text-agent-default">{item.name}</div>
+							<div class="mt-0.5 text-[10px] text-agent-dim">{item.type}</div>
 						</div>
 					</div>
 				{/each}
@@ -346,36 +309,36 @@
 						<div class="landing-plan-tag {plan.tagClass}">
 							{#if plan.featured}
 								<span
-									class="mr-1 inline-block h-[5px] w-[5px] rounded-full bg-[#00d4aa] shadow-[0_0_5px_rgba(0,212,170,0.6)]"
+									class="mr-1 inline-block h-[5px] w-[5px] rounded-full bg-agent shadow-[0_0_5px_rgba(0,212,170,0.6)]"
 								></span>
 							{/if}
 							{plan.tag}
 						</div>
 						<div class="mb-1.5 text-[15px] font-medium text-white">{plan.name}</div>
-						<div class="mb-5 text-[11px] leading-[1.7] text-[#484f58]">{plan.desc}</div>
+						<div class="mb-5 text-[11px] leading-[1.7] text-agent-dim">{plan.desc}</div>
 						<div class="mb-5 flex items-baseline gap-1">
 							{#if plan.price !== 'custom'}
-								<span class="text-[13px] text-[#8b949e]">$</span>
+								<span class="text-[13px] text-agent-subtle">$</span>
 								<span class="text-[32px] leading-none font-semibold tracking-[-0.04em] text-white"
 									>{plan.price}</span
 								>
-								<span class="text-[11px] text-[#484f58]">{plan.period}</span>
+								<span class="text-[11px] text-agent-dim">{plan.period}</span>
 							{:else}
 								<span class="text-[22px] leading-[1.4] font-semibold text-white">custom</span>
 							{/if}
 						</div>
-						<div class="mb-4.5 h-px bg-[#21262d]"></div>
+						<div class="mb-4.5 h-px bg-agent-border"></div>
 						<ul class="flex flex-col gap-2.5">
 							{#each plan.feats as feat}
 								<li
 									class="flex items-start gap-2.5 text-[11px] leading-[1.4] {feat.on
-										? 'text-[#8b949e]'
-										: 'text-[#484f58]'}"
+										? 'text-agent-subtle'
+										: 'text-agent-dim'}"
 								>
 									<span
 										class="mt-px w-3 shrink-0 text-center text-[10px] {feat.on
-											? 'text-[#00d4aa]'
-											: 'text-[#484f58]'}"
+											? 'text-agent'
+											: 'text-agent-dim'}"
 									>
 										{feat.on ? '✓' : '—'}
 									</span>
@@ -419,7 +382,7 @@
 					placeholder="research · teaching · product demos"
 				/>
 				<button class="landing-form-submit">REQUEST EARLY ACCESS →</button>
-				<div class="mt-2.5 text-[10px] leading-[1.7] text-[#484f58]">
+				<div class="mt-2.5 text-[10px] leading-[1.7] text-agent-dim">
 					No credit card required · Renders in under 30s<br />Works with Claude, o1, DeepSeek,
 					Gemini & more
 				</div>
@@ -431,16 +394,15 @@
 	<footer class="landing-footer">
 		<div class="flex items-center gap-2.5">
 			<div class="landing-footer-badge">STEERABLE</div>
-			<div class="text-[11px] text-[#484f58]">Reasoning, rendered.</div>
+			<div class="text-[11px] text-agent-dim">Reasoning, rendered.</div>
 		</div>
 		<ul class="landing-footer-links">
 			<li><a href="/app">demo</a></li>
-			<li><a href="#">docs</a></li>
-			<li><a href="#">api</a></li>
-			<li><a href="#">github</a></li>
-			<li><a href="#">privacy</a></li>
+			<li><a href="#docs">docs</a></li>
+			<li><a href="#github">github</a></li>
+			<li><a href="#privacy">privacy</a></li>
 		</ul>
-		<div class="text-[11px] text-[#484f58]">© 2025 Steerable</div>
+		<div class="text-[11px] text-agent-dim">© 2025 Steerable</div>
 	</footer>
 </div>
 

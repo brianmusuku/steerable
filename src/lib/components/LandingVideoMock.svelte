@@ -3,7 +3,7 @@
 	import { Play, Pause, SkipBack, SkipForward, Maximize2, Volume2 } from 'lucide-svelte';
 	import { fade, slide, scale } from 'svelte/transition';
 
-	let { active = false } = $props();
+	let { active = false, onFinish = null } = $props();
 
 	let progress = $state(0);
 	let playing = $state(false);
@@ -17,7 +17,13 @@
 	$effect(() => {
 		if (active && playing) {
 			const interval = setInterval(() => {
-				progress = (progress + 0.5) % 100;
+				progress += 0.5;
+				if (progress >= 100) {
+					progress = 100;
+					playing = false;
+					clearInterval(interval);
+					if (onFinish) onFinish();
+				}
 			}, 50);
 			return () => clearInterval(interval);
 		}
