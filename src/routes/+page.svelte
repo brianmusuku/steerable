@@ -39,7 +39,7 @@
 			dot: 'bg-[#79c0ff]',
 			glow: 'shadow-[0_0_6px_rgba(121,192,255,0.4)]',
 			name: 'AI narration',
-			desc: 'Expressive voiceover narration for each scene — summarizing the model\'s intent in plain language, synced to the visuals.',
+			desc: "Expressive voiceover narration for each scene — summarizing the model's intent in plain language, synced to the visuals.",
 			code: [
 				{ text: '// scene 03', cls: 'text-[#e6edf3]' },
 				{ text: '"The model recognises a greedy', cls: 'text-[#8b949e]' },
@@ -62,7 +62,7 @@
 			dot: 'bg-[#bc8cff]',
 			glow: 'shadow-[0_0_6px_rgba(188,140,255,0.4)]',
 			name: 'Custom branding',
-			desc: "Apply your own colors, fonts, and logo. Export videos that look like they belong in your product — not a generic demo tool.",
+			desc: 'Apply your own colors, fonts, and logo. Export videos that look like they belong in your product — not a generic demo tool.',
 			code: [
 				{ text: '// theme.config.json', cls: 'text-[#e6edf3]' },
 				{ text: 'accent: "#a78bfa"', cls: 'text-[#bc8cff]' },
@@ -179,9 +179,8 @@
 			</h1>
 
 			<p class="hero-subtitle">
-				Steerable converts reasoning traces from AI agents — thinking blocks,
-				chain-of-thought, self-corrections — into structured, narrated explainer
-				videos. Automatically.
+				Steerable converts reasoning traces from AI agents — thinking blocks, chain-of-thought,
+				self-corrections — into structured, narrated explainer videos. Automatically.
 			</p>
 
 			<div class="hero-actions">
@@ -225,11 +224,12 @@
 				<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
 				<span class="tl">&nbsp;</span>
 				<span class="tl tl-teal">✓ output/demo-trace.mp4 (2:34 · 1080p · 18.4 MB)</span>
-				<span class="tl tl-teal">✓ Hosted: steerable.io/v/abc123<span class="landing-cursor"></span></span>
+				<span class="tl tl-teal"
+					>✓ Hosted: steerable.io/v/abc123<span class="landing-cursor"></span></span
+				>
 			</div>
 		</div>
 	</section>
-
 
 	<!-- ═══════ HOW IT WORKS ═══════ -->
 	<section id="how" class="landing-section">
@@ -249,8 +249,8 @@
 					<div class="landing-hs-icon">📋</div>
 					<div class="landing-hs-title">Paste your trace</div>
 					<p class="landing-hs-desc">
-						Drop in any AI reasoning trace — Claude thinking blocks, GPT-o1, DeepSeek
-						R1, or raw chain-of-thought. Format is auto-detected.
+						Drop in any AI reasoning trace — Claude thinking blocks, GPT-o1, DeepSeek R1, or raw
+						chain-of-thought. Format is auto-detected.
 					</p>
 					<span class="landing-hs-tag">text · json · xml</span>
 				</div>
@@ -259,8 +259,8 @@
 					<div class="landing-hs-icon">⚙</div>
 					<div class="landing-hs-title">We render it</div>
 					<p class="landing-hs-desc">
-						The pipeline segments scenes, detects backtracks, generates narration, and
-						animates key reasoning transitions automatically.
+						The pipeline segments scenes, detects backtracks, generates narration, and animates key
+						reasoning transitions automatically.
 					</p>
 					<span class="landing-hs-tag">~28 seconds avg</span>
 				</div>
@@ -269,46 +269,11 @@
 					<div class="landing-hs-icon">▶</div>
 					<div class="landing-hs-title">Share the video</div>
 					<p class="landing-hs-desc">
-						Export as MP4, WebM, or GIF. Share a hosted link or embed in your docs.
-						Perfect for research walkthroughs and demos.
+						Export as MP4, WebM, or GIF. Share a hosted link or embed in your docs. Perfect for
+						research walkthroughs and demos.
 					</p>
 					<span class="landing-hs-tag">mp4 · webm · gif</span>
 				</div>
-			</div>
-		</div>
-	</section>
-
-	<!-- ═══════ FEATURES ═══════ -->
-	<section id="features" class="landing-section">
-		<div class="landing-section-inner reveal-on-scroll">
-			<div class="landing-eyebrow">capabilities</div>
-			<h2 class="landing-s-title">
-				Built for<br /><em>deep traces</em>
-			</h2>
-			<p class="landing-s-sub">
-				Not just a transcript renderer. Steerable understands reasoning structure —
-				hypotheses, pivots, self-corrections — and makes them visually distinct.
-			</p>
-
-			<div class="landing-features-grid">
-				{#each features as feat}
-					<div class="landing-feat-card">
-						<div class="flex items-center gap-2.5 mb-2.5">
-							<div
-								class="h-[6px] w-[6px] rounded-full {feat.dot} {feat.glow}"
-							></div>
-							<div class="text-[12px] font-medium text-white">{feat.name}</div>
-						</div>
-						<p class="text-[11px] text-[#8b949e] leading-[1.8]">{feat.desc}</p>
-						<div class="landing-fc-code">
-							{#each feat.code as line}
-								<span class="block font-mono text-[10px] leading-[1.9] {line.cls}"
-									>{line.text}</span
-								>
-							{/each}
-						</div>
-					</div>
-				{/each}
 			</div>
 		</div>
 	</section>
@@ -321,8 +286,8 @@
 				Works with<br /><em>any LLM</em>
 			</h2>
 			<p class="landing-s-sub">
-				Steerable parses traces from all major models and formats. If it thinks out loud, we
-				can render it.
+				Steerable parses traces from all major models and formats. If it thinks out loud, we can
+				render it.
 			</p>
 
 			<div class="landing-compat-grid">
@@ -360,33 +325,29 @@
 							{/if}
 							{plan.tag}
 						</div>
-						<div class="text-[15px] font-medium text-white mb-1.5">{plan.name}</div>
-						<div class="text-[11px] text-[#484f58] mb-5 leading-[1.7]">{plan.desc}</div>
-						<div class="flex items-baseline gap-1 mb-5">
+						<div class="mb-1.5 text-[15px] font-medium text-white">{plan.name}</div>
+						<div class="mb-5 text-[11px] leading-[1.7] text-[#484f58]">{plan.desc}</div>
+						<div class="mb-5 flex items-baseline gap-1">
 							{#if plan.price !== 'custom'}
 								<span class="text-[13px] text-[#8b949e]">$</span>
-								<span
-									class="text-[32px] font-semibold text-white tracking-[-0.04em] leading-none"
+								<span class="text-[32px] leading-none font-semibold tracking-[-0.04em] text-white"
 									>{plan.price}</span
 								>
 								<span class="text-[11px] text-[#484f58]">{plan.period}</span>
 							{:else}
-								<span
-									class="text-[22px] font-semibold text-white leading-[1.4]"
-									>custom</span
-								>
+								<span class="text-[22px] leading-[1.4] font-semibold text-white">custom</span>
 							{/if}
 						</div>
-						<div class="h-px bg-[#21262d] mb-4.5"></div>
+						<div class="mb-4.5 h-px bg-[#21262d]"></div>
 						<ul class="flex flex-col gap-2.5">
 							{#each plan.feats as feat}
 								<li
-									class="flex gap-2.5 text-[11px] items-start leading-[1.4] {feat.on
+									class="flex items-start gap-2.5 text-[11px] leading-[1.4] {feat.on
 										? 'text-[#8b949e]'
 										: 'text-[#484f58]'}"
 								>
 									<span
-										class="shrink-0 w-3 text-center text-[10px] mt-px {feat.on
+										class="mt-px w-3 shrink-0 text-center text-[10px] {feat.on
 											? 'text-[#00d4aa]'
 											: 'text-[#484f58]'}"
 									>
@@ -412,8 +373,8 @@
 					Your model thinks.<br />Let the world <em>see</em> it.
 				</h2>
 				<p class="landing-s-sub" style="margin-bottom:0">
-					Join 800+ researchers, AI engineers, and educators already rendering reasoning
-					into watchable stories. First render is always free.
+					Join 800+ researchers, AI engineers, and educators already rendering reasoning into
+					watchable stories. First render is always free.
 				</p>
 			</div>
 			<div class="landing-cta-form">
@@ -424,9 +385,7 @@
 					type="email"
 					placeholder="you@company.com"
 				/>
-				<label class="landing-form-label" for="usecase-input"
-					>what will you use it for?</label
-				>
+				<label class="landing-form-label" for="usecase-input">what will you use it for?</label>
 				<input
 					id="usecase-input"
 					class="landing-form-input"
@@ -434,9 +393,9 @@
 					placeholder="research · teaching · product demos"
 				/>
 				<button class="landing-form-submit">REQUEST EARLY ACCESS →</button>
-				<div class="mt-2.5 text-[10px] text-[#484f58] leading-[1.7]">
-					No credit card required · Renders in under 30s<br />Works with Claude, o1,
-					DeepSeek, Gemini & more
+				<div class="mt-2.5 text-[10px] leading-[1.7] text-[#484f58]">
+					No credit card required · Renders in under 30s<br />Works with Claude, o1, DeepSeek,
+					Gemini & more
 				</div>
 			</div>
 		</div>
@@ -526,7 +485,9 @@
 		padding: 0 14px;
 		height: 100%;
 		cursor: pointer;
-		transition: background 0.15s, color 0.15s;
+		transition:
+			background 0.15s,
+			color 0.15s;
 	}
 	.landing-nav-btn:hover {
 		background: #161b22;
@@ -597,8 +558,13 @@
 	}
 
 	@keyframes heroPulse {
-		0%, 100% { opacity: 1; }
-		50% { opacity: 0.4; }
+		0%,
+		100% {
+			opacity: 1;
+		}
+		50% {
+			opacity: 0.4;
+		}
 	}
 
 	.hero-title {
@@ -641,7 +607,9 @@
 		letter-spacing: 0.06em;
 		padding: 11px 24px;
 		cursor: pointer;
-		transition: background 0.15s, box-shadow 0.15s;
+		transition:
+			background 0.15s,
+			box-shadow 0.15s;
 		box-shadow: 0 0 20px rgba(0, 212, 170, 0.15);
 	}
 	.hero-btn-primary:hover {
@@ -693,8 +661,13 @@
 	}
 
 	@keyframes termFloat {
-		0%, 100% { transform: translateY(0); }
-		50% { transform: translateY(-6px); }
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
 	}
 
 	.hero-term-bar {
@@ -715,9 +688,15 @@
 		height: 10px;
 		border-radius: 50%;
 	}
-	.dot-red { background: #f85149; }
-	.dot-yellow { background: #e3b341; }
-	.dot-green { background: #3fb950; }
+	.dot-red {
+		background: #f85149;
+	}
+	.dot-yellow {
+		background: #e3b341;
+	}
+	.dot-green {
+		background: #3fb950;
+	}
 
 	.hero-term-title {
 		font-size: 11px;
@@ -735,10 +714,18 @@
 		display: block;
 		color: #484f58;
 	}
-	.tl-teal { color: #00d4aa; }
-	.tl-white { color: #e6edf3; }
-	.tl-dim { color: #484f58; }
-	.tl-amber { color: #e3b341; }
+	.tl-teal {
+		color: #00d4aa;
+	}
+	.tl-white {
+		color: #e6edf3;
+	}
+	.tl-dim {
+		color: #484f58;
+	}
+	.tl-amber {
+		color: #e3b341;
+	}
 
 	/* ─── Cursor blink ─────────────────────────────────────────────── */
 	.landing-cursor {
@@ -1110,7 +1097,9 @@
 	.reveal-on-scroll {
 		opacity: 0;
 		transform: translateY(20px);
-		transition: opacity 0.6s ease, transform 0.6s ease;
+		transition:
+			opacity 0.6s ease,
+			transform 0.6s ease;
 	}
 
 	:global(.revealed) {
