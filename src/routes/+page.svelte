@@ -1,5 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import LandingVideoMock from '$lib/components/LandingVideoMock.svelte';
+	import { fade, scale } from 'svelte/transition';
+
+	let showVideo = $state(false);
 
 	/* ── Smooth scroll ─────────────────────────────────────────────── */
 	function scrollTo(id: string) {
@@ -19,6 +23,12 @@
 			{ threshold: 0.1 }
 		);
 		document.querySelectorAll('.reveal-on-scroll').forEach((el) => observer.observe(el));
+
+		// Auto-transition after terminal sequence (simulated)
+		setTimeout(() => {
+			showVideo = true;
+		}, 8000);
+
 		return () => observer.disconnect();
 	});
 
@@ -194,36 +204,56 @@
 			</div>
 		</div>
 
-		<!-- Terminal preview -->
-		<div class="hero-terminal">
-			<div class="hero-term-bar">
-				<div class="hero-term-dots">
-					<span class="dot-red"></span>
-					<span class="dot-yellow"></span>
-					<span class="dot-green"></span>
-				</div>
-				<span class="hero-term-title">steerable</span>
-			</div>
-			<div class="hero-term-body">
-				<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
-				<span class="tl">&nbsp;</span>
-				<span class="tl tl-white">→ Parsing reasoning trace...</span>
-				<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
-				<span class="tl">&nbsp;</span>
-				<span class="tl tl-teal">→ Segmenting and filtering</span>
-				<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
-				<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
-				<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
-				<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
-				<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
-				<span class="tl">&nbsp;</span>
-				<span class="tl tl-white">→ Upload reasoning traces...</span>
-				<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
-				<span class="tl">&nbsp;</span>
-				<span class="tl tl-teal"
-					>✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span></span
+		<!-- Terminal / Video preview -->
+		<div class="hero-preview-container">
+			{#if !showVideo}
+				<div 
+					class="hero-terminal" 
+					out:scale={{ duration: 400, start: 0.98, opacity: 0 }}
 				>
-			</div>
+					<div class="hero-term-bar">
+						<div class="hero-term-dots">
+							<span class="dot-red"></span>
+							<span class="dot-yellow"></span>
+							<span class="dot-green"></span>
+						</div>
+						<span class="hero-term-title">steerable</span>
+					</div>
+					<div class="hero-term-body">
+						<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
+						<span class="tl">&nbsp;</span>
+						<span class="tl tl-white">→ Parsing reasoning trace...</span>
+						<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
+						<span class="tl">&nbsp;</span>
+						<span class="tl tl-teal">→ Segmenting and filtering</span>
+						<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
+						<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
+						<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
+						<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
+						<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
+						<span class="tl">&nbsp;</span>
+						<span class="tl tl-white">→ Upload reasoning traces...</span>
+						<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
+						<span class="tl">&nbsp;</span>
+						<button 
+							class="tl tl-teal text-left hover:underline transition-all"
+							onclick={() => showVideo = true}
+						>
+							✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span>
+						</button>
+					</div>
+				</div>
+			{:else}
+				<div in:fade={{ duration: 600, delay: 200 }}>
+					<LandingVideoMock active={showVideo} />
+					<button 
+						class="mt-4 text-[11px] text-[#484f58] hover:text-[#8b949e] flex items-center gap-2 mx-auto transition-colors"
+						onclick={() => showVideo = false}
+					>
+						← Back to terminal
+					</button>
+				</div>
+			{/if}
 		</div>
 	</section>
 
@@ -519,7 +549,7 @@
 		align-items: center;
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 140px 48px 80px;
+		padding: 120px 48px 100px;
 	}
 
 	.hero-content {
@@ -641,6 +671,14 @@
 		border-radius: 50%;
 		background: #3fb950;
 		box-shadow: 0 0 6px rgba(63, 185, 80, 0.5);
+	}
+
+	.hero-preview-container {
+		position: relative;
+		width: 100%;
+		max-width: 580px;
+		justify-self: end;
+		padding-bottom: 40px;
 	}
 
 	/* ─── Hero Terminal ──────────────────────────────────────────── */
