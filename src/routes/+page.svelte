@@ -223,7 +223,7 @@
 	</section>
 
 	<!-- ═══════ HOW IT WORKS ═══════ -->
-	<section id="how" class="landing-section">
+	<section id="how" class="landing-section border-t border-agent-border">
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">process</div>
 			<h2 class="landing-s-title">
@@ -506,7 +506,6 @@
 	.landing-hero {
 		padding-top: 40px;
 		min-height: 100vh;
-		border-bottom: 1px solid #21262d;
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 60px;
