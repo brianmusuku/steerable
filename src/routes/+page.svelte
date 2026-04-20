@@ -205,12 +205,12 @@
 				<span class="hero-term-title">steerable</span>
 			</div>
 			<div class="hero-term-body">
-				<span class="tl tl-teal">$ steerable render ./trace.txt</span>
+				<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
 				<span class="tl">&nbsp;</span>
 				<span class="tl tl-white">→ Parsing reasoning trace...</span>
 				<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
 				<span class="tl">&nbsp;</span>
-				<span class="tl tl-teal">→ Segmenting into scenes</span>
+				<span class="tl tl-teal">→ Segmenting and filtering</span>
 				<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
 				<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
 				<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
