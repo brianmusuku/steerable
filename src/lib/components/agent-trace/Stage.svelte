@@ -7,15 +7,15 @@
 	import { Play, Pause, SkipBack, SkipForward, Loader, RotateCcw } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
-	import { narration } from '$lib/data/llm_output3';
 	import { onMount } from 'svelte';
 	import { slide, fade } from 'svelte/transition';
 	import { getCachedTTS, saveTTS } from '$lib/utils/ttsCache';
 
+	let { narration, id, index = $bindable(-1) } = $props();
+
 	let stageEl: HTMLElement | undefined;
 	let volume = $state(40);
 	let currentTime = $state(0);
-	let { index = $bindable(-1) } = $props();
 	let currentView = $derived(narration.content[index]);
 	let speaking = $state(false);
 	let fileTreeActive = $state(false);
@@ -185,17 +185,6 @@
 		return URL.createObjectURL(new Blob([bytes], { type: mime }));
 	}
 
-	/** Browser-compatible hash function */
-	async function getHash(text: string, voice: string): Promise<string> {
-		const msgUint8 = new TextEncoder().encode(`${voice}:${text}`);
-		const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);
-		const hashArray = Array.from(new Uint8Array(hashBuffer));
-		return hashArray
-			.map((b) => b.toString(16).padStart(2, '0'))
-			.join('')
-			.substring(0, 16);
-	}
-
 	// ── Pre-generate all audio in parallel ───────────────────────────────
 	async function pregenAll() {
 		pregenStatus = 'loading';
@@ -207,7 +196,7 @@
 		const newDurations = new Map<number, number>();
 
 		// Fire all requests in parallel
-		const promises = narration.content.map(async (item, i) => {
+		const promises = narration.content.map(async (item: any, i: number) => {
 			const text = item.script_text;
 			if (!text.trim()) {
 				pregenProgress++;
@@ -215,7 +204,7 @@
 			}
 
 			try {
-				const hash = await getHash(text, voice);
+				const hash = `${id}-${i}`;
 				const cached = await getCachedTTS(hash);
 
 				if (cached) {

@@ -110,10 +110,10 @@ export async function generateVideoScript(reasoning_trace: string) {
 
 	try {
 		const parsed = JSON.parse(generatedJson);
-		return parsed.themes || [];
+		return parsed;
 	} catch (e) {
-		console.error('Failed to parse themes JSON', e);
-		return [];
+		console.error('Failed to parse narration JSON', e);
+		return null;
 	}
 }
 

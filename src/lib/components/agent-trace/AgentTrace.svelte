@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Timeline from './Timeline.svelte';
 	import Stage from './Stage.svelte';
-	import { narration } from '$lib/data/llm_output2';
+	import { narration as staticNarration } from '$lib/data/llm_output2';
+
+	let { narration = staticNarration, id = 'default' } = $props();
 
 	let current: number = $state(-1);
 </script>
@@ -27,7 +29,7 @@
 
 	<div class="flex min-h-0 flex-1">
 		<Timeline {current} actions={narration.content} onJump={(i) => (current = i)} />
-		<Stage bind:index={current} />
+		<Stage bind:index={current} {narration} {id} />
 	</div>
 </div>
 
