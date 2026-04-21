@@ -11,7 +11,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { getCachedTTS, saveTTS } from '$lib/utils/ttsCache';
 
-	let { narration, id, index = $bindable(-1) } = $props();
+	let { narration, id, index = $bindable(-1), autoStart = false } = $props();
 
 	let stageEl: HTMLElement | undefined;
 	let volume = $state(40);
@@ -23,6 +23,8 @@
 	let voice = $state('am_echo');
 	let canvasEl = $state<HTMLElement>();
 	let playbackComplete = $state(false);
+
+
 
 	let visibleComponents = $derived.by(() => {
 		if (index < 0) return [];
@@ -157,6 +159,10 @@
 	let animFrameId: number = 0;
 
 	onMount(() => {
+		if (autoStart) {
+			pregenAll();
+		}
+
 		audio = new Audio();
 		audio.volume = volume / 100;
 

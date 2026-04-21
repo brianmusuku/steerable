@@ -1,40 +1,103 @@
 <script lang="ts">
 	import Timeline from './Timeline.svelte';
 	import Stage from './Stage.svelte';
+	import { onMount } from 'svelte';
+	import { Loader } from '@lucide/svelte';
+	import { fade } from 'svelte/transition';
 	import { narration as staticNarration } from '$lib/data/llm_output2';
 
-	let { narration = staticNarration, id = 'default' } = $props();
+	let { narration = null, id = 'default' } = $props();
 
+	let currentNarration = $state(narration);
+	let loading = $state(!narration);
+	let error = $state<string | null>(null);
 	let current: number = $state(-1);
+
+	onMount(async () => {
+		if (!currentNarration) {
+			try {
+				const response = await fetch('/api/narration', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ id })
+				});
+				if (!response.ok) {
+					const errorData = await response.json();
+					throw new Error(errorData.error || 'Failed to generate narration script');
+				}
+				const data = await response.json();
+				currentNarration = data.narration;
+			} catch (e) {
+				error = e instanceof Error ? e.message : 'An unexpected error occurred';
+			} finally {
+				loading = false;
+			}
+		}
+	});
 </script>
 
 <div
 	class="dark flex h-screen flex-col overflow-hidden border border-agent-border bg-agent font-sans text-agent-default"
 >
-	<div
-		class="flex shrink-0 items-center gap-2.5 border-b border-agent-border bg-agent-surface px-4 py-2.5"
-	></div>
-
-	<header class="landing-topbar">
-		<div class="landing-brand">STEERABLE</div>
-		<div class="landing-path">
-			<span class="text-agent-subtle">reasoning traces</span>
-			<span class="text-agent-dim">→</span>
-			<span class="text-agent">{narration.content.length} steps</span>
+	{#if loading}
+		<div
+			class="flex flex-1 flex-col items-center justify-center gap-6 bg-agent"
+			in:fade={{ duration: 400 }}
+		>
+			<div class="relative flex items-center justify-center">
+				<Loader class="size-10 animate-spin text-agent" />
+				<div class="absolute size-14 animate-pulse rounded-full border border-agent/20"></div>
+			</div>
+			<div class="flex flex-col items-center gap-2 text-center">
+				<span class="text-xs font-bold tracking-[0.2em] text-agent uppercase"
+					>Initializing Environment</span
+				>
+				<span class="text-sm font-medium text-agent-subtle"
+					>Generating video script from reasoning trace...</span
+				>
+			</div>
 		</div>
-		<nav class="landing-nav">
-			<button class="landing-nav-btn">unlock audio</button>
-		</nav>
-	</header>
+	{:else if error}
+		<div class="flex flex-1 flex-col items-center justify-center gap-6 bg-agent" in:fade>
+			<div class="flex flex-col items-center gap-2 text-center">
+				<span class="text-xs font-bold tracking-[0.2em] text-red-500 uppercase"
+					>Generation Failed</span
+				>
+				<span class="max-w-md text-sm font-medium text-agent-dim">{error}</span>
+			</div>
+			<button
+				class="landing-cta-btn !border-red-500/20 !bg-red-500/10 !text-red-400 hover:!bg-red-500/20"
+				onclick={() => window.location.reload()}
+			>
+				Try Again
+			</button>
+		</div>
+	{:else if currentNarration}
+		<div
+			class="flex shrink-0 items-center gap-2.5 border-b border-agent-border bg-agent-surface px-4 py-2.5"
+		></div>
 
-	<div class="flex min-h-0 flex-1">
-		<Timeline {current} actions={narration.content} onJump={(i) => (current = i)} />
-		<Stage bind:index={current} {narration} {id} />
-	</div>
+		<header class="landing-topbar">
+			<div class="landing-brand">STEERABLE</div>
+			<div class="landing-path">
+				<span class="text-agent-subtle">reasoning traces</span>
+				<span class="text-agent-dim">→</span>
+				<span class="text-agent">{currentNarration.content.length} steps</span>
+			</div>
+			<nav class="landing-nav">
+				<button class="landing-nav-btn">unlock audio</button>
+			</nav>
+		</header>
+
+		<div class="flex min-h-0 flex-1" in:fade={{ duration: 600, delay: 200 }}>
+			<Timeline {current} actions={currentNarration.content} onJump={(i) => (current = i)} />
+			<Stage bind:index={current} narration={currentNarration} {id} autoStart={true} />
+		</div>
+	{/if}
 </div>
 
 <style>
-	/* ─── Topbar ───────────────────────────────────────────────────── */
+	/* ─── Topbar ──────────────────────────────────────────────────── */
 	.landing-topbar {
 		position: fixed;
 		top: 0;

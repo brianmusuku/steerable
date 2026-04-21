@@ -14,17 +14,22 @@ export const load = async ({ params, platform }: any) => {
 		throw error(404, 'Reasoning trace not found');
 	}
 
-	try {
-		const narration = await generateVideoScript(reasoning_trace);
-		if (!narration) {
-			throw error(500, 'Failed to generate narration');
+	const cacheKey = `narration:${id}`;
+	const cachedNarration = await platform.env.MY_KV_STORE.get(cacheKey);
+
+	if (cachedNarration) {
+		try {
+			return {
+				narration: JSON.parse(cachedNarration),
+				id
+			};
+		} catch (e) {
+			console.error('Error parsing cached narration:', e);
 		}
-		return {
-			narration,
-			id
-		};
-	} catch (e) {
-		console.error('Error generating video script:', e);
-		throw error(500, 'Internal server error during narration generation');
 	}
+
+	return {
+		narration: null,
+		id
+	};
 };
