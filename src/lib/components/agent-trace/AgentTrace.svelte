@@ -4,7 +4,6 @@
 	import { onMount } from 'svelte';
 	import { Loader } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
-	import { narration as staticNarration } from '$lib/data/llm_output2';
 
 	let { narration = null, id = 'default' } = $props();
 
@@ -37,36 +36,44 @@
 </script>
 
 <div
-	class="dark flex h-screen flex-col overflow-hidden border border-agent-border bg-agent font-sans text-agent-default"
+	class="dark flex h-screen flex-col overflow-hidden border border-agent-border bg-agent-stage font-sans text-agent-default"
 >
 	{#if loading}
 		<div
-			class="flex flex-1 flex-col items-center justify-center gap-6 bg-agent"
+			class="flex flex-1 flex-col items-center justify-center gap-8 bg-agent-stage"
 			in:fade={{ duration: 400 }}
 		>
 			<div class="relative flex items-center justify-center">
-				<Loader class="size-10 animate-spin text-agent" />
-				<div class="absolute size-14 animate-pulse rounded-full border border-agent/20"></div>
+				<Loader class="size-12 animate-spin text-agent" />
+				<div class="absolute size-16 animate-pulse rounded-full border border-agent/20"></div>
 			</div>
-			<div class="flex flex-col items-center gap-2 text-center">
-				<span class="text-xs font-bold tracking-[0.2em] text-agent uppercase"
-					>Initializing Environment</span
-				>
-				<span class="text-sm font-medium text-agent-subtle"
+			<div class="flex flex-col items-center gap-3 text-center">
+				<div class="flex flex-col items-center gap-1">
+					<span class="text-[11px] font-bold tracking-[0.3em] text-agent uppercase"
+						>Initializing Environment</span
+					>
+					<div class="h-0.5 w-8 bg-agent/30 rounded-full"></div>
+				</div>
+				<span class="text-sm font-medium text-agent-subtle max-w-xs"
 					>Generating video script from reasoning trace...</span
 				>
 			</div>
 		</div>
 	{:else if error}
-		<div class="flex flex-1 flex-col items-center justify-center gap-6 bg-agent" in:fade>
+		<div class="flex flex-1 flex-col items-center justify-center gap-8 bg-agent-stage" in:fade>
+			<div class="size-16 flex items-center justify-center rounded-full border border-red-500/20 bg-red-500/5">
+				<div class="size-10 rounded-full border-2 border-red-500/40 flex items-center justify-center">
+					<span class="text-red-500 font-bold text-xl">!</span>
+				</div>
+			</div>
 			<div class="flex flex-col items-center gap-2 text-center">
-				<span class="text-xs font-bold tracking-[0.2em] text-red-500 uppercase"
+				<span class="text-[11px] font-bold tracking-[0.3em] text-red-500 uppercase"
 					>Generation Failed</span
 				>
-				<span class="max-w-md text-sm font-medium text-agent-dim">{error}</span>
+				<span class="max-w-md text-sm font-medium text-agent-dim leading-relaxed">{error}</span>
 			</div>
 			<button
-				class="landing-cta-btn !border-red-500/20 !bg-red-500/10 !text-red-400 hover:!bg-red-500/20"
+				class="landing-cta-btn !border-red-500/20 !bg-red-500/10 !text-red-400 hover:!bg-red-500/20 transition-all active:scale-95"
 				onclick={() => window.location.reload()}
 			>
 				Try Again

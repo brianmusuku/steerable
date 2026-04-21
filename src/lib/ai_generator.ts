@@ -24,7 +24,7 @@ export async function generateVideoScript(reasoning_trace: string) {
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did. Delve into the "why" of the choices because we can see "what" changed through diffs. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Do not mention any of the video generating commands. file tree structure should remain as is. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
+	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did. Delve into the "why" of the choices because we can see "what" changed through diffs. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Ignore the video generation commands by the user and do not include them in the script. file tree structure should remain as is. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
 	${reasoning_trace}`
 
 	const responseSchema = {

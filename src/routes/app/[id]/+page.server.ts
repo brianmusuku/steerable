@@ -1,5 +1,4 @@
 import { error } from '@sveltejs/kit';
-import { generateVideoScript } from '$lib/ai_generator';
 
 export const load = async ({ params, platform }: any) => {
 	const { id } = params;
