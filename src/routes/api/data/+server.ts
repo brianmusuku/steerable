@@ -1,8 +1,15 @@
 // src/routes/api/data/+server.js
 import { json } from '@sveltejs/kit';
+import { verifyGumroadLicense } from '$lib/utils/verify';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request, platform }) {
+  const { licenseKey } = await request.json();
+  const license = await verifyGumroadLicense(licenseKey);
+  if (!license.valid) {
+    return json({ error: 'Invalid license key' }, { status: 400 });
+  }
+
   const uuid = crypto.randomUUID();
 
   try {

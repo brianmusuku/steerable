@@ -1,7 +1,7 @@
 // src/lib/gemini-html-generator.js
 
 import { GoogleGenAI } from '@google/genai';
-import { GEMINI_API_KEY, GUMROAD_PRODUCT_ID } from '$env/static/private';
+import { GEMINI_API_KEY } from '$env/static/private';
 
 const VFAST_MODEL = 'gemini-3-flash-lite';
 const FAST_MODEL = 'gemini-3-flash-preview';
@@ -117,46 +117,5 @@ export async function generateVideoScript(reasoning_trace: string) {
 	}
 }
 
-/**
- * Verifies a Gumroad license key.
- * 
- * @param {string} licenseKey - The license key to verify.
- * @returns {Promise<{valid: boolean, purchase?: any, message?: string}>}
- */
-export async function verifyGumroadLicense(licenseKey: string) {
-
-	try {
-		const response = await fetch('https://api.gumroad.com/v2/licenses/verify', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify({
-				product_id: GUMROAD_PRODUCT_ID,
-				license_key: licenseKey
-			})
-		});
-
-		const data = await response.json();
-
-		if (data.success && data.purchase && !data.purchase.refunded && !data.purchase.chargeback) {
-			return {
-				valid: true,
-				purchase: data.purchase
-			};
-		}
-
-		return {
-			valid: false,
-			message: data.message || 'Invalid or inactive license key.'
-		};
-	} catch (error) {
-		console.error('Error verifying Gumroad license:', error);
-		return {
-			valid: false,
-			message: 'Verification failed. Please try again later.'
-		};
-	}
-}
 
 
