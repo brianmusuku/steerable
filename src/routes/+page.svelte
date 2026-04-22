@@ -50,11 +50,10 @@
 
 	/* integrations */
 	const integrations = [
-		{ name: 'Claude 3.5 / 4', type: 'Thinking blocks' },
-		{ name: 'OpenAI o1 / o3', type: 'Chain-of-thought' },
-		{ name: 'DeepSeek R1', type: 'Reasoning traces' },
-		{ name: 'Gemini 2.0', type: 'Extended thinking' },
-		{ name: 'Custom / OSS', type: 'Raw text / JSON' }
+		{ name: 'OpenCode', type: 'Launched' },
+		{ name: 'Claude code', type: 'Coming soon' },
+		{ name: 'Cursor', type: 'Coming soon' },
+		{ name: 'Steerable', type: 'Coming soon' }
 	];
 
 	/* pricing */
@@ -70,9 +69,9 @@
 			feats: [
 				{ text: '5 renders / month', on: true },
 				{ text: 'Up to 2k token traces', on: true },
-				{ text: '720p MP4 export', on: true },
+				{ text: 'AI subtitles', on: true },
 				{ text: 'AI narration', on: false },
-				{ text: 'Custom branding', on: false }
+				{ text: 'Change video theme', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnText: 'start free'
@@ -83,16 +82,17 @@
 			name: 'Studio',
 			desc: 'For teams shipping AI products and demos.',
 			price: '49',
-			period: '/mo',
+			period: '/lifetime',
 			featured: true,
 			feats: [
 				{ text: '100 renders / month', on: true },
 				{ text: 'Up to 32k token traces', on: true },
-				{ text: '1080p MP4 + WebM', on: true },
 				{ text: 'AI narration (10 voices)', on: true },
-				{ text: 'Custom colors & logo', on: true }
+				{ text: 'AI generated subtitles', on: true },
+				{ text: 'Change video theme', on: true }
 			],
 			btnClass: 'landing-btn-solid',
+			btnLink: 'https://brayanmusuku.gumroad.com/l/steerable',
 			btnText: 'get studio'
 		},
 		{
@@ -135,7 +135,7 @@
 		</div>
 		<nav class="landing-nav">
 			<button class="landing-nav-btn" onclick={() => scrollTo('how')}>how it works</button>
-			<button class="landing-nav-btn" onclick={() => scrollTo('features')}>features</button>
+			<button class="landing-nav-btn" onclick={() => scrollTo('integrations')}>integrations</button>
 			<button class="landing-nav-btn" onclick={() => scrollTo('pricing')}>pricing</button>
 			<button class="landing-cta-btn">
 				<a href="https://www.npmjs.com/package/steerable" target="_blank">Install OpenCode Plugin</a
@@ -237,20 +237,21 @@
 				<div class="landing-how-step">
 					<div class="landing-hs-num">01</div>
 					<div class="landing-hs-icon">📋</div>
-					<div class="landing-hs-title">Paste your trace</div>
+					<div class="landing-hs-title">Install the plugin</div>
 					<p class="landing-hs-desc">
-						Drop in any AI reasoning trace — Claude thinking blocks, GPT-o1, DeepSeek R1, or raw
-						chain-of-thought. Format is auto-detected.
+						Install the steerable opencode plugin by following the instructions on
+						<a href="https://www.npmjs.com/package/steerable" target="_blank">npm</a>. It basically
+						entails adding a line to the opencode.json file.
 					</p>
-					<span class="landing-hs-tag">text · json · xml</span>
+					<span class="landing-hs-tag">easy setup</span>
 				</div>
 				<div class="landing-how-step">
 					<div class="landing-hs-num">02</div>
 					<div class="landing-hs-icon">⚙</div>
-					<div class="landing-hs-title">We render it</div>
+					<div class="landing-hs-title">Ask it to generate</div>
 					<p class="landing-hs-desc">
-						The pipeline segments scenes, detects backtracks, generates narration, and animates key
-						reasoning transitions automatically.
+						Use your coding agent normally. If the session needs to be visualised, simply ask the
+						LLM to use the steerable plugin to generate a video of the session.
 					</p>
 					<span class="landing-hs-tag">~28 seconds avg</span>
 				</div>
@@ -259,26 +260,23 @@
 					<div class="landing-hs-icon">▶</div>
 					<div class="landing-hs-title">Share the video</div>
 					<p class="landing-hs-desc">
-						Export as MP4, WebM, or GIF. Share a hosted link or embed in your docs. Perfect for
-						research walkthroughs and demos.
+						The plugin will generate a link, which points to the hosted video. Anyone with the link
+						can watch and share the video regardless of the agent they use.
 					</p>
-					<span class="landing-hs-tag">mp4 · webm · gif</span>
+					<span class="landing-hs-tag">share anywhere</span>
 				</div>
 			</div>
 		</div>
 	</section>
 
 	<!-- ═══════ INTEGRATIONS ═══════ -->
-	<section class="landing-section">
+	<section id="integrations" class="landing-section">
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">integrations</div>
 			<h2 class="landing-s-title">
-				Works with<br /><em>any LLM</em>
+				Works with any<br /><em> Coding Agent</em>
 			</h2>
-			<p class="landing-s-sub">
-				Steerable parses traces from all major models and formats. If it thinks out loud, we can
-				render it.
-			</p>
+			<p class="landing-s-sub">Steerable plans to support all major coding harnesses.</p>
 
 			<div class="landing-compat-grid">
 				{#each integrations as item}
@@ -301,7 +299,7 @@
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">pricing</div>
 			<h2 class="landing-s-title">
-				Simple plans,<br /><em>no surprises</em>
+				Lifetime plans.<br /><em>Pay once</em>, use forever.
 			</h2>
 
 			<div class="landing-pricing-row">
@@ -347,7 +345,9 @@
 								</li>
 							{/each}
 						</ul>
-						<button class="mt-5 w-full {plan.btnClass}">{plan.btnText}</button>
+						<a href={plan.btnLink} target="_blank">
+							<button class="mt-5 w-full {plan.btnClass}">{plan.btnText}</button>
+						</a>
 					</div>
 				{/each}
 			</div>
@@ -355,7 +355,7 @@
 	</section>
 
 	<!-- ═══════ CTA ═══════ -->
-	<section id="cta" class="landing-section">
+	<section id="cta" class="landing-section hidden">
 		<div class="landing-cta-inner reveal-on-scroll">
 			<div>
 				<div class="landing-eyebrow">early access</div>
