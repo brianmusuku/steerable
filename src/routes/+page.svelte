@@ -137,7 +137,10 @@
 			<button class="landing-nav-btn" onclick={() => scrollTo('how')}>how it works</button>
 			<button class="landing-nav-btn" onclick={() => scrollTo('features')}>features</button>
 			<button class="landing-nav-btn" onclick={() => scrollTo('pricing')}>pricing</button>
-			<button class="landing-cta-btn" onclick={() => scrollTo('cta')}>get early access</button>
+			<button class="landing-cta-btn">
+				<a href="https://www.npmjs.com/package/steerable" target="_blank">Install OpenCode Plugin</a
+				>
+			</button>
 		</nav>
 	</header>
 
@@ -160,13 +163,9 @@
 			</p>
 
 			<div class="hero-actions">
-				<button class="hero-btn-primary" onclick={() => scrollTo('cta')}>Get early access</button>
-				<a href="/app" class="hero-btn-secondary">Try the demo →</a>
-			</div>
-
-			<div class="hero-social-proof">
-				<span class="hero-sp-dot"></span>
-				800+ researchers and AI engineers on the waitlist
+				<button class="hero-btn-primary">
+					<a href="https://www.npmjs.com/package/steerable" target="_blank">Get OpenCode Plugin</a>
+				</button>
 			</div>
 		</div>
 
