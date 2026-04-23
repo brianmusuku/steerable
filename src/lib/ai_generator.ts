@@ -6,9 +6,6 @@ import { GEMINI_API_KEY } from '$env/static/private';
 const SFAST_MODEL = 'gemini-3.1-flash-lite-preview';
 const FAST_MODEL = 'gemini-3-flash-preview';
 
-
-
-
 /**
  * Generates an agent walkthrough video script.
  *
@@ -24,78 +21,67 @@ export async function generateVideoScript(reasoning_trace: string) {
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did. Delve into the "why" of the choices because we can see "what" changed through diffs. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Ignore the video generation commands by the user and do not include them in the script. file tree structure should remain as is. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
-	${reasoning_trace}`
+	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did. Delve into the "why" of the choices because we can see "what" changed through diffs. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Ignore the video generation commands by the user and do not include them in the script. file tree structure should be copied character for character, strictly no changes. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
+	${reasoning_trace}`;
 
 	const responseSchema = {
-		type: "OBJECT",
+		type: 'OBJECT',
 		properties: {
 			content: {
-				type: "ARRAY",
+				type: 'ARRAY',
 				items: {
-					type: "OBJECT",
+					type: 'OBJECT',
 					properties: {
 						script_text: {
-							type: "STRING"
+							type: 'STRING'
 						},
 						visual: {
-							type: "STRING",
-							enum: [
-								"code diff",
-								"file viewer",
-								"folder tree viewer",
-								"command line shell"
-							]
+							type: 'STRING',
+							enum: ['code diff', 'file viewer', 'folder tree viewer', 'command line shell']
 						},
 						title: {
-							type: "STRING"
+							type: 'STRING'
 						},
 						filename: {
-							type: "STRING"
+							type: 'STRING'
 						},
 						filetree: {
-							type: "STRING"
+							type: 'STRING'
 						},
 						agents_output: {
-							type: "STRING"
+							type: 'STRING'
 						},
 						script_text_3word_phrase_where_visual_starts: {
-							type: "STRING"
+							type: 'STRING'
 						}
 					},
 					propertyOrdering: [
-						"script_text",
-						"visual",
-						"title",
-						"filename",
-						"filetree",
-						"agents_output",
-						"script_text_3word_phrase_where_visual_starts"
+						'script_text',
+						'visual',
+						'title',
+						'filename',
+						'filetree',
+						'agents_output',
+						'script_text_3word_phrase_where_visual_starts'
 					],
 					required: [
-						"script_text",
-						"visual",
-						"title",
-						"filename",
-						"filetree",
-						"agents_output",
-						"script_text_3word_phrase_where_visual_starts"
+						'script_text',
+						'visual',
+						'title',
+						'filename',
+						'filetree',
+						'agents_output',
+						'script_text_3word_phrase_where_visual_starts'
 					]
 				}
 			},
 			one_sentence_1st_person_summary: {
-				type: "STRING"
+				type: 'STRING'
 			}
 		},
-		propertyOrdering: [
-			"content",
-			"one_sentence_1st_person_summary"
-		],
-		required: [
-			"content",
-			"one_sentence_1st_person_summary"
-		]
-	}
+		propertyOrdering: ['content', 'one_sentence_1st_person_summary'],
+		required: ['content', 'one_sentence_1st_person_summary']
+	};
 	const response = await ai.models.generateContent({
 		model: FAST_MODEL,
 		contents: prompt,
@@ -116,6 +102,3 @@ export async function generateVideoScript(reasoning_trace: string) {
 		return null;
 	}
 }
-
-
-
