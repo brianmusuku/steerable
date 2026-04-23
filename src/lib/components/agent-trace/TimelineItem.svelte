@@ -13,7 +13,8 @@
 		read: 'text-agent-blue',
 		terminal: 'text-agent-blue',
 		file: 'text-agent-blue',
-		diff: 'text-agent-blue'
+		diff: 'text-agent-blue',
+		directory: 'text-agent-blue'
 	};
 
 	const VISUAL_TO_KIND: Record<string, string> = {
