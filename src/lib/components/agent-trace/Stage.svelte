@@ -24,8 +24,6 @@
 	let canvasEl = $state<HTMLElement>();
 	let playbackComplete = $state(false);
 
-
-
 	let visibleComponents = $derived.by(() => {
 		if (index < 0) return [];
 		const items: { component: any; props: any; id: string }[] = [];
@@ -514,7 +512,7 @@
 	bind:this={stageEl}
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
-	<div class="m-8 flex h-200 flex-col justify-between border border-agent-border">
+	<div class="relative m-8 flex h-200 flex-col justify-start border border-agent-border">
 		{#if currentView}
 			{#key index}
 				<ActionHeader {currentView} onComplete={() => (showContent = true)} />

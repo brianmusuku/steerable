@@ -52,28 +52,32 @@
 					<span class="text-[11px] font-bold tracking-[0.3em] text-agent uppercase"
 						>Initializing Environment</span
 					>
-					<div class="h-0.5 w-8 bg-agent/30 rounded-full"></div>
+					<div class="h-0.5 w-8 rounded-full bg-agent/30"></div>
 				</div>
-				<span class="text-sm font-medium text-agent-subtle max-w-xs"
+				<span class="max-w-xs text-sm font-medium text-agent-subtle"
 					>Generating video script from reasoning trace...</span
 				>
 			</div>
 		</div>
 	{:else if error}
 		<div class="flex flex-1 flex-col items-center justify-center gap-8 bg-agent-stage" in:fade>
-			<div class="size-16 flex items-center justify-center rounded-full border border-red-500/20 bg-red-500/5">
-				<div class="size-10 rounded-full border-2 border-red-500/40 flex items-center justify-center">
-					<span class="text-red-500 font-bold text-xl">!</span>
+			<div
+				class="flex size-16 items-center justify-center rounded-full border border-red-500/20 bg-red-500/5"
+			>
+				<div
+					class="flex size-10 items-center justify-center rounded-full border-2 border-red-500/40"
+				>
+					<span class="text-xl font-bold text-red-500">!</span>
 				</div>
 			</div>
 			<div class="flex flex-col items-center gap-2 text-center">
 				<span class="text-[11px] font-bold tracking-[0.3em] text-red-500 uppercase"
 					>Generation Failed</span
 				>
-				<span class="max-w-md text-sm font-medium text-agent-dim leading-relaxed">{error}</span>
+				<span class="max-w-md text-sm leading-relaxed font-medium text-agent-dim">{error}</span>
 			</div>
 			<button
-				class="landing-cta-btn !border-red-500/20 !bg-red-500/10 !text-red-400 hover:!bg-red-500/20 transition-all active:scale-95"
+				class="landing-cta-btn border-red-500/20! bg-red-500/10! text-red-400! transition-all hover:bg-red-500/20! active:scale-95"
 				onclick={() => window.location.reload()}
 			>
 				Try Again
