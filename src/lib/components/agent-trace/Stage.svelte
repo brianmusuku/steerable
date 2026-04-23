@@ -513,55 +513,69 @@
 	class="scrollbar-thin-md flex-1 justify-center overflow-x-hidden overflow-y-auto bg-agent-stage p-5"
 >
 	<div class="relative m-8 flex h-200 flex-col justify-start border border-agent-border">
-		{#if currentView}
-			{#key index}
-				<ActionHeader {currentView} onComplete={() => (showContent = true)} />
-			{/key}
-			<div
-				bind:this={canvasEl}
-				class="canvas scrollbar-thin-md grid flex-1 grid-cols-2 content-start items-start gap-x-3 gap-y-3 overflow-y-auto p-8"
-			>
-				{#each visibleComponents as { component: VisualComp, props, id }, i (id)}
+		<div class="relative grid flex-1 overflow-hidden">
+			{#if currentView}
+				<div
+					class="col-start-1 row-start-1 flex h-full flex-col overflow-hidden"
+					in:fade={{ delay: 300, duration: 400 }}
+					out:fade={{ duration: 300 }}
+				>
+					{#key index}
+						<ActionHeader {currentView} onComplete={() => (showContent = true)} />
+					{/key}
 					<div
-						transition:slide={{ axis: 'y', duration: 500 }}
-						class="flex h-fit flex-col {i % 2 === 0 ? 'justify-self-end' : 'justify-self-start'}"
+						bind:this={canvasEl}
+						class="canvas scrollbar-thin-md grid flex-1 grid-cols-2 content-start items-start gap-x-3 gap-y-3 overflow-y-auto p-8"
 					>
-						<div transition:fade={{ duration: 300 }}>
-							<VisualComp {...props} />
-						</div>
+						{#each visibleComponents as { component: VisualComp, props, id }, i (id)}
+							<div
+								transition:slide={{ axis: 'y', duration: 500 }}
+								class="flex h-fit flex-col {i % 2 === 0 ? 'justify-self-end' : 'justify-self-start'}"
+							>
+								<div transition:fade={{ duration: 300 }}>
+									<VisualComp {...props} />
+								</div>
+							</div>
+						{/each}
 					</div>
-				{/each}
-			</div>
-			<div
-				class="subtitle font-base hidden w-full flex-wrap justify-center gap-x-1.5 px-16 py-8 text-center text-lg leading-relaxed"
-			>
-				{#if timestampsCache.has(index)}
-					{@const words = timestampsCache.get(index)}
-					{#each words as ts, i}
-						{@const isPast = currentTime >= ts.start}
-						{@const isCurrentWord = currentTime >= ts.start && currentTime <= ts.end}
-						{@const isNextWord =
-							i > 0 && currentTime >= words[i - 1].start && currentTime <= words[i - 1].end}
-						{@const isHighlighted = isCurrentWord || isNextWord}
-						<span
-							class="transition-all duration-200 {isPast ? 'text-agent-bright' : 'text-agent-dim'}"
-							class:!text-agent={isHighlighted}
-							style={isHighlighted
-								? 'text-shadow: 0 0 12px rgba(0, 212, 170, 0.4); transform: scale(1.00);'
-								: 'transform: scale(1);'}
-						>
-							{ts.word}
-						</span>
-					{/each}
-				{:else}
-					<span class="text-agent-dim transition-opacity duration-300">
-						{currentView?.script_text}
-					</span>
-				{/if}
-			</div>
-		{:else}
-			<EmptyState {start} {pregenStatus} {pregenProgress} {pregenTotal} />
-		{/if}
+					<div
+						class="subtitle font-base hidden w-full flex-wrap justify-center gap-x-1.5 px-16 py-8 text-center text-lg leading-relaxed"
+					>
+						{#if timestampsCache.has(index)}
+							{@const words = timestampsCache.get(index)}
+							{#each words as ts, i}
+								{@const isPast = currentTime >= ts.start}
+								{@const isCurrentWord = currentTime >= ts.start && currentTime <= ts.end}
+								{@const isNextWord =
+									i > 0 && currentTime >= words[i - 1].start && currentTime <= words[i - 1].end}
+								{@const isHighlighted = isCurrentWord || isNextWord}
+								<span
+									class="transition-all duration-200 {isPast ? 'text-agent-bright' : 'text-agent-dim'}"
+									class:!text-agent={isHighlighted}
+									style={isHighlighted
+										? 'text-shadow: 0 0 12px rgba(0, 212, 170, 0.4); transform: scale(1.00);'
+										: 'transform: scale(1);'}
+								>
+									{ts.word}
+								</span>
+							{/each}
+						{:else}
+							<span class="text-agent-dim transition-opacity duration-300">
+								{currentView?.script_text}
+							</span>
+						{/if}
+					</div>
+				</div>
+			{:else}
+				<div
+					class="col-start-1 row-start-1 flex h-full flex-col"
+					in:fade={{ delay: 300, duration: 400 }}
+					out:fade={{ duration: 300 }}
+				>
+					<EmptyState {start} {pregenStatus} {pregenProgress} {pregenTotal} />
+				</div>
+			{/if}
+		</div>
 
 		<div>
 			<!-- Progress bar (global across all clips) -->

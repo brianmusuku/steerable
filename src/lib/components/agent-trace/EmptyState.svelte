@@ -15,7 +15,7 @@
 	} = $props();
 </script>
 
-<div class="flex h-full flex-1 flex-col items-center justify-center p-8" transition:fade>
+<div class="flex h-full flex-1 flex-col items-center justify-center p-8">
 	{#if pregenStatus === 'loading'}
 		<div class="flex w-full max-w-md flex-col items-center gap-8" in:slide={{ axis: 'y' }}>
 			<div class="relative flex items-center justify-center">
