@@ -4,7 +4,8 @@
 		read: { label: 'File' },
 		terminal: { label: 'Shell' },
 		file: { label: 'File' },
-		diff: { label: 'Diff' }
+		diff: { label: 'Diff' },
+		directory: { label: 'Directory' }
 	};
 
 	const KIND_COLORS: Record<string, string> = {
