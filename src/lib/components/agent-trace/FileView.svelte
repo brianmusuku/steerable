@@ -18,26 +18,11 @@
 
 	let container: HTMLDivElement;
 
+	// FIX: Handle both actual newlines and literal '\n' characters from LLM output
+	let parsedLines = $derived(content.lines.replace(/\\n/g, '\n').split('\n'));
+
 	onMount(() => {
-		// gsap.registerPlugin(TextPlugin);
-		// const tl = gsap.timeline();
-		// tl.from(container, {
-		// 	y: 20,
-		// 	opacity: 0,
-		// 	duration: 0.8,
-		// 	ease: 'power2.out'
-		// });
-		// const lineEls = container.querySelectorAll('.file-line');
-		// lineEls.forEach((el) => {
-		// 	const node = el as HTMLElement;
-		// 	const originalText = node.innerText;
-		// 	node.innerText = '';
-		// 	tl.to(node, {
-		// 		text: originalText,
-		// 		duration: Math.max(originalText.length * 0.02, 0.1),
-		// 		ease: 'none'
-		// 	});
-		// });
+		// GSAP code is safe to uncomment when ready
 	});
 </script>
 
@@ -51,7 +36,8 @@
 	</div>
 
 	<div class="font-mono text-[11.5px] leading-[1.65]">
-		{#each content.lines.split('\n') as line, i}
+		<!-- Loop over the derived parsedLines instead of inline splitting -->
+		{#each parsedLines as line, i}
 			<div class="flex px-3.5 hover:bg-agent-raised">
 				<span
 					class="w-[34px] shrink-0 pr-2.5 pb-px text-right text-[10px] text-agent-dim select-none"
