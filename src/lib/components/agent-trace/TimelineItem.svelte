@@ -16,7 +16,7 @@
 	};
 
 	const VISUAL_TO_KIND: Record<string, string> = {
-		'folder tree viewer': 'file',
+		'folder tree viewer': 'directory',
 		'file viewer': 'read',
 		'command line shell': 'terminal',
 		'code diff': 'diff'
