@@ -48,14 +48,6 @@
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] {iconColor}">{@html icon}</span>
 		<span class="font-mono text-[11px] text-agent-bright">{content.filename}</span>
-		<span
-			class="rounded px-[7px] py-px text-[9px] font-bold tracking-[0.06em] uppercase
-        {badge === 'new'
-				? 'bg-agent-green-bg text-agent-green'
-				: 'bg-agent-orange-bg text-agent-orange'}"
-		>
-			{badge}
-		</span>
 	</div>
 
 	<div class="font-mono text-[11.5px] leading-[1.65]">
