@@ -74,7 +74,7 @@
 	});
 </script>
 
-<div class="max-h-130 w-140 overflow-auto rounded-lg border border-agent-border">
+<div class="w-140 rounded-lg border border-agent-border">
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] text-agent-blue underline">{@html '&#x2A57;'}</span>
 		<!-- Note: Removed the () call execution for derived states here -->
@@ -85,7 +85,7 @@
 		</span>
 	</div>
 
-	<div class="font-mono text-[11.5px] leading-[1.65]">
+	<div class="hide-scrollbar max-h-130 overflow-auto font-mono text-[11.5px] leading-[1.65]">
 		{#each parsedContent.lines as line}
 			<div class="flex px-0 {diffBg(line.t)}">
 				<span class="w-[15px] shrink-0 pb-px text-right text-[10px] text-agent-dim select-none">
@@ -97,3 +97,15 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	/* Hide scrollbar for Chrome, Safari, Edge */
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	/* Hide scrollbar for Firefox */
+	.hide-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none; /* IE and Edge */
+	}
+</style>

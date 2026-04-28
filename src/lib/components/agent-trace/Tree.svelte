@@ -41,8 +41,6 @@
 
 	let containerEl: HTMLDivElement;
 
-	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
 	onMount(() => {
 		onTreeMount?.();
 		const ctx = gsap.context(() => {
@@ -78,7 +76,10 @@
 	});
 </script>
 
-<div bind:this={containerEl} class="w-140 rounded-lg border border-agent-border font-mono text-sm">
+<div
+	bind:this={containerEl}
+	class="hide-scrollbar max-h-130 w-140 overflow-auto rounded-lg border border-agent-border font-mono text-sm"
+>
 	<div
 		class="tree-header flex items-center gap-2 rounded-t-lg border-b border-agent-border bg-agent-raised px-3.5 py-[7px]"
 	>
@@ -131,3 +132,15 @@
 		</Sidebar.MenuItem>
 	{/if}
 {/snippet}
+
+<style>
+	/* Hide scrollbar for Chrome, Safari, Edge */
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	/* Hide scrollbar for Firefox */
+	.hide-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none; /* IE and Edge */
+	}
+</style>

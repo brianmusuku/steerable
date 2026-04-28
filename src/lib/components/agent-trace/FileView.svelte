@@ -35,7 +35,7 @@
 		<span class="font-mono text-[11px] text-agent-bright">{content.filename}</span>
 	</div>
 
-	<div class="font-mono text-[11.5px] leading-[1.65]">
+	<div class="hide-scrollbar max-h-130 overflow-auto font-mono text-[11.5px] leading-[1.65]">
 		<!-- Loop over the derived parsedLines instead of inline splitting -->
 		{#each parsedLines as line, i}
 			<div class="flex px-3.5 hover:bg-agent-raised">
@@ -49,3 +49,15 @@
 		{/each}
 	</div>
 </div>
+
+<style>
+	/* Hide scrollbar for Chrome, Safari, Edge */
+	.hide-scrollbar::-webkit-scrollbar {
+		display: none;
+	}
+	/* Hide scrollbar for Firefox */
+	.hide-scrollbar {
+		scrollbar-width: none;
+		-ms-overflow-style: none; /* IE and Edge */
+	}
+</style>
