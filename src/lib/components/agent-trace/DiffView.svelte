@@ -23,21 +23,26 @@
 		let removed = 0;
 		let extractedFilename = filename;
 
-		let i = 0;
-		while (i < lines.length) {
-			const line = lines[i];
-			if (line.startsWith('@@')) break;
+		let hunkStartIndex = -1;
 
+		// Pre-scan to find the hunk start and gracefully handle extracting filenames
+		for (let j = 0; j < lines.length; j++) {
+			const line = lines[j];
 			// Bonus: Automatically extract filename from the diff header if not passed as prop
-			if (line.startsWith('+++ ')) {
-				if (!extractedFilename) {
-					let f = line.substring(4).trim().split('\t')[0]; // Strip timestamps
-					if (f.startsWith('b/')) f = f.substring(2); // Strip git 'b/' prefix
-					extractedFilename = f;
-				}
+			if (line.startsWith('+++ ') && !extractedFilename) {
+				let f = line.substring(4).trim().split('\t')[0]; // Strip timestamps
+				if (f.startsWith('b/')) f = f.substring(2); // Strip git 'b/' prefix
+				extractedFilename = f;
 			}
-			i++;
+			// Stop scanning if we hit our first header
+			if (line.startsWith('@@')) {
+				hunkStartIndex = j;
+				break;
+			}
 		}
+
+		// If no @@ was found, it's likely a raw snippet. Start from the very beginning.
+		let i = hunkStartIndex !== -1 ? hunkStartIndex : 0;
 
 		for (; i < lines.length; i++) {
 			const line = lines[i];
