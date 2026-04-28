@@ -23,7 +23,8 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 	});
 
 	const prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
-	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready. 
+	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
+	Breakdown each semantically distinct change into its own visual because multiple changes can appear on the same file.
 	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
 	${reasoning_trace}`;
 
