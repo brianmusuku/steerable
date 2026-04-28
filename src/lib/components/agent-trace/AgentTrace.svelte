@@ -55,7 +55,7 @@
 					<div class="h-0.5 w-8 rounded-full bg-agent/30"></div>
 				</div>
 				<span class="max-w-xs text-sm font-medium text-agent-subtle"
-					>Generating video script from reasoning trace...</span
+					>Generating video, please wait...</span
 				>
 			</div>
 		</div>

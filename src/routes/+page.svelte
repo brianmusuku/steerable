@@ -44,7 +44,7 @@
 			// Restart terminal sequence cycle
 			setTimeout(() => {
 				showVideo = true;
-			}, 5000); // 10s in terminal before switching back
+			}, 10000); // 10s in terminal before switching back
 		}, 2000); // Wait 2s on "finished" screen
 	}
 
@@ -117,7 +117,7 @@
 </script>
 
 <svelte:head>
-	<title>Steerable — Reasoning Traces to Explainable Video</title>
+	<title>Steerable — Generate AI Videos for your coding projects</title>
 	<meta
 		name="description"
 		content="Turn any AI reasoning trace into a structured, narrated video — in under 30 seconds. Works with Claude, OpenAI o1, DeepSeek R1, Gemini and more."
@@ -129,7 +129,7 @@
 	<header class="landing-topbar">
 		<div class="landing-brand">STEERABLE</div>
 		<div class="landing-path">
-			<span class="text-agent-subtle">reasoning traces</span>
+			<span class="text-agent-subtle">code changes</span>
 			<span class="text-agent-dim">→</span>
 			<span class="text-agent">explainable video</span>
 		</div>
@@ -138,8 +138,7 @@
 			<button class="landing-nav-btn" onclick={() => scrollTo('integrations')}>integrations</button>
 			<button class="landing-nav-btn" onclick={() => scrollTo('pricing')}>pricing</button>
 			<button class="landing-cta-btn">
-				<a href="https://www.npmjs.com/package/steerable" target="_blank">Install OpenCode Plugin</a
-				>
+				<a href="https://www.npmjs.com/package/steerable" target="_blank">docs</a>
 			</button>
 		</nav>
 	</header>
@@ -152,20 +151,21 @@
 				Now in early access
 			</div>
 
+			<!-- <h1 class="hero-title">
+				Your AI agent codes,<br />
+				We review its work via <em>videos</em>.
+			</h1> -->
 			<h1 class="hero-title">
-				Your AI agent reasons.<br />
-				We turn it into <em>video</em>.
+				AI <em>videos</em> reviews <br />for your coding projects.
 			</h1>
 
 			<p class="hero-subtitle">
-				Steerable converts reasoning traces from AI agents — thinking blocks, chain-of-thought,
-				self-corrections — into structured, narrated explainer videos. Automatically.
+				Steerable is a command line tool that converts code diffs into narrated explainer videos.
+				Automatically.
 			</p>
 
 			<div class="hero-actions">
-				<button class="hero-btn-primary">
-					<a href="https://www.npmjs.com/package/steerable" target="_blank">Get OpenCode Plugin</a>
-				</button>
+				<button class="hero-btn-primary"> npm install -g steerable </button>
 			</div>
 		</div>
 
@@ -183,26 +183,14 @@
 							<span class="hero-term-title">steerable</span>
 						</div>
 						<div class="hero-term-body">
-							<span class="tl tl-teal">$ can you use steerable to explain what you did?</span>
-							<span class="tl">&nbsp;</span>
-							<span class="tl tl-white">→ Parsing reasoning trace...</span>
-							<span class="tl tl-dim">&nbsp; 4,821 tokens · 38 paragraphs · Claude 4</span>
-							<span class="tl">&nbsp;</span>
-							<span class="tl tl-teal">→ Segmenting and filtering</span>
-							<span class="tl tl-dim">&nbsp; [00:00] Problem framing</span>
-							<span class="tl tl-dim">&nbsp; [00:38] Initial approach</span>
-							<span class="tl tl-amber">&nbsp; [01:04] Backtrack detected (conf: 0.94)</span>
-							<span class="tl tl-dim">&nbsp; [01:22] LP relaxation pivot</span>
-							<span class="tl tl-dim">&nbsp; [02:10] Solution & conclusion</span>
-							<span class="tl">&nbsp;</span>
-							<span class="tl tl-white">→ Upload reasoning traces...</span>
-							<span class="tl tl-dim">&nbsp; ████████████████████ 100%</span>
-							<span class="tl">&nbsp;</span>
+							<span class="tl tl-teal"
+								><span class="text-agent-blue">/Projects/myproject</span>$ steerable -review</span
+							>
 							<button
-								class="tl tl-teal text-left transition-all hover:underline"
+								class="tl tl-white text-left transition-all hover:underline"
 								onclick={() => (showVideo = true)}
 							>
-								✓ See video at: steerable.io/v/abc123<span class="landing-cursor"></span>
+								✓ Video is ready, watch is at https://steerable.io/watch/4*ay5c1F3
 							</button>
 						</div>
 					</div>
