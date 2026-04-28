@@ -23,8 +23,8 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 	});
 
 	const prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
-	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready. To create a mental map 
-	for the junior engineer, start with a quick overview before diving into specifics.
+	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready. 
+	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
 	${reasoning_trace}`;
 
 	const responseSchema = {

@@ -11,19 +11,21 @@
 
 	let {
 		ref = $bindable(null),
-		filetree = '[]',
+		filetree = [], // Default to an empty array instead of string '[]'
 		currentFilename = '',
 		onTreeMount,
 		...restProps
 	}: ComponentProps<typeof Sidebar.Root> & {
-		filetree?: string;
+		filetree?: string | any[]; // Accept either string or array
 		currentFilename?: string;
 		onTreeMount?: () => void;
 	} = $props();
 
 	let parsedTree = $derived.by(() => {
 		try {
-			const data = JSON.parse(filetree);
+			// Check if filetree is already an array/object, or if it needs parsing
+			const data = typeof filetree === 'string' ? JSON.parse(filetree) : filetree;
+
 			// The filetree JSON has a root object without type: {"name":"root","children":[]}
 			if (data && typeof data === 'object' && !Array.isArray(data)) {
 				if (data.name === 'root' && Array.isArray(data.children)) {
