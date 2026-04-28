@@ -50,10 +50,10 @@
 
 	/* integrations */
 	const integrations = [
-		{ name: 'OpenCode', type: 'Launched' },
-		{ name: 'Claude code', type: 'Coming soon' },
-		{ name: 'Cursor', type: 'Coming soon' },
-		{ name: 'Steerable', type: 'Coming soon' }
+		{ name: 'OpenCode', type: 'Tested' },
+		{ name: 'Claude code', type: 'Tested' },
+		{ name: 'Cursor', type: 'Tested' },
+		{ name: 'VS Code', type: 'Tested' }
 	];
 
 	/* pricing */
@@ -68,12 +68,13 @@
 			featured: false,
 			feats: [
 				{ text: '5 renders / month', on: true },
-				{ text: 'Up to 2k token traces', on: true },
+				{ text: 'Up to 3 video chapters', on: true },
 				{ text: 'AI subtitles', on: true },
 				{ text: 'AI narration', on: false },
 				{ text: 'Change video theme', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
+			btnLink: 'https://www.npmjs.com/package/steerable',
 			btnText: 'start free'
 		},
 		{
@@ -85,8 +86,8 @@
 			period: '/lifetime',
 			featured: true,
 			feats: [
-				{ text: '100 renders / month', on: true },
-				{ text: 'Up to 32k token traces', on: true },
+				{ text: '50 renders / month', on: true },
+				{ text: 'Up to 12 video chapters', on: true },
 				{ text: 'AI narration (10 voices)', on: true },
 				{ text: 'AI generated subtitles', on: true },
 				{ text: 'Change video theme', on: true }
@@ -105,15 +106,28 @@
 			featured: false,
 			feats: [
 				{ text: 'Unlimited renders', on: true },
-				{ text: 'Unlimited trace length', on: true },
+				{ text: 'Unlimited video length', on: true },
 				{ text: '4K + raw asset export', on: true },
-				{ text: 'Custom narrator cloning', on: true },
-				{ text: 'White-label + SLA', on: true }
+				{ text: 'Custom narrator cloning', on: true }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnText: 'contact sales'
 		}
 	];
+
+	let copied = $state(false);
+	let copiedC = $state(false);
+
+	const copyToClipboard = (text: string, isInstallCommand: boolean) => {
+		navigator.clipboard.writeText(text);
+		if (isInstallCommand) {
+			copied = true;
+			setTimeout(() => (copied = false), 2000);
+		} else {
+			copiedC = true;
+			setTimeout(() => (copiedC = false), 2000);
+		}
+	};
 </script>
 
 <svelte:head>
@@ -156,16 +170,21 @@
 				We review its work via <em>videos</em>.
 			</h1> -->
 			<h1 class="hero-title">
-				AI <em>videos</em> reviews <br />for your coding projects.
+				AI <em>video reviews</em> <br />for your coding projects.
 			</h1>
 
 			<p class="hero-subtitle">
-				Steerable is a command line tool that converts code diffs into narrated explainer videos.
-				Automatically.
+				Steerable is a command line tool that uses AI to convert code diffs into narrated explainer
+				videos.
 			</p>
 
 			<div class="hero-actions">
-				<button class="hero-btn-primary"> npm install -g steerable </button>
+				<button
+					class="hero-btn-primary"
+					onclick={() => copyToClipboard('npm install -g steerable', true)}
+				>
+					npm install -g steerable {copied ? '✔️' : ''}
+				</button>
 			</div>
 		</div>
 
@@ -184,13 +203,13 @@
 						</div>
 						<div class="hero-term-body">
 							<span class="tl tl-teal"
-								><span class="text-agent-blue">/Projects/myproject</span>$ steerable -review</span
+								><span class="text-agent-blue">/projects/myproject</span>$ steerable -review</span
 							>
 							<button
 								class="tl tl-white text-left transition-all hover:underline"
 								onclick={() => (showVideo = true)}
 							>
-								✓ Video is ready, watch is at https://steerable.io/watch/4*ay5c1F3
+								✓ Video is ready, watch is at https://steerable.io/watch/4xay5c1F3
 							</button>
 						</div>
 					</div>
@@ -214,42 +233,54 @@
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">process</div>
 			<h2 class="landing-s-title">
-				From trace to video<br />in <em>three steps</em>
+				From code diffs to video<br />in <em>three steps</em>
 			</h2>
 			<p class="landing-s-sub">
-				No editing software. No manual work. Paste your trace and Steerable handles parsing,
-				narration, and rendering automatically.
+				No editing software. No manual work. Steerable handles parsing, narration, and rendering
+				automatically.
 			</p>
 
 			<div class="landing-steps-row">
 				<div class="landing-how-step">
 					<div class="landing-hs-num">01</div>
 					<div class="landing-hs-icon">📋</div>
-					<div class="landing-hs-title">Install the plugin</div>
+					<div class="landing-hs-title">Install the npm package</div>
 					<p class="landing-hs-desc">
-						Install the steerable opencode plugin by following the instructions on
-						<a href="https://www.npmjs.com/package/steerable" target="_blank">npm</a>. It basically
-						entails adding a line to the opencode.json file.
+						Install the steerable package from npm. The command below adds the commandline tool
+						globally.
 					</p>
-					<span class="landing-hs-tag">easy setup</span>
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<span
+						class="landing-hs-tag cursor-pointer"
+						onclick={() => copyToClipboard('npm install -g steerable', true)}
+					>
+						npm install -g steerable {copied ? '✔' : ''}
+					</span>
 				</div>
 				<div class="landing-how-step">
 					<div class="landing-hs-num">02</div>
 					<div class="landing-hs-icon">⚙</div>
-					<div class="landing-hs-title">Ask it to generate</div>
+					<div class="landing-hs-title">Run the command</div>
 					<p class="landing-hs-desc">
-						Use your coding agent normally. If the session needs to be visualised, simply ask the
-						LLM to use the steerable plugin to generate a video of the session.
+						Before staging a commit on your project, run the following command in your terminal
+						project folder.
 					</p>
-					<span class="landing-hs-tag">~28 seconds avg</span>
+					<!-- svelte-ignore a11y_click_events_have_key_events -->
+					<!-- svelte-ignore a11y_no_static_element_interactions -->
+					<span
+						class="landing-hs-tag cursor-pointer"
+						onclick={() => copyToClipboard('steerable -review', false)}
+						>steerable -review {copiedC ? '✔' : ''}
+					</span>
 				</div>
 				<div class="landing-how-step">
 					<div class="landing-hs-num">03</div>
 					<div class="landing-hs-icon">▶</div>
 					<div class="landing-hs-title">Share the video</div>
 					<p class="landing-hs-desc">
-						The plugin will generate a link, which points to the hosted video. Anyone with the link
-						can watch and share the video regardless of the agent they use.
+						The command will generate a link, which points to the hosted video. Anyone with the link
+						can watch and share the video.
 					</p>
 					<span class="landing-hs-tag">share anywhere</span>
 				</div>
@@ -262,9 +293,11 @@
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">integrations</div>
 			<h2 class="landing-s-title">
-				Works with any<br /><em> Coding Agent</em>
+				Works with any<br /><em> Coding Agent</em> or IDE
 			</h2>
-			<p class="landing-s-sub">Steerable plans to support all major coding harnesses.</p>
+			<p class="landing-s-sub">
+				Steerable works on any directory with git. We recomend using git in vs code.
+			</p>
 
 			<div class="landing-compat-grid">
 				{#each integrations as item}
@@ -386,12 +419,11 @@
 			<div class="text-[11px] text-agent-dim">Reasoning, rendered.</div>
 		</div>
 		<ul class="landing-footer-links">
-			<li><a href="/app">demo</a></li>
-			<li><a href="#docs">docs</a></li>
-			<li><a href="#github">github</a></li>
-			<li><a href="#privacy">privacy</a></li>
+			<li><a href="https://www.npmjs.com/package/steerable">docs</a></li>
+			<li><a href="https://www.npmjs.com/package/steerable">github</a></li>
+			<li><a href="https://www.npmjs.com/package/steerable">privacy</a></li>
 		</ul>
-		<div class="text-[11px] text-agent-dim">© 2025 Steerable</div>
+		<div class="text-[11px] text-agent-dim">© {new Date().getFullYear()} Steerable</div>
 	</footer>
 </div>
 
