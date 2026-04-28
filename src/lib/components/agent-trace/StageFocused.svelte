@@ -360,84 +360,68 @@
 				<div class="relative z-10 flex h-full flex-col justify-center px-12 pr-6">
 					<!-- Wrapper keeps Title and Subtitles together as a centered block -->
 					<div class="flex flex-col">
-						{#key index}
-							<div in:fly={{ x: -20, duration: 400, delay: 150 }} out:fade={{ duration: 200 }}>
-								<h2 class="mb-3 text-3xl leading-tight font-bold tracking-tight text-agent-bright">
-									{currentView.title}
-								</h2>
-								{#if currentView.filename}
-									<h3 class="flex items-center gap-2 font-mono text-lg text-agent">
-										<span class="text-sm opacity-60">File:</span>
-										{currentView.filename}
-									</h3>
-								{/if}
-							</div>
-						{/key}
-
-						<!-- Subtitles Engine -->
-						<div class="mt-12 min-h-[120px] text-left text-lg leading-relaxed">
+						<div class="relative grid">
 							{#key index}
-								<div in:fade={{ duration: 400, delay: 200 }} out:fade={{ duration: 200 }}>
-									{#if timestampsCache.has(index)}
-										{@const words = timestampsCache.get(index)}
-										{#each words as ts, i}
-											{@const isPast = currentTime >= ts.start}
-											{@const isCurrentWord = currentTime >= ts.start && currentTime <= ts.end}
-											{@const isNextWord =
-												i > 0 &&
-												currentTime >= words[i - 1].start &&
-												currentTime <= words[i - 1].end}
-											{@const isHighlighted = isCurrentWord || isNextWord}
-											<span
-												class="mr-1.5 inline-block transition-all duration-200 {isPast
-													? 'text-agent-bright'
-													: 'text-agent-dim'}"
-												class:!text-agent={isHighlighted}
-												style={isHighlighted
-													? 'text-shadow: 0 0 12px rgba(0, 212, 170, 0.4); transform: scale(1.05);'
-													: 'transform: scale(1);'}
-											>
-												{ts.word}
-											</span>
-										{/each}
-									{:else}
-										<span class="text-agent-dim transition-opacity duration-300">
-											{currentView.script_text}
-										</span>
+								<div
+									class="col-start-1 row-start-1 flex flex-col"
+									in:fly={{ x: -20, duration: 400, delay: 150 }}
+									out:fade={{ duration: 200 }}
+								>
+									<h2
+										class="mb-3 text-3xl leading-tight font-bold tracking-tight text-agent-bright"
+									>
+										{currentView.title}
+									</h2>
+									{#if currentView.filename}
+										<h3 class="flex items-center gap-2 font-mono text-lg text-agent">
+											<span class="text-sm opacity-60">File:</span>
+											{currentView.filename}
+										</h3>
 									{/if}
 								</div>
 							{/key}
 						</div>
+
+						<!-- Subtitles Engine -->
+						<!-- <div class="mt-12 min-h-[120px] text-left text-lg leading-relaxed">
+							...
+						</div> -->
 					</div>
 				</div>
 
 				<!-- RIGHT COLUMN: Current Active Component -->
 				<div class="relative z-0 flex h-full items-center justify-center p-8 pl-6">
-					{#if currentStepIsVisible}
-						{#key index}
-							<div
-								class="absolute inset-8 flex items-center justify-center overflow-hidden"
-								in:fly={{ y: 20, duration: 500, delay: 250 }}
-								out:fade={{ duration: 250 }}
-							>
-								{#if currentView.visual === 'folder tree viewer'}
-									<Tree filetree={narration.filetree} currentFilename={highlightedFilename} />
-								{:else if currentView.visual === 'command line shell'}
-									<TerminalBlock content={currentView.agents_output} />
-								{:else if currentView.visual === 'file viewer'}
-									<FileView
-										content={{ lines: currentView.agents_output, filename: currentView.filename }}
-									/>
-								{:else if currentView.visual === 'code diff'}
-									<DiffView content={currentView.agents_output} filename={currentView.filename} />
-								{/if}
-							</div>
-						{/key}
-					{/if}
+					{#key index}
+						<div
+							class="absolute inset-8"
+							in:fly={{ y: 20, duration: 500, delay: 250 }}
+							out:fade={{ duration: 250 }}
+						>
+							{#if currentStepIsVisible}
+								<div
+									class="flex h-full w-full items-center justify-center overflow-hidden"
+									in:fade={{ duration: 300 }}
+									out:fade={{ duration: 200 }}
+								>
+									{#if currentView.visual === 'folder tree viewer'}
+										<Tree filetree={narration.filetree} currentFilename={highlightedFilename} />
+									{:else if currentView.visual === 'command line shell'}
+										<TerminalBlock content={currentView.agents_output} />
+									{:else if currentView.visual === 'file viewer'}
+										<FileView
+											content={{ lines: currentView.agents_output, filename: currentView.filename }}
+										/>
+									{:else if currentView.visual === 'code diff'}
+										<DiffView content={currentView.agents_output} filename={currentView.filename} />
+									{/if}
+								</div>
+							{/if}
+						</div>
+					{/key}
 				</div>
 			{:else}
 				<div
-					class="col-span-2 flex h-full flex-col"
+					class="absolute inset-0 z-20 flex h-full flex-col bg-agent-stage"
 					in:fade={{ delay: 300, duration: 400 }}
 					out:fade={{ duration: 300 }}
 				>

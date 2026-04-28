@@ -74,7 +74,7 @@
 	});
 </script>
 
-<div class="w-140 overflow-hidden rounded-lg border border-agent-border">
+<div class="max-h-130 w-140 overflow-auto rounded-lg border border-agent-border">
 	<div class="flex items-center gap-2 border-b border-agent-border bg-agent-raised px-3.5 py-[7px]">
 		<span class="text-[13px] text-agent-blue underline">{@html '&#x2A57;'}</span>
 		<!-- Note: Removed the () call execution for derived states here -->
