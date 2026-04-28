@@ -22,7 +22,10 @@ export const POST = async ({ request, platform }: any) => {
 	}
 
 	try {
-		const narration = await generateVideoScript(reasoning_trace);
+		let filetree = JSON.parse(reasoning_trace).fileTree;
+		filetree = JSON.stringify(filetree);
+
+		const narration = await generateVideoScript(reasoning_trace, filetree);
 		if (!narration) {
 			return json({ error: 'Failed to generate narration' }, { status: 500 });
 		}

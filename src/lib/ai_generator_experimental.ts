@@ -12,7 +12,7 @@ const FAST_MODEL = 'gemini-3-flash-preview';
  * @param {string} html - The HTML to analyze.
  * @returns {Promise<string[]>} - The generated theme names.
  */
-export async function generateVideoScript(reasoning_trace: string) {
+export async function generateVideoScript(reasoning_trace: string, filetree: string) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('Gemini API key is not set in environment variables.');
 	}
@@ -21,7 +21,8 @@ export async function generateVideoScript(reasoning_trace: string) {
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `given the following diff, please create a script, taking the persona of someone explaining what he did and why he did it. The other person consuming this will do it via a text to speech software and visuals so make sure your script is voice ready. File tree structure JSON should be copied character for character, as is, no changes.
+	const prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
+	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready. 
 	${reasoning_trace}`;
 
 	const responseSchema = {
@@ -45,9 +46,6 @@ export async function generateVideoScript(reasoning_trace: string) {
 						filename: {
 							type: 'STRING'
 						},
-						filetree: {
-							type: 'STRING'
-						},
 						agents_output: {
 							type: 'STRING'
 						},
@@ -60,7 +58,6 @@ export async function generateVideoScript(reasoning_trace: string) {
 						'visual',
 						'title',
 						'filename',
-						'filetree',
 						'agents_output',
 						'script_text_3word_phrase_where_visual_starts'
 					],
@@ -69,7 +66,6 @@ export async function generateVideoScript(reasoning_trace: string) {
 						'visual',
 						'title',
 						'filename',
-						'filetree',
 						'agents_output',
 						'script_text_3word_phrase_where_visual_starts'
 					]
@@ -96,6 +92,7 @@ export async function generateVideoScript(reasoning_trace: string) {
 
 	try {
 		const parsed = JSON.parse(generatedJson);
+		parsed.filetree = filetree;
 		return parsed;
 	} catch (e) {
 		console.error('Failed to parse narration JSON', e);
