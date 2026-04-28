@@ -12,7 +12,7 @@ const FAST_MODEL = 'gemini-3-flash-preview';
  * @param {string} html - The HTML to analyze.
  * @returns {Promise<string[]>} - The generated theme names.
  */
-export async function generateVideoScript(reasoning_trace: string, filetree: string) {
+export async function generateVideoScript(reasoning_trace: string, filetree: JSON) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('Gemini API key is not set in environment variables.');
 	}
