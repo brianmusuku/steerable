@@ -34,7 +34,7 @@
 				items.push({
 					component: Tree,
 					props: {
-						filetree: currentView.filetree,
+						filetree: narration.filetree,
 						currentFilename: highlightedFilename,
 						onTreeMount: () => (fileTreeActive = true)
 					},

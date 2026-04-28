@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Timeline from './Timeline.svelte';
-	import Stage from './Stage.svelte';
+	import Stage from './StageFocused.svelte';
 	import { onMount } from 'svelte';
 	import { Loader } from '@lucide/svelte';
 	import { fade } from 'svelte/transition';
