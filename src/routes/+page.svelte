@@ -92,7 +92,7 @@
 			],
 			btnClass: 'landing-btn-solid',
 			btnLink: 'https://brayanmusuku.gumroad.com/l/steerable',
-			btnText: 'get studio'
+			btnText: 'subscribe'
 		},
 		{
 			tag: 'Enterprise',

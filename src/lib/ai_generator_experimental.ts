@@ -2,7 +2,6 @@
 
 import { GoogleGenAI } from '@google/genai';
 import { GEMINI_API_KEY } from '$env/static/private';
-import { Description } from './components/ui/empty';
 
 const SFAST_MODEL = 'gemini-3.1-flash-lite-preview';
 const FAST_MODEL = 'gemini-3-flash-preview';
@@ -30,7 +29,9 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
 	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
-	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review.   
+	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review. 
+	Do not mention anything about steerable npm package.
+
 	${reasoning_trace}`;
 	} else {
 		visual_types = ['code diff', 'file viewer', 'folder tree viewer'];
@@ -41,6 +42,8 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 	After each major change, make a point to show the plain file with the changes implememented, because diffs are sometimes hard to read.
 	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
 	Before you end, try to advice on anything overlooked, any impact of the changes to the overall project, or next steps.
+	Do not mention anything about steerable npm package.
+	
 	${reasoning_trace}`;
 	}
 
