@@ -40,7 +40,7 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 	Breakdown each semantically distinct change into its own visual because multiple changes can appear on the same file.
 	After each major change, make a point to show the plain file with the changes implememented, because diffs are sometimes hard to read.
 	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
-	Before you end, try to advice on anything overlooked, any gotchas or next steps.
+	Before you end, try to advice on anything overlooked, any impact of the changes to the overall project, or next steps.
 	${reasoning_trace}`;
 	}
 
