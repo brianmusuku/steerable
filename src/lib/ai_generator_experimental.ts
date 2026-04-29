@@ -22,13 +22,25 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 		apiKey: GEMINI_API_KEY
 	});
 
+	let visual_types: string[] = [];
+
 	let prompt = '';
 	if (!license.valid) {
+		visual_types = [
+			'code diff',
+			'file viewer',
+			'folder tree viewer',
+			'command line shell',
+			'license subscription'
+		];
+
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
 	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
 	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review.   
 	${reasoning_trace}`;
 	} else {
+		visual_types = ['code diff', 'file viewer', 'folder tree viewer', 'command line shell'];
+
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
 	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
 	Breakdown each semantically distinct change into its own visual because multiple changes can appear on the same file.
@@ -51,13 +63,7 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 						},
 						visual: {
 							type: 'STRING',
-							enum: [
-								'code diff',
-								'file viewer',
-								'folder tree viewer',
-								'command line shell',
-								'license subscription'
-							]
+							enum: visual_types
 						},
 						title: {
 							type: 'STRING'
