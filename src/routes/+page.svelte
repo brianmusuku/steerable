@@ -234,8 +234,8 @@
 				From code diffs to video<br />in <em>three steps</em>
 			</h2>
 			<p class="landing-s-sub">
-				No editing software. No manual work. Steerable handles parsing, narration, and rendering
-				automatically.
+				Steerable handles parsing, narration, and rendering automatically. No editing or manual
+				work.
 			</p>
 
 			<div class="landing-steps-row">
