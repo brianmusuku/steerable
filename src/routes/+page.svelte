@@ -68,27 +68,27 @@
 			featured: false,
 			feats: [
 				{ text: '5 renders / month', on: true },
-				{ text: 'Up to 3 video chapters', on: true },
-				{ text: 'AI subtitles', on: true },
-				{ text: 'AI narration', on: false }
+				{ text: 'Short non-techincal snippets', on: true },
+				{ text: '3 chapters per video', on: true },
+				{ text: 'Export to mp4', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnLink: 'https://www.npmjs.com/package/steerable',
 			btnText: 'start free'
 		},
 		{
-			tag: 'Studio',
+			tag: 'Coder',
 			tagClass: 'text-agent bg-[rgba(0,212,170,0.12)] border-[rgba(0,212,170,0.2)]',
-			name: 'Studio',
+			name: 'Coder',
 			desc: 'For teams shipping AI products and demos.',
 			price: '49',
-			period: '/lifetime',
+			period: '/year',
 			featured: true,
 			feats: [
 				{ text: '50 renders / month', on: true },
-				{ text: 'Up to 12 video chapters', on: true },
-				{ text: 'AI narration (10 voices)', on: true },
-				{ text: 'AI generated subtitles', on: true }
+				{ text: 'In-depth technical reviews', on: true },
+				{ text: 'Unlimited chapters per video', on: true },
+				{ text: 'Export to mp4', on: false }
 			],
 			btnClass: 'landing-btn-solid',
 			btnLink: 'https://brayanmusuku.gumroad.com/l/steerable',
