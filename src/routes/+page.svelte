@@ -269,7 +269,7 @@
 					<span
 						class="landing-hs-tag cursor-pointer"
 						onclick={() => copyToClipboard('steerable -review', false)}
-						>steerable -review {copiedC ? '✔' : ''}
+						>steerable review {copiedC ? '✔' : ''}
 					</span>
 				</div>
 				<div class="landing-how-step">
