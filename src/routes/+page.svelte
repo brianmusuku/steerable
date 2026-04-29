@@ -417,6 +417,7 @@
 			<div class="text-[11px] text-agent-dim">Reasoning, rendered.</div>
 		</div>
 		<ul class="landing-footer-links">
+			<li><a href="https://x.com/bryanmusuku" target="_blank">contact</a></li>
 			<li><a href="https://www.npmjs.com/package/steerable">docs</a></li>
 			<li><a href="https://www.npmjs.com/package/steerable">github</a></li>
 			<li><a href="https://www.npmjs.com/package/steerable">privacy</a></li>
