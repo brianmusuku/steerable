@@ -261,7 +261,7 @@
 					<div class="landing-hs-icon">⚙</div>
 					<div class="landing-hs-title">Run the command</div>
 					<p class="landing-hs-desc">
-						Before staging a commit on your project, run the following command in your terminal
+						Before adding a commit on your project, run the following command in your terminal
 						project folder.
 					</p>
 					<!-- svelte-ignore a11y_click_events_have_key_events -->
