@@ -13,7 +13,7 @@ const FAST_MODEL = 'gemini-3-flash-preview';
  * @param {string} html - The HTML to analyze.
  * @returns {Promise<string[]>} - The generated theme names.
  */
-export async function generateVideoScript(reasoning_trace: string, filetree: JSON) {
+export async function generateVideoScript(reasoning_trace: string, filetree: JSON, license: any) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('Gemini API key is not set in environment variables.');
 	}
@@ -22,13 +22,21 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
+	let prompt = '';
+	if (!license.valid) {
+		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
+	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
+	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review.   
+	${reasoning_trace}`;
+	} else {
+		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
 	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
 	Breakdown each semantically distinct change into its own visual because multiple changes can appear on the same file.
 	After each major change, make a point to show the plain file with the changes implememented, because diffs are sometimes hard to read.
 	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
 	Before you end, try to advice on anything overlooked, any gotchas or next steps.
 	${reasoning_trace}`;
+	}
 
 	const responseSchema = {
 		type: 'OBJECT',
@@ -43,7 +51,13 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 						},
 						visual: {
 							type: 'STRING',
-							enum: ['code diff', 'file viewer', 'folder tree viewer', 'command line shell']
+							enum: [
+								'code diff',
+								'file viewer',
+								'folder tree viewer',
+								'command line shell',
+								'license subscription'
+							]
 						},
 						title: {
 							type: 'STRING'

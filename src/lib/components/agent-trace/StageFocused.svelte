@@ -6,6 +6,7 @@
 	import { Play, Pause, SkipBack, SkipForward, RotateCcw } from '@lucide/svelte';
 	import { Slider } from '$lib/components/ui/slider/';
 	import Tree from './Tree.svelte';
+	import Subscription from './Subscription.svelte';
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { SvelteMap } from 'svelte/reactivity';
@@ -413,6 +414,8 @@
 										/>
 									{:else if currentView.visual === 'code diff'}
 										<DiffView content={currentView.agents_output} filename={currentView.filename} />
+									{:else if currentView.visual === 'license subscription'}
+										<Subscription />
 									{/if}
 								</div>
 							{/if}

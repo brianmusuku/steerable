@@ -96,7 +96,9 @@
 				<span class="text-agent">{currentNarration.content.length} steps</span>
 			</div>
 			<nav class="landing-nav">
-				<button class="landing-nav-btn">download video</button>
+				<button class="landing-nav-btn">
+					<a href="https://brayanmusuku.gumroad.com/l/steerable" target="_blank"> upgrade </a>
+				</button>
 			</nav>
 		</header>
 

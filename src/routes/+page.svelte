@@ -70,8 +70,7 @@
 				{ text: '5 renders / month', on: true },
 				{ text: 'Up to 3 video chapters', on: true },
 				{ text: 'AI subtitles', on: true },
-				{ text: 'AI narration', on: false },
-				{ text: 'Change video theme', on: false }
+				{ text: 'AI narration', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnLink: 'https://www.npmjs.com/package/steerable',
@@ -89,8 +88,7 @@
 				{ text: '50 renders / month', on: true },
 				{ text: 'Up to 12 video chapters', on: true },
 				{ text: 'AI narration (10 voices)', on: true },
-				{ text: 'AI generated subtitles', on: true },
-				{ text: 'Change video theme', on: true }
+				{ text: 'AI generated subtitles', on: true }
 			],
 			btnClass: 'landing-btn-solid',
 			btnLink: 'https://brayanmusuku.gumroad.com/l/steerable',
@@ -100,7 +98,7 @@
 			tag: 'Enterprise',
 			tagClass: 'text-agent-subtle bg-[#1c1f28] border-agent-border',
 			name: 'Reel',
-			desc: 'For labs and enterprises with high-volume needs.',
+			desc: 'For enterprises with high-volume needs.',
 			price: 'custom',
 			period: '',
 			featured: false,
