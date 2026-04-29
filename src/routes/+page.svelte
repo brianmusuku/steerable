@@ -268,7 +268,7 @@
 					<!-- svelte-ignore a11y_no_static_element_interactions -->
 					<span
 						class="landing-hs-tag cursor-pointer"
-						onclick={() => copyToClipboard('steerable -review', false)}
+						onclick={() => copyToClipboard('steerable review', false)}
 						>steerable review {copiedC ? '✔' : ''}
 					</span>
 				</div>
