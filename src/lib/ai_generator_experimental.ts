@@ -13,7 +13,7 @@ const FAST_MODEL = 'gemini-3-flash-preview';
  * @param {string} html - The HTML to analyze.
  * @returns {Promise<string[]>} - The generated theme names.
  */
-export async function generateVideoScript(reasoning_trace: string, filetree: JSON, license: any) {
+export async function generateVideoScript(reasoning_trace: string, filetree: any, license: any) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('Gemini API key is not set in environment variables.');
 	}
@@ -26,20 +26,14 @@ export async function generateVideoScript(reasoning_trace: string, filetree: JSO
 
 	let prompt = '';
 	if (!license.valid) {
-		visual_types = [
-			'code diff',
-			'file viewer',
-			'folder tree viewer',
-			'command line shell',
-			'license subscription'
-		];
+		visual_types = ['code diff', 'file viewer', 'folder tree viewer', 'license subscription'];
 
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
 	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
 	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review.   
 	${reasoning_trace}`;
 	} else {
-		visual_types = ['code diff', 'file viewer', 'folder tree viewer', 'command line shell'];
+		visual_types = ['code diff', 'file viewer', 'folder tree viewer'];
 
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
 	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.

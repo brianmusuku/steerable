@@ -23,7 +23,7 @@ export const POST = async ({ request, platform }: any) => {
 
 	try {
 		const data = JSON.parse(reasoning_trace);
-		const filetree = data.fileTree;
+		const filetree = data.traces.fileTree;
 		const trace = JSON.stringify(data.traces);
 		const license = data.license;
 
