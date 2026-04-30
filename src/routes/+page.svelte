@@ -60,7 +60,7 @@
 	const plans = [
 		{
 			tag: 'Free',
-			tagClass: 'text-agent-dim bg-[#1c1f28] border-agent-border',
+			tagClass: 'text-agent-subtle bg-[#1c1f28] border-agent-border',
 			name: 'Explorer',
 			desc: 'For researchers and tinkerers trying it out.',
 			price: '0',
@@ -142,7 +142,7 @@
 		<div class="landing-brand">STEERABLE</div>
 		<div class="landing-path">
 			<span class="text-agent-bright">code changes</span>
-			<span class="text-agent-dim">→</span>
+			<span class="text-agent-bright">→</span>
 			<span class="text-agent">explainable video</span>
 		</div>
 		<nav class="landing-nav">
