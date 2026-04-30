@@ -146,10 +146,19 @@
 			<span class="text-agent">explainable video</span>
 		</div>
 		<nav class="landing-nav">
-			<button class="landing-nav-btn" onclick={() => scrollTo('how')}>how it works</button>
-			<button class="landing-nav-btn" onclick={() => scrollTo('integrations')}>integrations</button>
-			<button class="landing-nav-btn" onclick={() => scrollTo('pricing')}>pricing</button>
-			<button class="landing-cta-btn">
+			<button class="landing-nav-btn text-agent-bright!" onclick={() => scrollTo('how')}
+				>how it works</button
+			>
+			<button class="landing-nav-btn text-agent-bright!" onclick={() => scrollTo('integrations')}
+				>integrations</button
+			>
+			<button class="landing-nav-btn text-agent-bright!" onclick={() => scrollTo('pricing')}
+				>pricing</button
+			>
+			<button
+				class="landing-cta-btn
+			"
+			>
 				<a href="https://www.npmjs.com/package/steerable" target="_blank">docs</a>
 			</button>
 		</nav>
@@ -414,15 +423,21 @@
 	<footer class="landing-footer">
 		<div class="flex items-center gap-2.5">
 			<div class="landing-footer-badge">STEERABLE</div>
-			<div class="text-[11px] text-agent-dim">Reasoning, rendered.</div>
+			<div class="text-[11px] text-agent-bright">Reasoning, rendered.</div>
 		</div>
 		<ul class="landing-footer-links">
-			<li><a href="https://x.com/bryanmusuku" target="_blank">contact</a></li>
-			<li><a href="https://www.npmjs.com/package/steerable">docs</a></li>
-			<li><a href="https://www.npmjs.com/package/steerable">github</a></li>
-			<li><a href="https://www.npmjs.com/package/steerable">privacy</a></li>
+			<li>
+				<a class="text-agent-bright!" href="https://x.com/bryanmusuku" target="_blank">contact</a>
+			</li>
+			<li><a class="text-agent-bright!" href="https://www.npmjs.com/package/steerable">docs</a></li>
+			<li>
+				<a class="text-agent-bright!" href="https://www.npmjs.com/package/steerable">github</a>
+			</li>
+			<li>
+				<a class="text-agent-bright!" href="https://www.npmjs.com/package/steerable">privacy</a>
+			</li>
 		</ul>
-		<div class="text-[11px] text-agent-dim">© {new Date().getFullYear()} Steerable</div>
+		<div class="text-[11px] text-agent-bright">© {new Date().getFullYear()} Steerable</div>
 	</footer>
 </div>
 
