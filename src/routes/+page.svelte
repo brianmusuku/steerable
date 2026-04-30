@@ -141,7 +141,7 @@
 	<header class="landing-topbar">
 		<div class="landing-brand">STEERABLE</div>
 		<div class="landing-path">
-			<span class="text-agent-subtle">code changes</span>
+			<span class="text-agent-bright">code changes</span>
 			<span class="text-agent-dim">→</span>
 			<span class="text-agent">explainable video</span>
 		</div>
