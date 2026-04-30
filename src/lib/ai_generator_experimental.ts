@@ -29,7 +29,8 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 
 		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
 	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
-	The script should be a very brief very non technical overview. 3 turns only. End the script by asking the junior to buy a license for a more indepth review. 
+	The script should be a very brief very non technical overview. 3 turns only. 
+	End the script by asking the junior to buy a license for a more technical and more indepth review. 
 
 	${reasoning_trace}`;
 	} else {
