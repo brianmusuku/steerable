@@ -74,6 +74,13 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 						},
 						script_text_3word_phrase_where_visual_starts: {
 							type: 'STRING'
+						},
+						keywords: {
+							type: 'ARRAY',
+							items: {
+								type: 'STRING',
+								description: 'most important phrase that appears in the script_text, Verbatim.'
+							}
 						}
 					},
 					propertyOrdering: [

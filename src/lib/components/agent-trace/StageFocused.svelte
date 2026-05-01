@@ -11,6 +11,7 @@
 	import { fade, fly } from 'svelte/transition';
 	import { SvelteMap } from 'svelte/reactivity';
 	import { getCachedTTS, saveTTS } from '$lib/utils/ttsCache';
+	import { gsap } from 'gsap';
 
 	let { narration, id, index = $bindable(-1), autoStart = false } = $props();
 
@@ -23,7 +24,7 @@
 
 	let currentView = $derived(narration.content[index]);
 
-	// ── AUDIO PREGEN AND CACHE (Using SvelteMap) ────────────────────────
+	// ── AUDIO PREGEN AND CACHE ───────────────────────────────────────────
 	let audioCache = new SvelteMap<number, string>();
 	let timestampsCache = new SvelteMap<number, any>();
 	let clipDurations = new SvelteMap<number, number>();
@@ -43,7 +44,7 @@
 
 		if (phrase && timestamps) {
 			const startTime = findPhraseStartTime(timestamps, phrase);
-			if (currentTime < startTime - 1.8) {
+			if (currentTime < startTime - 1.01) {
 				return false;
 			}
 		}
@@ -82,6 +83,80 @@
 		return elapsed;
 	});
 
+	// ── ACTIVE KEYWORD (single uttered keyword at a time) ────────────────
+	let activeKeyword = $derived.by(() => {
+		if (index < 0) return '';
+		const timestamps = timestampsCache.get(index);
+		const keywords = narration.content[index]?.keywords ?? [];
+
+		let latest = '';
+		let latestTime = -Infinity;
+
+		for (const kw of keywords) {
+			const t = findPhraseStartTime(timestamps, kw);
+			if (t > 0 && currentTime >= t - 1.5 && t > latestTime) {
+				latestTime = t;
+				latest = kw;
+			}
+		}
+		return latest;
+	});
+
+	let keywordEl = $state<HTMLElement | null>(null);
+	let activeTl: gsap.core.Timeline | null = null;
+
+	// Fires only when activeKeyword string value actually changes
+	$effect(() => {
+		const kw = activeKeyword;
+
+		if (activeTl) {
+			const nextKw = kw;
+			activeTl.eventCallback('onReverseComplete', () => {
+				activeTl?.kill();
+				activeTl = null;
+				if (nextKw && keywordEl) playKeyword(nextKw);
+				else if (keywordEl) keywordEl.innerHTML = '';
+			});
+			activeTl.reverse();
+		} else {
+			if (kw && keywordEl) playKeyword(kw);
+			else if (keywordEl) keywordEl.innerHTML = '';
+		}
+	});
+
+	// Reset keyword when step changes
+	$effect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		index;
+		activeTl?.kill();
+		activeTl = null;
+		if (keywordEl) keywordEl.innerHTML = '';
+	});
+
+	function playKeyword(kw: string) {
+		if (!keywordEl) return;
+
+		keywordEl.innerHTML = kw
+			.split('')
+			.map(
+				(c) =>
+					`<span class="kw-char" style="display:inline-block;opacity:0;transform:translateY(4px)">${c === ' ' ? '&nbsp;' : c}</span>`
+			)
+			.join('');
+
+		const chars = keywordEl.querySelectorAll<HTMLElement>('.kw-char');
+		activeTl = gsap.timeline();
+		activeTl.to(chars, {
+			opacity: 1,
+			y: 0,
+			rotation: () => (Math.random() - 0.5) * 3.5,
+			transformOrigin: 'bottom center',
+			duration: 0.055,
+			ease: 'power2.out',
+			stagger: { each: 0.028, from: 'start' }
+		});
+	}
+
 	let audio: HTMLAudioElement | null = $state(null);
 	let animFrameId: number = 0;
 
@@ -102,6 +177,7 @@
 		return () => {
 			cancelAnimationFrame(animFrameId);
 			audio?.pause();
+			activeTl?.kill();
 			for (const url of audioCache.values()) {
 				URL.revokeObjectURL(url);
 			}
@@ -291,7 +367,7 @@
 				cleanWord.toLowerCase() === basename.toLowerCase() ||
 				cleanWord.toLowerCase() === stem.toLowerCase()
 			) {
-				return ts.start - 1.8;
+				return ts.start - 1.01;
 			}
 		}
 		for (const part of parts) {
@@ -299,7 +375,7 @@
 			for (const ts of timestamps) {
 				const cleanWord = ts.word.replace(/[.,;:!?"'()\[\]]/g, '');
 				if (cleanWord.toLowerCase() === partStem.toLowerCase() && partStem.length > 2) {
-					return ts.start - 1.8;
+					return ts.start - 1.01;
 				}
 			}
 		}
@@ -359,7 +435,6 @@
 			{#if currentView}
 				<!-- LEFT COLUMN: Info & Subtitles (Vertically Centered) -->
 				<div class="relative z-10 flex h-full flex-col justify-center px-12 pr-6">
-					<!-- Wrapper keeps Title and Subtitles together as a centered block -->
 					<div class="flex flex-col">
 						<div class="relative grid">
 							{#key index}
@@ -374,19 +449,19 @@
 										{currentView.title}
 									</h2>
 									{#if currentView.filename}
-										<h3 class="flex items-center gap-2 font-mono text-lg text-agent">
+										<h3 class="hidden items-center gap-2 font-mono text-lg text-agent">
 											<span class="text-sm opacity-60">File:</span>
 											{currentView.filename}
 										</h3>
 									{/if}
+
+									<!-- Single keyword element: GSAP writes innerHTML directly -->
+									<div class="h-8 text-lg">
+										<span bind:this={keywordEl} class="font-mono text-agent"></span>
+									</div>
 								</div>
 							{/key}
 						</div>
-
-						<!-- Subtitles Engine -->
-						<!-- <div class="mt-12 min-h-[120px] text-left text-lg leading-relaxed">
-							...
-						</div> -->
 					</div>
 				</div>
 
@@ -519,5 +594,9 @@
 	:global([data-slot='slider-range']) {
 		background-color: var(--color-agent);
 		height: 4px;
+	}
+
+	:global(.kw-char) {
+		display: inline-block;
 	}
 </style>
