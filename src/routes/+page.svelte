@@ -327,7 +327,7 @@
 		<div class="landing-section-inner reveal-on-scroll">
 			<div class="landing-eyebrow">pricing</div>
 			<h2 class="landing-s-title">
-				Lifetime plans.<br /><em>Pay once</em>, use forever.
+				Affordable plans.<br /><em>Pay annually</em>.
 			</h2>
 
 			<div class="landing-pricing-row">

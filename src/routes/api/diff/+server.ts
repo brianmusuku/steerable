@@ -25,7 +25,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 			return json({ error: 'Server configuration error' }, { status: 500 });
 		}
 
-		const uuid = crypto.randomUUID().replaceAll('-', '');
+		const uuid = crypto.randomUUID().replaceAll('-', '').slice(0, 14);
 
 		// Store traces in KV. If traces is an object, stringify it.
 		let value = typeof traces === 'string' ? traces : JSON.stringify({ traces, license });
