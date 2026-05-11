@@ -37,40 +37,50 @@
 	];
 </script>
 
-<div class="video-mock-container" class:active in:scale={{ duration: 600, start: 0.95, opacity: 0 }}>
+<div
+	class="video-mock-container"
+	class:active
+	in:scale={{ duration: 600, start: 0.95, opacity: 0 }}
+>
 	<!-- Header / Top Bar -->
 	<div class="video-mock-header">
 		<div class="flex items-center gap-3">
 			<div class="h-2 w-2 rounded-full bg-[#00d4aa] shadow-[0_0_8px_rgba(0,212,170,0.6)]"></div>
-			<span class="text-[10px] font-medium tracking-wider text-[#8b949e] uppercase">Live Rendering</span>
+			<span class="text-[10px] font-medium tracking-wider text-[#8b949e] uppercase"
+				>Live Rendering</span
+			>
 		</div>
 		<div class="text-[10px] text-[#484f58]">01:04 / 02:45</div>
 	</div>
 
 	<!-- Main Content "Stage" -->
-	<div class="video-mock-stage">
-		<div class="grid grid-cols-2 gap-4 h-full p-6">
+	<div class="video-mock-stage opacity-0">
+		<div class="grid h-full grid-cols-2 gap-4 p-6">
 			<!-- Left Side: Trace -->
 			<div class="flex flex-col gap-3">
 				{#each segments as segment, i}
-					<div 
-						class="segment-card" 
+					<div
+						class="segment-card"
 						class:active={segment.status === 'active'}
 						class:done={segment.status === 'done'}
 						style="--delay: {i * 150}ms"
 					>
-						<div class="flex items-center justify-between mb-2">
-							<span class="text-[10px] font-mono">{segment.title}</span>
+						<div class="mb-2 flex items-center justify-between">
+							<span class="font-mono text-[10px]">{segment.title}</span>
 							{#if segment.status === 'done'}
-								<span class="text-[#00d4aa] text-[10px]">✓</span>
+								<span class="text-[10px] text-[#00d4aa]">✓</span>
 							{:else if segment.status === 'active'}
 								<span class="loading-spinner"></span>
 							{/if}
 						</div>
-						<div class="h-1 w-full bg-[#21262d] rounded-full overflow-hidden">
-							<div 
-								class="h-full bg-[#00d4aa] transition-all duration-1000" 
-								style="width: {segment.status === 'done' ? '100%' : segment.status === 'active' ? '65%' : '0%'}"
+						<div class="h-1 w-full overflow-hidden rounded-full bg-[#21262d]">
+							<div
+								class="h-full bg-[#00d4aa] transition-all duration-1000"
+								style="width: {segment.status === 'done'
+									? '100%'
+									: segment.status === 'active'
+										? '65%'
+										: '0%'}"
 							></div>
 						</div>
 					</div>
@@ -78,9 +88,11 @@
 			</div>
 
 			<!-- Right Side: Visualization Mock -->
-			<div class="relative flex items-center justify-center border border-[#21262d] rounded-md bg-[#0d1117] overflow-hidden group">
+			<div
+				class="group relative flex items-center justify-center overflow-hidden rounded-md border border-[#21262d] bg-[#0d1117]"
+			>
 				<div class="absolute inset-0 bg-gradient-to-br from-[#00d4aa]/5 to-transparent"></div>
-				
+
 				<!-- Branching Diagram Mock -->
 				<div class="branching-mock">
 					<div class="node central"></div>
@@ -92,8 +104,8 @@
 				</div>
 
 				<div class="absolute bottom-3 left-3 flex flex-col gap-1">
-					<div class="text-[9px] text-[#484f58] font-mono">confidence_score</div>
-					<div class="text-[14px] text-[#00d4aa] font-mono font-bold tracking-tighter">0.942</div>
+					<div class="font-mono text-[9px] text-[#484f58]">confidence_score</div>
+					<div class="font-mono text-[14px] font-bold tracking-tighter text-[#00d4aa]">0.942</div>
 				</div>
 			</div>
 		</div>
@@ -108,15 +120,21 @@
 
 		<div class="flex items-center justify-between px-4 py-3">
 			<div class="flex items-center gap-5">
-				<SkipBack size={14} class="text-[#8b949e] hover:text-[#c9d1d9] cursor-pointer transition-colors" />
-				<button onclick={() => playing = !playing} class="flex items-center justify-center">
+				<SkipBack
+					size={14}
+					class="cursor-pointer text-[#8b949e] transition-colors hover:text-[#c9d1d9]"
+				/>
+				<button onclick={() => (playing = !playing)} class="flex items-center justify-center">
 					{#if playing}
-						<Pause size={16} class="text-[#00d4aa] fill-[#00d4aa]/20" />
+						<Pause size={16} class="fill-[#00d4aa]/20 text-[#00d4aa]" />
 					{:else}
-						<Play size={16} class="text-[#00d4aa] fill-[#00d4aa]/20" />
+						<Play size={16} class="fill-[#00d4aa]/20 text-[#00d4aa]" />
 					{/if}
 				</button>
-				<SkipForward size={14} class="text-[#8b949e] hover:text-[#c9d1d9] cursor-pointer transition-colors" />
+				<SkipForward
+					size={14}
+					class="cursor-pointer text-[#8b949e] transition-colors hover:text-[#c9d1d9]"
+				/>
 			</div>
 
 			<div class="flex items-center gap-4">
@@ -137,7 +155,7 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		box-shadow: 
+		box-shadow:
 			0 20px 50px rgba(0, 0, 0, 0.5),
 			0 0 0 1px rgba(0, 212, 170, 0.1);
 	}
@@ -195,7 +213,9 @@
 	}
 
 	@keyframes spin {
-		to { transform: rotate(360deg); }
+		to {
+			transform: rotate(360deg);
+		}
 	}
 
 	/* Branching Mock Icons/Shapes */
@@ -214,10 +234,24 @@
 		z-index: 2;
 	}
 
-	.node.central { top: 50%; left: 10%; transform: translateY(-50%); background: #8b949e; }
-	.node.n1 { top: 20%; left: 80%; }
-	.node.n2 { bottom: 20%; left: 80%; }
-	.node.active { background: #00d4aa; box-shadow: 0 0 10px #00d4aa; }
+	.node.central {
+		top: 50%;
+		left: 10%;
+		transform: translateY(-50%);
+		background: #8b949e;
+	}
+	.node.n1 {
+		top: 20%;
+		left: 80%;
+	}
+	.node.n2 {
+		bottom: 20%;
+		left: 80%;
+	}
+	.node.active {
+		background: #00d4aa;
+		box-shadow: 0 0 10px #00d4aa;
+	}
 
 	.line {
 		position: absolute;
@@ -227,8 +261,20 @@
 		z-index: 1;
 	}
 
-	.line.l1 { width: 85px; top: 50%; left: 14%; transform: rotate(-22deg); }
-	.line.l2 { width: 85px; top: 50%; left: 14%; transform: rotate(22deg); background: #00d4aa; opacity: 0.4; }
+	.line.l1 {
+		width: 85px;
+		top: 50%;
+		left: 14%;
+		transform: rotate(-22deg);
+	}
+	.line.l2 {
+		width: 85px;
+		top: 50%;
+		left: 14%;
+		transform: rotate(22deg);
+		background: #00d4aa;
+		opacity: 0.4;
+	}
 
 	.pulse-ring {
 		position: absolute;
@@ -243,8 +289,14 @@
 	}
 
 	@keyframes pulse {
-		0% { transform: scale(1); opacity: 0.8; }
-		100% { transform: scale(4); opacity: 0; }
+		0% {
+			transform: scale(1);
+			opacity: 0.8;
+		}
+		100% {
+			transform: scale(4);
+			opacity: 0;
+		}
 	}
 
 	/* Controls */
