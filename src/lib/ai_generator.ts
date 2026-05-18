@@ -3,7 +3,7 @@
 import { GoogleGenAI } from '@google/genai';
 import { GEMINI_API_KEY } from '$env/static/private';
 
-const SFAST_MODEL = 'gemini-3.1-flash-lite-preview';
+const SLOW_MODEL = 'gemini-3-flash-preview';
 const FAST_MODEL = 'gemini-3.1-flash-lite';
 
 /**
