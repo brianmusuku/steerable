@@ -1,5 +1,5 @@
 import { json } from '@sveltejs/kit';
-import { generateVideoScript } from '$lib/ai_generator_experimental';
+import { generateVideoScript } from '$lib/ai_generator';
 
 export const POST = async ({ request, platform }: any) => {
 	const { id } = await request.json();

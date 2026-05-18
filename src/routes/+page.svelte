@@ -44,7 +44,7 @@
 			// Restart terminal sequence cycle
 			setTimeout(() => {
 				showVideo = true;
-			}, 10000); // 10s in terminal before switching back
+			}, 9000); // 10s in terminal before switching back
 		}, 2000); // Wait 2s on "finished" screen
 	}
 

@@ -4,7 +4,7 @@ import { GoogleGenAI } from '@google/genai';
 import { GEMINI_API_KEY } from '$env/static/private';
 
 const SFAST_MODEL = 'gemini-3.1-flash-lite-preview';
-const FAST_MODEL = 'gemini-3-flash-preview';
+const FAST_MODEL = 'gemini-3.1-flash-lite';
 
 /**
  * Generates an agent walkthrough video script.
@@ -12,7 +12,7 @@ const FAST_MODEL = 'gemini-3-flash-preview';
  * @param {string} html - The HTML to analyze.
  * @returns {Promise<string[]>} - The generated theme names.
  */
-export async function generateVideoScript(reasoning_trace: string) {
+export async function generateVideoScript(reasoning_trace: string, filetree: any, license: any) {
 	if (!GEMINI_API_KEY) {
 		throw new Error('Gemini API key is not set in environment variables.');
 	}
@@ -21,8 +21,30 @@ export async function generateVideoScript(reasoning_trace: string) {
 		apiKey: GEMINI_API_KEY
 	});
 
-	const prompt = `given the following log for an AI agent, please create a script where you walk-through your actions, taking the persona of someone explaining what he did and why he didit. The person consuming this will do it via a text to speech software and programmatic visuals so make sure your script is voice ready. Ignore the video generation commands by the user and do not include them in the script. file tree structure JSON should be copied character for character, as is, no changes. agents_output is the string that performs the agent's action e.g. command, file content or file diff.
+	let visual_types: string[] = [];
+
+	let prompt = '';
+	if (!license.valid) {
+		visual_types = ['code diff', 'file viewer', 'folder tree viewer', 'license subscription'];
+
+		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did.
+	The junior consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
+	The script should be a very brief very non technical overview. 3 turns only. 
+	End the script by asking the junior to buy a license for a more technical and more indepth review. 
+
 	${reasoning_trace}`;
+	} else {
+		visual_types = ['code diff', 'file viewer', 'folder tree viewer'];
+
+		prompt = `Given the following code diff, please create a script, taking the persona of a senior engineer explaining what he did and why he did it.
+	The junior engineer consuming this will do it via a text to speech software and visuals so make sure your script is voice ready.
+	Breakdown each semantically distinct change into its own visual because multiple changes can appear on the same file.
+	After each major change, make a point to show the plain file with the changes implememented, because diffs are sometimes hard to read.
+	Assume the junior engineer doesn't know where changes we made so its good to start with a tree viewer, explaining file structure before diving into specifics.
+	Before you end, try to advice on anything overlooked, any impact of the changes to the overall project, or next steps.
+
+	${reasoning_trace}`;
+	}
 
 	const responseSchema = {
 		type: 'OBJECT',
@@ -37,7 +59,7 @@ export async function generateVideoScript(reasoning_trace: string) {
 						},
 						visual: {
 							type: 'STRING',
-							enum: ['code diff', 'file viewer', 'folder tree viewer', 'command line shell']
+							enum: visual_types
 						},
 						title: {
 							type: 'STRING'
@@ -45,14 +67,20 @@ export async function generateVideoScript(reasoning_trace: string) {
 						filename: {
 							type: 'STRING'
 						},
-						filetree: {
-							type: 'STRING'
-						},
 						agents_output: {
-							type: 'STRING'
+							type: 'STRING',
+							description:
+								'The whole diff highlighted on the lines that you are currently explaining.'
 						},
 						script_text_3word_phrase_where_visual_starts: {
 							type: 'STRING'
+						},
+						keywords: {
+							type: 'ARRAY',
+							items: {
+								type: 'STRING',
+								description: 'most important phrase that appears in the script_text, Verbatim.'
+							}
 						}
 					},
 					propertyOrdering: [
@@ -60,7 +88,6 @@ export async function generateVideoScript(reasoning_trace: string) {
 						'visual',
 						'title',
 						'filename',
-						'filetree',
 						'agents_output',
 						'script_text_3word_phrase_where_visual_starts'
 					],
@@ -69,7 +96,6 @@ export async function generateVideoScript(reasoning_trace: string) {
 						'visual',
 						'title',
 						'filename',
-						'filetree',
 						'agents_output',
 						'script_text_3word_phrase_where_visual_starts'
 					]
@@ -96,6 +122,7 @@ export async function generateVideoScript(reasoning_trace: string) {
 
 	try {
 		const parsed = JSON.parse(generatedJson);
+		parsed.filetree = filetree;
 		return parsed;
 	} catch (e) {
 		console.error('Failed to parse narration JSON', e);
