@@ -70,7 +70,8 @@
 				{ text: '5 renders / month', on: true },
 				{ text: 'Short non-techincal snippets', on: true },
 				{ text: '3 chapters per video', on: true },
-				{ text: 'Export to mp4', on: false }
+				{ text: 'Export to mp4', on: false },
+				{ text: 'Low Intelligence Model', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnLink: 'https://www.npmjs.com/package/steerable',
@@ -88,7 +89,8 @@
 				{ text: '50 renders / month', on: true },
 				{ text: 'In-depth technical reviews', on: true },
 				{ text: 'Unlimited chapters per video', on: true },
-				{ text: 'Export to mp4', on: false }
+				{ text: 'Export to mp4', on: false },
+				{ text: 'High Intelligence Model', on: false }
 			],
 			btnClass: 'landing-btn-solid',
 			btnLink: 'https://brayanmusuku.gumroad.com/l/steerable',
@@ -106,7 +108,8 @@
 				{ text: 'Unlimited renders', on: true },
 				{ text: 'Unlimited video length', on: true },
 				{ text: '4K + raw asset export', on: true },
-				{ text: 'Custom narrator cloning', on: true }
+				{ text: 'Custom narrator cloning', on: true },
+				{ text: 'High Intelligence Model', on: false }
 			],
 			btnClass: 'landing-btn-ghost',
 			btnText: 'contact sales'
