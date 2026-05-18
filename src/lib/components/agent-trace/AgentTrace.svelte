@@ -22,7 +22,9 @@
 				});
 				if (!response.ok) {
 					const errorData = await response.json();
-					throw new Error(errorData.error || 'Failed to generate narration script');
+					throw new Error(
+						errorData.error || 'Free Server Over Capacity. Please subscribe to upgrade.'
+					);
 				}
 				const data = await response.json();
 				currentNarration = data.narration;
