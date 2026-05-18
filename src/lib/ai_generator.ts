@@ -3,8 +3,9 @@
 import { GoogleGenAI } from '@google/genai';
 import { GEMINI_API_KEY } from '$env/static/private';
 
-const SLOW_MODEL = 'gemini-3-flash-preview';
-const FAST_MODEL = 'gemini-3.1-flash-lite';
+const GOOD_IQ_MODEL = 'gemini-3-flash-preview';
+const AVG_IQ_MODEL = 'gemini-3.1-flash-lite';
+const HIQH_IQ_MODEL = 'gemini-3.1-pro-preview';
 
 /**
  * Generates an agent walkthrough video script.
@@ -109,7 +110,7 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 		required: ['content', 'one_sentence_1st_person_summary']
 	};
 	const response = await ai.models.generateContent({
-		model: FAST_MODEL,
+		model: GOOD_IQ_MODEL,
 		contents: prompt,
 		config: {
 			responseMimeType: 'application/json',
