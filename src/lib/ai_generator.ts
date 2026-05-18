@@ -71,7 +71,7 @@ export async function generateVideoScript(reasoning_trace: string, filetree: any
 						agents_output: {
 							type: 'STRING',
 							description:
-								'The whole diff highlighted on the lines that you are currently explaining.'
+								'The whole diff highlighted on the lines that you are currently explaining. Add new lines on the diff for formatting.'
 						},
 						script_text_3word_phrase_where_visual_starts: {
 							type: 'STRING'
